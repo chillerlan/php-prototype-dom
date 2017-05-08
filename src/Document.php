@@ -69,7 +69,7 @@ class Document extends DOMDocument{
 	 * @param string        $axis
 	 * @param int           $nodeType
 	 *
-	 * @return array
+	 * @return \DOMNode[]
 	 */
 	public function select($selectors = null, DOMNode $contextNode = null, string $axis = 'descendant-or-self::', int $nodeType = XML_ELEMENT_NODE):array{
 
@@ -166,7 +166,7 @@ class Document extends DOMDocument{
 	 * @param int      $maxLength
 	 * @param int      $nodeType
 	 *
-	 * @return array[\chillerlan\PrototypeDOM\Element]
+	 * @return \DOMNode[]
 	 */
 	public function recursivelyCollect(DOMNode $element, string $property, int $maxLength = -1, int $nodeType = XML_ELEMENT_NODE):array{
 		$nodes = [];
@@ -197,16 +197,16 @@ class Document extends DOMDocument{
 	 * @param int         $index
 	 * @param int         $nodeType
 	 *
-	 * @return \chillerlan\PrototypeDOM\Element|\DOMNode|null
+	 * @return \DOMNode|null
 	 */
 	public function _recursivelyFind(DOMNode $element, string $property, string $selector = null, int $index = 0, int $nodeType = XML_ELEMENT_NODE){
 
 		if(in_array($property, ['parentNode', 'previousSibling', 'nextSibling'])){
 
+			/** @var \chillerlan\PrototypeDOM\Element $element */
 			while($element = $element->{$property}){
 
-				/** @var \chillerlan\PrototypeDOM\Element $element */
-				if($element->nodeType !== $nodeType || $selector && !$element->match($selector) || --$index >= 0){
+				if($element->nodeType !== $nodeType || !is_null($selector) && !$element->match($selector) || --$index >= 0){
 					continue;
 				}
 

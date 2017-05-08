@@ -12,7 +12,7 @@
 
 namespace chillerlan\PrototypeDOM;
 
-use DOMNode, DOMNodeList;
+use DOMNode;
 
 /**
  * @extends \DOMNode
@@ -31,7 +31,7 @@ trait NodeTraversalTrait{
 	 * @param int    $maxLength
 	 * @param int    $nodeType
 	 *
-	 * @return array [\chillerlan\PrototypeDOM\Element]
+	 * @return \chillerlan\PrototypeDOM\Element[]
 	 */
 	public function recursivelyCollect(string $property, int $maxLength = -1, int $nodeType = XML_ELEMENT_NODE):array{
 		/** @var \DOMNode $this */
@@ -138,7 +138,7 @@ trait NodeTraversalTrait{
 	/**
 	 * @param int $nodeType
 	 *
-	 * @return array[\chillerlan\PrototypeDOM\Element]
+	 * @return \chillerlan\PrototypeDOM\Element[]
 	 */
 	public function childElements(int $nodeType = XML_ELEMENT_NODE):array{
 		$children = [];
@@ -177,21 +177,21 @@ trait NodeTraversalTrait{
 	}
 
 	/**
-	 * @return array[\chillerlan\PrototypeDOM\Element]
+	 * @return \chillerlan\PrototypeDOM\Element[]
 	 */
 	public function ancestors():array{
 		return $this->recursivelyCollect('parentNode');
 	}
 
 	/**
-	 * @return array[\chillerlan\PrototypeDOM\Element]
+	 * @return \chillerlan\PrototypeDOM\Element[]
 	 */
 	public function siblings():array{
 		return array_merge(array_reverse($this->previousSiblings()), $this->nextSiblings());
 	}
 
 	/**
-	 * @return array[\chillerlan\PrototypeDOM\Element]
+	 * @return \chillerlan\PrototypeDOM\Element[]
 	 */
 	public function descendants():array{
 		return $this->select();
@@ -205,14 +205,14 @@ trait NodeTraversalTrait{
 	}
 
 	/**
-	 * @return array[\chillerlan\PrototypeDOM\Element]
+	 * @return \chillerlan\PrototypeDOM\Element[]
 	 */
 	public function previousSiblings():array{
 		return $this->recursivelyCollect('previousSibling');
 	}
 
 	/**
-	 * @return array[\chillerlan\PrototypeDOM\Element]
+	 * @return \chillerlan\PrototypeDOM\Element[]
 	 */
 	public function nextSiblings():array{
 		return $this->recursivelyCollect('nextSibling');

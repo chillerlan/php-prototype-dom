@@ -12,7 +12,7 @@
 
 namespace chillerlan\PrototypeDOM;
 
-use DOMElement, DOMNode, DOMNodeList;
+use DOMElement;
 
 class Element extends DOMElement{
 	use NodeTraversalTrait, NodeManipulationTrait;
@@ -25,7 +25,7 @@ class Element extends DOMElement{
 	public function id(string $newID = null):string {
 		$oldID = $this->getAttribute('id');
 
-		if($newID){
+		if(!is_null($newID)){
 			$this->setAttribute('id', $newID);
 		}
 
@@ -146,7 +146,7 @@ class Element extends DOMElement{
 	}
 
 	/**
-	 * @return array
+	 * @return string[]
 	 */
 	public function getStyle():array{
 		$currentStyle = [];
@@ -210,7 +210,7 @@ class Element extends DOMElement{
 	}
 
 	/**
-	 * @return array
+	 * @return  string[]
 	 */
 	public function getAttributes():array{
 		$attributes = [];
