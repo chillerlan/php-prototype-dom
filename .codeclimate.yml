@@ -6,15 +6,6 @@ engines:
     config:
       file_extensions: "php"
       rulesets: "phpmd.xml"
-    checks:
-      Naming/ShortMethodName:
-        enabled: false
-      CleanCode/BooleanArgumentFlag:
-        enabled: false
-      CleanCode/ElseExpression:
-        enabled: false
-  markdownlint:
-    enabled: true
 ratings:
   paths:
   - "**.php"
