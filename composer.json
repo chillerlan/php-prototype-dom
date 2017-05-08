@@ -1,6 +1,6 @@
 {
 	"name": "codemasher/php-prototype-dom",
-	"description": "PHP 7+",
+	"description": "Prototype.js like DOM traversal and manipulation. PHP 7+",
 	"homepage": "https://github.com/codemasher/php-prototype-dom",
 	"license": "MIT",
 	"type": "library",
