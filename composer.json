@@ -1,0 +1,32 @@
+{
+	"name": "codemasher/php-prototype-dom",
+	"description": "PHP 7+",
+	"homepage": "https://github.com/codemasher/php-prototype-dom",
+	"license": "MIT",
+	"type": "library",
+	"authors": [
+		{
+			"name": "Smiley",
+			"email": "smiley@chillerlan.net"
+		}
+	],
+	"require": {
+		"php": ">=7.0.3",
+		"symfony/css-selector": "3.2.*"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "6.0.*"
+	},
+	"autoload": {
+		"psr-4": {
+			"chillerlan\\PrototypeDOM\\": "src"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"chillerlan\\PrototypeDOMTest\\": "tests",
+			"chillerlan\\PrototypeDOMExamples\\": "examples"
+		}
+	}
+
+}
