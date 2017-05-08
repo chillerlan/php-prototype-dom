@@ -143,10 +143,14 @@ trait NodeTraversalTrait{
 	public function childElements(int $nodeType = XML_ELEMENT_NODE):array{
 		$children = [];
 
-		foreach($this->childNodes as $child){
+		if($this->hasChildNodes()){
 
-			if($child->nodeType === $nodeType){
-				$children[] = $child;
+			foreach($this->childNodes as $child){
+
+				if($child->nodeType === $nodeType){
+					$children[] = $child;
+				}
+
 			}
 
 		}

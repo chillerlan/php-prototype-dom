@@ -154,7 +154,7 @@ class Document extends DOMDocument{
 			$document->loadHTML('<html><body id="content">'.$content.'</body></html>');
 		}
 		else{
-			throw new \Exception('invalid content');
+			throw new \Exception('invalid content'); // @codeCoverageIgnore
 		}
 
 		return $document->getElementById('content')->childNodes;

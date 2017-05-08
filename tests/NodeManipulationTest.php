@@ -21,7 +21,10 @@ class NodeManipulationTest extends TestAbstract{
 			$node->remove();
 		}
 
-		$this->assertEquals('<!DOCTYPE html>'."\n".'<html lang="en"></html>'."\n", $this->document->inspect());
+		$this->assertSame('<!DOCTYPE html>'."\n".'<html lang="en"></html>'."\n", $this->document->inspect());
+
+		$element = $this->document->newElement('div', ['id' => 'what'])->update('foo!');
+		$this->assertSame('what', $element->remove()->id());
 	}
 
 	public function testReplace(){
@@ -31,9 +34,14 @@ class NodeManipulationTest extends TestAbstract{
 	}
 
 	public function testWrap(){
-		$this->element->wrap($this->document->newElement('section', ['id' => 'nope']));
+		$wrapper = $this->document->newElement('section', ['id' => 'nope']);
+		$this->element->wrap($wrapper);
 
 		$this->assertSame('what', $this->document->getElementById('nope')->firstChild->id());
+
+		$wrapper = $this->document->newElement('section', ['id' => 'nope']);
+		$element = $this->document->newElement('div', ['id' => 'what'])->update('foo!');
+		$this->assertSame('<section id="nope"><div id="what">foo!</div></section>', $element->wrap($wrapper)->inspect());
 	}
 
 	public function testEmpty(){
@@ -64,11 +72,17 @@ class NodeManipulationTest extends TestAbstract{
 				'top' => '<div id="top1">top1</div><div id="top2">top2</div>',
 				'bottom' => '<div id="bottom2">bottom2</div><div id="bottom3">bottom3</div>',
 				'before' => '<div id="before1"></div><div id="before2"></div>',
-				'after' => '<div id="after1"></div><div id="after2"><div><a></a></div></div>',
-			]);
+				'after' => '<div id="after1"></div><div id="after2"></div>',
+			])
+			->next(2)
+			->insert('<div id="after3"><a></a></div>')
+			->up()
+			->insert(['after' => '<div id="after8"><a></a></div>']);
+
+		$this->assertNull($this->element->up(2));
 
 		$this->assertSame('bottom3', $this->document->getElementById('bottom3')->nodeValue);
-#		print_r($this->document->saveHTML());
+#		print_r($this->document->inspect());
 #		$this->markTestSkipped('@todo testInsert');
 	}
 

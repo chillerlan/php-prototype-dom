@@ -45,6 +45,12 @@ trait NodeManipulationTrait{
 	 * @return \DOMNode
 	 */
 	public function remove():DOMNode{
+
+		if(!$this->parentNode){
+			/** @var \chillerlan\PrototypeDOM\Element $this */
+			return $this;
+		}
+
 		/** @var \chillerlan\PrototypeDOM\Element $this */
 		return $this->parentNode->removeChild($this);
 	}
@@ -55,6 +61,12 @@ trait NodeManipulationTrait{
 	 * @return \DOMNode
 	 */
 	public function replace(DOMNode $newnode):DOMNode{
+
+		if(!$this->parentNode){
+			/** @var \chillerlan\PrototypeDOM\Element $this */
+			return $this;
+		}
+
 		/** @var \chillerlan\PrototypeDOM\Element $this */
 		return $this->parentNode->replaceChild($this->_importNode($newnode), $this);
 	}
@@ -103,6 +115,7 @@ trait NodeManipulationTrait{
 
 		while($node){
 			$nextNode = $node->nextSibling;
+
 			if($node->nodeType === XML_TEXT_NODE && empty(trim($node->nodeValue))){
 				$node->remove();
 			}
@@ -143,10 +156,14 @@ trait NodeManipulationTrait{
 	 *
 	 * @return \DOMNode
 	 */
-	public function _insertBefore(DOMNodeList $nodes):DOMNode{
+	public function _insertBefore(DOMNodeList $nodes){
 
-		foreach($nodes as $node){
-			$this->parentNode->insertBefore($this->_importNode($node), $this);
+		if($this->parentNode){
+
+			foreach($nodes as $node){
+				$this->parentNode->insertBefore($this->_importNode($node), $this);
+			}
+
 		}
 
 		/** @var \chillerlan\PrototypeDOM\Element $this */
@@ -159,10 +176,9 @@ trait NodeManipulationTrait{
 	 * @return \DOMNode
 	 */
 	public function _insertTop(DOMNodeList $nodes):DOMNode{
-		$this->firstChild->_insertBefore($nodes);
-
-		/** @var \chillerlan\PrototypeDOM\Element $this */
-		return $this;
+		return $this->hasChildNodes()
+			? $this->firstChild->_insertBefore($nodes)
+			: $this->_insertBottom($nodes);
 	}
 
 	/**
@@ -171,17 +187,9 @@ trait NodeManipulationTrait{
 	 * @return \DOMNode
 	 */
 	public function _insertAfter(DOMNodeList $nodes):DOMNode{
-		$node = $this->nextSibling;
-
-		if(!$node){
-			$this->parentNode->_insertBottom($nodes);
-		}
-		else{
-			$node->_insertBefore($nodes);
-		}
-
-		/** @var \chillerlan\PrototypeDOM\Element $this */
-		return $this;
+		return !$this->nextSibling && $this->parentNode
+			? $this->parentNode->_insertBottom($nodes)
+			: $this->nextSibling->_insertBefore($nodes);
 	}
 
 	/**
@@ -194,7 +202,6 @@ trait NodeManipulationTrait{
 	 * @param string|array|\DOMNode|\DOMNodeList $content
 	 *
 	 * @return \DOMNode
-	 * @throws \Exception
 	 */
 	public function insert($content):DOMNode{
 
@@ -214,9 +221,6 @@ trait NodeManipulationTrait{
 
 			}
 
-		}
-		else{
-			throw new \Exception('invalid content: '.gettype($content));
 		}
 
 		/** @var \chillerlan\PrototypeDOM\Element $this */

@@ -84,7 +84,7 @@ class Element extends DOMElement{
 
 		}
 
-		$this->setAttribute('class', implode(' ', $currentClassnames));
+		$this->setAttribute('class', implode(' ', array_unique($currentClassnames)));
 
 		return $this;
 	}
@@ -97,7 +97,6 @@ class Element extends DOMElement{
 	public function removeClassNames(array $classnames):Element{
 		$currentClassnames = $this->getClassNames();
 
-		// @todo -> regex?
 		foreach($classnames as $classname){
 			$keys = array_keys($currentClassnames, $classname);
 
@@ -111,7 +110,7 @@ class Element extends DOMElement{
 
 		}
 
-		$this->setAttribute('class', implode(' ', $currentClassnames));
+		$this->setAttribute('class', implode(' ', array_unique($currentClassnames)));
 
 		return $this;
 	}
