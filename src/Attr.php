@@ -1,9 +1,9 @@
 <?php
 /**
- * Class Text
+ * Class Attr
  *
- * @filesource   Text.php
- * @created      06.05.2017
+ * @filesource   Attr.php
+ * @created      08.05.2017
  * @package      chillerlan\PrototypeDOM
  * @author       Smiley <smiley@chillerlan.net>
  * @copyright    2017 Smiley
@@ -12,9 +12,6 @@
 
 namespace chillerlan\PrototypeDOM;
 
-use DOMText;
+use DOMAttr;
 
-class Text extends DOMText{
-	use ManipulationTrait, TraversalTrait;
-
-}
+class Attr extends DOMAttr{}

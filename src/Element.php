@@ -15,7 +15,7 @@ namespace chillerlan\PrototypeDOM;
 use DOMElement;
 
 class Element extends DOMElement{
-	use NodeTraversalTrait, NodeManipulationTrait;
+	use ManipulationTrait, TraversalTrait;
 
 	/**
 	 * @param string|null $newID

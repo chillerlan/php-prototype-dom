@@ -1,8 +1,8 @@
 <?php
 /**
- * Trait NodeTraversalTrait
+ * Trait TraversalTrait
  *
- * @filesource   NodeTraversalTrait.php
+ * @filesource   TraversalTrait.php
  * @created      06.05.2017
  * @package      chillerlan\PrototypeDOM
  * @author       Smiley <smiley@chillerlan.net>
@@ -17,7 +17,7 @@ use DOMNode;
 /**
  * @extends \DOMNode
  */
-trait NodeTraversalTrait{
+trait TraversalTrait{
 
 	/**
 	 * @link http://php.net/manual/class.domnode.php#domnode.props.ownerdocument
@@ -31,9 +31,9 @@ trait NodeTraversalTrait{
 	 * @param int    $maxLength
 	 * @param int    $nodeType
 	 *
-	 * @return \chillerlan\PrototypeDOM\Element[]
+	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
-	public function recursivelyCollect(string $property, int $maxLength = -1, int $nodeType = XML_ELEMENT_NODE):array{
+	public function recursivelyCollect(string $property, int $maxLength = -1, int $nodeType = XML_ELEMENT_NODE):NodeList{
 		/** @var \DOMNode $this */
 		return $this->ownerDocument->recursivelyCollect($this, $property, $maxLength, $nodeType);
 	}
@@ -69,9 +69,9 @@ trait NodeTraversalTrait{
 	/**
 	 * @param string|array $selectors
 	 *
-	 * @return array
+	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
-	public function select($selectors = null):array{
+	public function select($selectors = null):NodeList{
 		return $this->ownerDocument->select($selectors, $this, 'descendant::');
 	}
 
@@ -138,10 +138,10 @@ trait NodeTraversalTrait{
 	/**
 	 * @param int $nodeType
 	 *
-	 * @return \chillerlan\PrototypeDOM\Element[]
+	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
-	public function childElements(int $nodeType = XML_ELEMENT_NODE):array{
-		$children = [];
+	public function childElements(int $nodeType = XML_ELEMENT_NODE):NodeList{
+		$children = new NodeList;
 
 		if($this->hasChildNodes()){
 
@@ -164,36 +164,27 @@ trait NodeTraversalTrait{
 	 * @return bool
 	 */
 	public function descendantOf(DOMNode $ancestor):bool{
-
-		foreach($this->ancestors() as $match){
-
-			if($ancestor->isSameNode($match)){
-				return true;
-			}
-
-		}
-
-		return false;
+		return $this->ancestors()->match($ancestor);
 	}
 
 	/**
-	 * @return \chillerlan\PrototypeDOM\Element[]
+	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
-	public function ancestors():array{
+	public function ancestors():NodeList{
 		return $this->recursivelyCollect('parentNode');
 	}
 
 	/**
-	 * @return \chillerlan\PrototypeDOM\Element[]
+	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
-	public function siblings():array{
-		return array_merge(array_reverse($this->previousSiblings()), $this->nextSiblings());
+	public function siblings():NodeList{
+		return $this->previousSiblings()->reverse()->merge($this->nextSiblings());
 	}
 
 	/**
-	 * @return \chillerlan\PrototypeDOM\Element[]
+	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
-	public function descendants():array{
+	public function descendants():NodeList{
 		return $this->select();
 	}
 
@@ -205,16 +196,16 @@ trait NodeTraversalTrait{
 	}
 
 	/**
-	 * @return \chillerlan\PrototypeDOM\Element[]
+	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
-	public function previousSiblings():array{
+	public function previousSiblings():NodeList{
 		return $this->recursivelyCollect('previousSibling');
 	}
 
 	/**
-	 * @return \chillerlan\PrototypeDOM\Element[]
+	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
-	public function nextSiblings():array{
+	public function nextSiblings():NodeList{
 		return $this->recursivelyCollect('nextSibling');
 	}
 

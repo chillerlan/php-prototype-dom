@@ -1,8 +1,8 @@
 <?php
 /**
- * Trait NodeManipulationTrait
+ * Trait ManipulationTrait
  *
- * @filesource   NodeManipulationTrait.php
+ * @filesource   ManipulationTrait.php
  * @created      08.05.2017
  * @package      chillerlan\PrototypeDOM
  * @author       Smiley <smiley@chillerlan.net>
@@ -17,7 +17,7 @@ use DOMNode, DOMNodeList;
 /**
  * @extends \DOMNode
  */
-trait NodeManipulationTrait{
+trait ManipulationTrait{
 
 	/**
 	 * @link http://php.net/manual/class.domnode.php#domnode.props.ownerdocument
@@ -137,62 +137,6 @@ trait NodeManipulationTrait{
 	}
 
 	/**
-	 * @param \DOMNodeList $nodes
-	 *
-	 * @return \DOMNode
-	 */
-	public function _insertBottom(DOMNodeList $nodes):DOMNode{
-
-		foreach($nodes as $node){
-			$this->appendChild($this->_importNode($node));
-		}
-
-		/** @var \chillerlan\PrototypeDOM\Element $this */
-		return $this;
-	}
-
-	/**
-	 * @param \DOMNodeList $nodes
-	 *
-	 * @return \DOMNode
-	 */
-	public function _insertBefore(DOMNodeList $nodes){
-
-		if($this->parentNode){
-
-			foreach($nodes as $node){
-				$this->parentNode->insertBefore($this->_importNode($node), $this);
-			}
-
-		}
-
-		/** @var \chillerlan\PrototypeDOM\Element $this */
-		return $this;
-	}
-
-	/**
-	 * @param \DOMNodeList $nodes
-	 *
-	 * @return \DOMNode
-	 */
-	public function _insertTop(DOMNodeList $nodes):DOMNode{
-		return $this->hasChildNodes()
-			? $this->firstChild->_insertBefore($nodes)
-			: $this->_insertBottom($nodes);
-	}
-
-	/**
-	 * @param \DOMNodeList $nodes
-	 *
-	 * @return \DOMNode
-	 */
-	public function _insertAfter(DOMNodeList $nodes):DOMNode{
-		return !$this->nextSibling && $this->parentNode
-			? $this->parentNode->_insertBottom($nodes)
-			: $this->nextSibling->_insertBefore($nodes);
-	}
-
-	/**
 	 * Accepted insertion points are:
 	 * - before (as element's previous sibling)
 	 * - after (as element's next sibling)
@@ -205,23 +149,87 @@ trait NodeManipulationTrait{
 	 */
 	public function insert($content):DOMNode{
 
-		if(is_string($content) || $content instanceof DOMNode || $content instanceof DOMNodeList){
-			$this->_insertBottom($this->ownerDocument->_toDOMNodeList($content));
-		}
-		elseif(is_array($content)){
+		if(is_array($content)){
 
 			foreach(['before', 'after', 'top', 'bottom'] as $pos){
 
 				if(array_key_exists($pos, $content)){
-					call_user_func_array(
-						[$this, '_insert'.ucfirst($pos)],
-						[$this->ownerDocument->_toDOMNodeList($content[$pos])]
-					);
+					$nodes = $this->ownerDocument->_toNodeList($content[$pos]);
+
+					if($pos === 'top'){
+						$nodes->reverse();
+					}
+
+					foreach($nodes as $node){
+						call_user_func_array([$this, 'insert_'.$pos], [$node]);
+					}
+
 				}
 
 			}
 
 		}
+		else{
+			foreach($this->ownerDocument->_toNodeList($content) as $node){
+				$this->insert_bottom($node);
+			}
+		}
+
+		/** @var \chillerlan\PrototypeDOM\Element $this */
+		return $this;
+	}
+
+	/**
+	 * @param \DOMNode      $node
+	 * @param \DOMNode|null $refNode
+	 *
+	 * @return \DOMNode
+	 */
+	public function insert_before(DOMNode $node, DOMNode $refNode = null):DOMNode{
+
+		if($this->parentNode){
+			$this->parentNode->insertBefore($this->_importNode($node), $refNode ?? $this);
+		}
+
+		/** @var \chillerlan\PrototypeDOM\Element $this */
+		return $this;
+	}
+
+	/**
+	 * @param \DOMNode $node
+	 *
+	 * @return \DOMNode
+	 */
+	public function insert_after(DOMNode $node):DOMNode{
+		!$this->nextSibling && $this->parentNode
+			? $this->parentNode->insert_bottom($node)
+			: $this->nextSibling->insert_before($node);
+
+		/** @var \chillerlan\PrototypeDOM\Element $this */
+		return $this;
+	}
+
+	/**
+	 * @param \DOMNode $node
+	 *
+	 * @return \DOMNode
+	 */
+	public function insert_top(DOMNode $node):DOMNode{
+		$this->hasChildNodes()
+			? $this->firstChild->insert_before($node, $this->firstChild)
+			: $this->insert_bottom($node);
+
+		/** @var \chillerlan\PrototypeDOM\Element $this */
+		return $this;
+	}
+
+	/**
+	 * @param \DOMNode $node
+	 *
+	 * @return \DOMNode
+	 */
+	public function insert_bottom(DOMNode $node):DOMNode{
+		$this->appendChild($this->_importNode($node));
 
 		/** @var \chillerlan\PrototypeDOM\Element $this */
 		return $this;

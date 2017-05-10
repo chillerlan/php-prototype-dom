@@ -17,7 +17,7 @@ class NodeManipulationTest extends TestAbstract{
 	public function testRemove(){
 
 		foreach($this->document->select(['head', 'body']) as $node){
-			/** @var \chillerlan\PrototypeDOM\NodeManipulationTrait $node */
+			/** @var \chillerlan\PrototypeDOM\ManipulationTrait $node */
 			$node->remove();
 		}
 
@@ -82,7 +82,7 @@ class NodeManipulationTest extends TestAbstract{
 		$this->assertNull($this->element->up(2));
 
 		$this->assertSame('bottom3', $this->document->getElementById('bottom3')->nodeValue);
-#		print_r($this->document->inspect());
+		print_r($this->document->inspect());
 #		$this->markTestSkipped('@todo testInsert');
 	}
 

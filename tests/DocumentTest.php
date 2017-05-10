@@ -33,7 +33,7 @@ class DocumentTest extends TestAbstract{
 	}
 
 	public function testGetElementsBySelector(){
-		$this->assertSame('en', $this->document->getElementsBySelector('html')->item(0)->getAttribute('lang'));
+		$this->assertSame('en', $this->document->querySelectorAll('html')->item(0)->getAttribute('lang'));
 	}
 
 	public function testInspect(){
@@ -45,22 +45,22 @@ class DocumentTest extends TestAbstract{
 		$this->assertEquals('<!DOCTYPE html>'."\n".'<html lang="en"></html>'."\n", $this->document->removeElementsBySelector(['head', 'body'])->inspect());
 	}
 
-	public function testToDOMNodeList(){
-		$nodelist = $this->document->_toDOMNodeList('<div id="boo" class="bar">content1</div><div><a href="#foo">blah</a></div>');
-
-		$this->assertSame(2, $nodelist->length);
-		$this->assertSame('blah', $nodelist->item(1)->nodeValue);
-		$this->assertInstanceOf(DOMNodeList::class, $this->document->_toDOMNodeList($nodelist));
-	}
+#	public function testToDOMNodeList(){
+#		$nodelist = $this->document->_toNodeList('<div id="boo" class="bar">content1</div><div><a href="#foo">blah</a></div>');
+// @todo
+#		$this->assertSame(2, $nodelist->length);
+#		$this->assertSame('blah', $nodelist->item(1)->nodeValue);
+#		$this->assertInstanceOf(DOMNodeList::class, $this->document->_toNodeList($nodelist));
+#	}
 
 	public function testRecursivelyCollect(){
 		$this->element = $this->document->getElementById('content');
 
 		$elements = $this->document->recursivelyCollect($this->element, 'parentNode');
-		$this->assertSame(['body', 'html'], array_column($elements, 'nodeName'));
+		$this->assertSame(['body', 'html'], array_column(iterator_to_array($elements), 'nodeName'));
 
 		$elements = $this->document->recursivelyCollect($this->element, 'parentNode', 1);
-		$this->assertSame(['body'], array_column($elements, 'nodeName'));
+		$this->assertSame(['body'], array_column(iterator_to_array($elements), 'nodeName'));
 	}
 
 }

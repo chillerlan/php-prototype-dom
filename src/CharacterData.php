@@ -15,5 +15,5 @@ namespace chillerlan\PrototypeDOM;
 use DOMCharacterData;
 
 class CharacterData extends DOMCharacterData {
-	use NodeTraversalTrait, NodeManipulationTrait;
+	use TraversalTrait, ManipulationTrait;
 }

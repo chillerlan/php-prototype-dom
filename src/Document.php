@@ -30,6 +30,9 @@ class Document extends DOMDocument{
 		$this->registerNodeClass('DOMText', Text::class);
 		$this->registerNodeClass('DOMCharacterData', CharacterData::class);
 		$this->registerNodeClass('DOMDocumentFragment', DocumentFragment::class);
+		$this->registerNodeClass('DOMDocumentType', DocumentType::class);
+		$this->registerNodeClass('DOMComment', Comment::class);
+		$this->registerNodeClass('DOMAttr', Attr::class);
 	}
 
 	/**
@@ -46,10 +49,10 @@ class Document extends DOMDocument{
 	 * @param string        $xpath
 	 * @param \DOMNode|null $contextNode
 	 *
-	 * @return \DOMNodeList
+	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
-	public function query(string $xpath, DOMNode $contextNode = null):DOMNodeList{
-		return (new DOMXPath($this))->query($xpath, $contextNode);
+	public function query(string $xpath, DOMNode $contextNode = null):NodeList{
+		return new NodeList((new DOMXPath($this))->query($xpath, $contextNode));
 	}
 
 	/**
@@ -57,9 +60,9 @@ class Document extends DOMDocument{
 	 * @param \DOMNode|null $contextNode
 	 * @param string        $axis
 	 *
-	 * @return \DOMNodeList
+	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
-	public function getElementsBySelector(string $selector, DOMNode $contextNode = null, string $axis = 'descendant-or-self::'):DOMNodeList{
+	public function querySelectorAll(string $selector, DOMNode $contextNode = null, string $axis = 'descendant-or-self::'):NodeList{
 		return $this->query($this->selector2xpath($selector, $axis), $contextNode);
 	}
 
@@ -69,9 +72,9 @@ class Document extends DOMDocument{
 	 * @param string        $axis
 	 * @param int           $nodeType
 	 *
-	 * @return \DOMNode[]
+	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
-	public function select($selectors = null, DOMNode $contextNode = null, string $axis = 'descendant-or-self::', int $nodeType = XML_ELEMENT_NODE):array{
+	public function select($selectors = null, DOMNode $contextNode = null, string $axis = 'descendant-or-self::', int $nodeType = XML_ELEMENT_NODE):NodeList{
 
 		if(is_string($selectors)){
 			$selectors = [trim($selectors)];
@@ -81,11 +84,11 @@ class Document extends DOMDocument{
 			$selectors = ['*'];
 		}
 
-		$elements = [];
+		$elements = new NodeList;
 
 		foreach($selectors as $selector){
 
-			foreach($this->getElementsBySelector($selector, $contextNode, $axis) as $element){
+			foreach($this->querySelectorAll($selector, $contextNode, $axis) as $element){
 
 				if($element->nodeType === $nodeType){
 					$elements[] = $element;
@@ -96,6 +99,19 @@ class Document extends DOMDocument{
 		}
 
 		return $elements;
+	}
+
+	public function _loadHTMLFragment(string $content):NodeList{
+		$document = new Document;
+		$document->loadHTML('<html><body id="-import-content">'.$content.'</body></html>');
+
+		return new NodeList($document->getElementById('-import-content')->childNodes);
+
+/*
+		$document->loadHTML('<!DOCTYPE html>' .$content);
+		return $document->getElementsByTagName('head')[0]->childNodes
+		         ?? $document->getElementsByTagName('body')[0]->childNodes;
+*/
 	}
 
 	/**
@@ -132,32 +148,26 @@ class Document extends DOMDocument{
 	}
 
 	/**
-	 * @param string|\DOMNode|\DOMNodeList $content
+	 * @param string|\DOMNode|\DOMNodeList|\chillerlan\PrototypeDOM\NodeList $content
 	 *
-	 * @return \DOMNodeList
+	 * @return \chillerlan\PrototypeDOM\NodeList
 	 * @throws \Exception
 	 */
-	public function _toDOMNodeList($content):DOMNodeList{
+	public function _toNodeList($content):NodeList{
 
-		if($content instanceof DOMNodeList){
-			return $content;
+		if($content instanceof NodeList || $content instanceof DOMNodeList || is_array($content)){
+			return new NodeList($content);
 		}
-
-		$document = new Document;
-
-		if($content instanceof DOMNode){
-			$document->loadHTML('<html><body id="content"></body></html>');
-
-			$document->getElementById('content')->appendChild($document->importNode($content, true));
+		elseif($content instanceof DOMNode){
+			return new NodeList([$content]);
 		}
 		elseif(is_string($content)){
-			$document->loadHTML('<html><body id="content">'.$content.'</body></html>');
+			return $this->_loadHTMLFragment($content);
 		}
 		else{
 			throw new \Exception('invalid content'); // @codeCoverageIgnore
 		}
 
-		return $document->getElementById('content')->childNodes;
 	}
 
 	/**
@@ -166,10 +176,10 @@ class Document extends DOMDocument{
 	 * @param int      $maxLength
 	 * @param int      $nodeType
 	 *
-	 * @return \DOMNode[]
+	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
-	public function recursivelyCollect(DOMNode $element, string $property, int $maxLength = -1, int $nodeType = XML_ELEMENT_NODE):array{
-		$nodes = [];
+	public function recursivelyCollect(DOMNode $element, string $property, int $maxLength = -1, int $nodeType = XML_ELEMENT_NODE):NodeList{
+		$nodes = new NodeList;
 
 		if(in_array($property, ['parentNode', 'previousSibling', 'nextSibling'])){
 

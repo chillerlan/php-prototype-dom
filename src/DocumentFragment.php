@@ -17,5 +17,5 @@ use DOMDocumentFragment;
 /**
  */
 class DocumentFragment extends DOMDocumentFragment{
-	use NodeTraversalTrait, NodeManipulationTrait;
+	use TraversalTrait, ManipulationTrait;
 }

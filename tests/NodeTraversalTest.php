@@ -17,11 +17,11 @@ class NodeTraversalTest extends TestAbstract{
 	public function testRecursivelyCollect(){
 		$this->element = $this->document->getElementById('content');
 
-		$this->assertSame(['body', 'html'], array_column($this->element->ancestors(), 'nodeName'));
-		$this->assertSame(['div', 'div'], array_column($this->element->siblings(), 'nodeName'));
+		$this->assertSame(['body', 'html'], array_column(iterator_to_array($this->element->ancestors()), 'nodeName'));
+		$this->assertSame(['div', 'div'], array_column(iterator_to_array($this->element->siblings()), 'nodeName'));
 
 		$elements = $this->element->recursivelyCollect('parentNode', 1);
-		$this->assertSame(['body'], array_column($elements, 'nodeName'));
+		$this->assertSame(['body'], array_column(iterator_to_array($elements), 'nodeName'));
 	}
 
 	public function testInspect(){
@@ -32,8 +32,8 @@ class NodeTraversalTest extends TestAbstract{
 		$this->element = $this->document->getElementById('content');
 
 		$e = ['some stuff', 'more stuff', 'other stuff'];
-		$this->assertSame($e, array_column($this->element->select('*'), 'nodeValue'));
-		$this->assertSame($e, array_column($this->element->descendants(), 'nodeValue'));
+		$this->assertSame($e, array_column(iterator_to_array($this->element->select('*')), 'nodeValue'));
+		$this->assertSame($e, array_column(iterator_to_array($this->element->descendants()), 'nodeValue'));
 	}
 
 	public function testMatch(){
@@ -78,7 +78,7 @@ class NodeTraversalTest extends TestAbstract{
 	public function testChildElements(){
 		$this->element = $this->document->getElementById('content');
 
-		$this->assertSame(['some stuff', 'more stuff', 'other stuff'], array_column($this->element->childElements(), 'nodeValue'));
+		$this->assertSame(['some stuff', 'more stuff', 'other stuff'], array_column($this->element->childElements()->_toArray(), 'nodeValue'));
 	}
 
 	public function testDescendantOf(){
