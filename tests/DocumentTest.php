@@ -57,10 +57,10 @@ class DocumentTest extends TestAbstract{
 		$this->element = $this->document->getElementById('content');
 
 		$elements = $this->document->recursivelyCollect($this->element, 'parentNode');
-		$this->assertSame(['body', 'html'], array_column(iterator_to_array($elements), 'nodeName'));
+		$this->assertSame(['body', 'html'], $elements->pluck('nodeName'));
 
 		$elements = $this->document->recursivelyCollect($this->element, 'parentNode', 1);
-		$this->assertSame(['body'], array_column(iterator_to_array($elements), 'nodeName'));
+		$this->assertSame(['body'], $elements->pluck('nodeName'));
 	}
 
 }

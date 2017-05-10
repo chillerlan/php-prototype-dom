@@ -12,7 +12,7 @@
 
 namespace chillerlan\PrototypeDOM;
 
-use DOMNode, DOMNodeList;
+use DOMNode;
 
 /**
  * @extends \DOMNode
@@ -47,11 +47,11 @@ trait ManipulationTrait{
 	public function remove():DOMNode{
 
 		if(!$this->parentNode){
-			/** @var \chillerlan\PrototypeDOM\Element $this */
+			/** @var \DOMNode $this */
 			return $this;
 		}
 
-		/** @var \chillerlan\PrototypeDOM\Element $this */
+		/** @var \DOMNode $this */
 		return $this->parentNode->removeChild($this);
 	}
 
@@ -63,20 +63,20 @@ trait ManipulationTrait{
 	public function replace(DOMNode $newnode):DOMNode{
 
 		if(!$this->parentNode){
-			/** @var \chillerlan\PrototypeDOM\Element $this */
+			/** @var \DOMNode $this */
 			return $this;
 		}
 
-		/** @var \chillerlan\PrototypeDOM\Element $this */
+		/** @var \DOMNode $this */
 		return $this->parentNode->replaceChild($this->_importNode($newnode), $this);
 	}
 
 	/**
 	 * @param \DOMNode $wrapper
 	 *
-	 * @return \DOMNode
+	 * @return \chillerlan\PrototypeDOM\Element
 	 */
-	public function wrap(DOMNode $wrapper):DOMNode{
+	public function wrap(DOMNode $wrapper):Element{
 		/** @var \chillerlan\PrototypeDOM\Element $wrapper */
 		return $wrapper->insert($this->replace($wrapper));
 	}
@@ -90,7 +90,7 @@ trait ManipulationTrait{
 			$this->firstChild->remove();
 		}
 
-		/** @var \chillerlan\PrototypeDOM\Element $this */
+		/** @var \DOMNode $this */
 		return $this;
 	}
 
@@ -103,7 +103,7 @@ trait ManipulationTrait{
 		$this->empty();
 		$this->insert($content);
 
-		/** @var \chillerlan\PrototypeDOM\Element $this */
+		/** @var \DOMNode $this */
 		return $this;
 	}
 
@@ -123,7 +123,7 @@ trait ManipulationTrait{
 			$node = $nextNode;
 		}
 
-		/** @var \chillerlan\PrototypeDOM\Element $this */
+		/** @var \DOMNode $this */
 		return $this;
 	}
 
@@ -156,7 +156,7 @@ trait ManipulationTrait{
 				if(array_key_exists($pos, $content)){
 					$nodes = $this->ownerDocument->_toNodeList($content[$pos]);
 
-					if($pos === 'top'){
+					if($pos === 'top' && $this->hasChildNodes() || $pos === 'after' && $this->nextSibling){
 						$nodes->reverse();
 					}
 
@@ -175,7 +175,7 @@ trait ManipulationTrait{
 			}
 		}
 
-		/** @var \chillerlan\PrototypeDOM\Element $this */
+		/** @var \DOMNode $this */
 		return $this;
 	}
 
@@ -191,7 +191,7 @@ trait ManipulationTrait{
 			$this->parentNode->insertBefore($this->_importNode($node), $refNode ?? $this);
 		}
 
-		/** @var \chillerlan\PrototypeDOM\Element $this */
+		/** @var \DOMNode $this */
 		return $this;
 	}
 
@@ -201,12 +201,9 @@ trait ManipulationTrait{
 	 * @return \DOMNode
 	 */
 	public function insert_after(DOMNode $node):DOMNode{
-		!$this->nextSibling && $this->parentNode
+		return !$this->nextSibling && $this->parentNode
 			? $this->parentNode->insert_bottom($node)
 			: $this->nextSibling->insert_before($node);
-
-		/** @var \chillerlan\PrototypeDOM\Element $this */
-		return $this;
 	}
 
 	/**
@@ -215,12 +212,9 @@ trait ManipulationTrait{
 	 * @return \DOMNode
 	 */
 	public function insert_top(DOMNode $node):DOMNode{
-		$this->hasChildNodes()
+		return $this->hasChildNodes()
 			? $this->firstChild->insert_before($node, $this->firstChild)
 			: $this->insert_bottom($node);
-
-		/** @var \chillerlan\PrototypeDOM\Element $this */
-		return $this;
 	}
 
 	/**
@@ -231,7 +225,7 @@ trait ManipulationTrait{
 	public function insert_bottom(DOMNode $node):DOMNode{
 		$this->appendChild($this->_importNode($node));
 
-		/** @var \chillerlan\PrototypeDOM\Element $this */
+		/** @var \DOMNode $this */
 		return $this;
 	}
 

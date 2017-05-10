@@ -28,7 +28,7 @@ class NodeListTest extends TestCase{
 	protected function setUp(){}
 
 	public function testInstance(){
-		$this->nodelist = new NodeList([]);
+		$this->nodelist = new NodeList;
 
 		$this->assertInstanceOf(NodeList::class, $this->nodelist);
 		$this->assertInstanceOf(Iterator::class, $this->nodelist);
@@ -41,11 +41,11 @@ class NodeListTest extends TestCase{
 
 		$this->assertCount(2, $this->nodelist);
 
-		$this->assertSame('boo', $this->nodelist->item(0)->id());
+		$this->assertSame('boo', $this->nodelist->first()->id());
 
 		$this->nodelist->reverse();
 
-		$this->assertSame('boo', $this->nodelist->item(1)->id());
+		$this->assertSame('boo', $this->nodelist->last()->id());
 
 
 		foreach($this->nodelist as $i => $node){

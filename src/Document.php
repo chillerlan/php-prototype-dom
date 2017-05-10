@@ -12,27 +12,35 @@
 
 namespace chillerlan\PrototypeDOM;
 
-use DOMDocument, DOMNode, DOMNodeList, DOMXPath;
+use DOMDocument,DOMNode, DOMNodeList, DOMXPath;
 use Symfony\Component\CssSelector\CssSelectorConverter;
 
 class Document extends DOMDocument{
 
+	const NODE_CLASSES = [
+		'Attr',
+		'CharacterData',
+		'Comment',
+		'DocumentFragment',
+		'DocumentType',
+		'Element',
+		'Text',
+	];
+
 	/**
 	 * Document constructor.
 	 *
+	 * @param string      $content
 	 * @param string|null $version
 	 * @param string|null $encoding
 	 */
-	public function __construct($version = null, $encoding = null){
+	public function __construct(string $content = null, $version = '1.0', $encoding = 'UTF-8'){
 		parent::__construct($version, $encoding);
 
-		$this->registerNodeClass('DOMElement', Element::class);
-		$this->registerNodeClass('DOMText', Text::class);
-		$this->registerNodeClass('DOMCharacterData', CharacterData::class);
-		$this->registerNodeClass('DOMDocumentFragment', DocumentFragment::class);
-		$this->registerNodeClass('DOMDocumentType', DocumentType::class);
-		$this->registerNodeClass('DOMComment', Comment::class);
-		$this->registerNodeClass('DOMAttr', Attr::class);
+		foreach(self::NODE_CLASSES as $nodeClass){
+			$this->registerNodeClass('DOM'.$nodeClass, __NAMESPACE__.'\\'.$nodeClass);
+		}
+
 	}
 
 	/**

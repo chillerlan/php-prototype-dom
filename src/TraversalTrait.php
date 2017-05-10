@@ -53,7 +53,7 @@ trait TraversalTrait{
 			$selector = null;
 		}
 
-		/** @var \chillerlan\PrototypeDOM\Element $this */
+		/** @var \DOMNode $this */
 		return $this->ownerDocument->_recursivelyFind($this, $property, $selector, $index ?? 0, $nodeType);
 	}
 
@@ -81,7 +81,7 @@ trait TraversalTrait{
 	 * @return bool
 	 */
 	public function match(string $selector):bool{
-		/** @var \chillerlan\PrototypeDOM\Element $this */
+		/** @var \DOMNode $this */
 		return $this->ownerDocument->match($this, $selector);
 	}
 
@@ -192,7 +192,7 @@ trait TraversalTrait{
 	 * @return \DOMNode|null
 	 */
 	public function firstDescendant(){
-		return $this->descendants()[0] ?? null;
+		return $this->descendants()->first();
 	}
 
 	/**
