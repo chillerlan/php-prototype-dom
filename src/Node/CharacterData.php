@@ -4,16 +4,17 @@
  *
  * @filesource   CharacterData.php
  * @created      07.05.2017
- * @package      chillerlan\PrototypeDOM
+ * @package      chillerlan\PrototypeDOM\Node
  * @author       Smiley <smiley@chillerlan.net>
  * @copyright    2017 Smiley
  * @license      MIT
  */
 
-namespace chillerlan\PrototypeDOM;
+namespace chillerlan\PrototypeDOM\Node;
 
 use DOMCharacterData;
+use chillerlan\PrototypeDOM\Traits\ElementTrait;
 
-class CharacterData extends DOMCharacterData {
-	use TraversalTrait, ManipulationTrait;
+class CharacterData extends DOMCharacterData implements PrototypeElement{
+	use ElementTrait;
 }

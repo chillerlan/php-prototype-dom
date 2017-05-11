@@ -10,8 +10,11 @@
  * @license      MIT
  */
 
-namespace chillerlan\PrototypeDOM;
+namespace chillerlan\PrototypeDOM\Node;
 
+use chillerlan\PrototypeDOM\Traits\NodeTrait;
 use DOMDocumentType;
 
-class DocumentType extends DOMDocumentType{}
+class DocumentType extends DOMDocumentType implements PrototypeNode{
+	use NodeTrait;
+}

@@ -10,11 +10,11 @@
  * @license      MIT
  */
 
-namespace chillerlan\PrototypeDOM;
+namespace chillerlan\PrototypeDOM\Node;
 
 use DOMText;
+use chillerlan\PrototypeDOM\Traits\ElementTrait;
 
-class Text extends DOMText{
-	use ManipulationTrait, TraversalTrait;
-
+class Text extends DOMText implements PrototypeElement{
+	use ElementTrait;
 }

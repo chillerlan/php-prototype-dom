@@ -12,52 +12,66 @@
 
 namespace chillerlan\PrototypeDOM;
 
-use DOMNode, DOMNodeList, Iterator, ArrayAccess, Countable;
+use ArrayAccess, Countable, DOMNodeList, Iterator;
+use chillerlan\PrototypeDOM\Node\PrototypeNode;
+use chillerlan\PrototypeDOM\Traits\{EnumerableTrait, Magic};
 
 /**
- * @see http://api.prototypejs.org/language/Enumerable/
+ * @property int $length
  */
 class NodeList implements Iterator, ArrayAccess, Countable{
+	use EnumerableTrait, Magic;
 
 	/**
 	 * @var array
 	 */
-	protected $nodelist = [];
+	protected $array = [];
 
 	/**
 	 * @var int
 	 */
-	protected $key = 0;
+	protected $offset = 0;
 
 	/**
 	 * NodeList constructor.
 	 *
-	 * @param \DOMNodeList|\chillerlan\PrototypeDOM\NodeList|\chillerlan\PrototypeDOM\Element[] $content
+	 * @param \DOMNodeList $nodes
 	 *
 	 * @throws \Exception
 	 */
-	public function __construct($content = null){
+	public function __construct(DOMNodeList $nodes = null){
 
-		if($content instanceof NodeList || $content instanceof DOMNodeList){
-			$this->nodelist = iterator_to_array($content);
-		}
-		elseif(is_array($content)){
-			$this->nodelist = $content;
-		}
-		else{
-			$this->nodelist = [];
+		if(!is_null($nodes)){
+			$this->array = iterator_to_array($nodes);
 		}
 
 	}
 
+
+	/*********
+	 * magic *
+	 *********/
+
 	/**
-	 * @param \DOMNode $node
+	 * @return int
+	 */
+	public function magic_get_length():int{
+		return $this->count();
+	}
+
+
+	/***********
+	 * generic *
+	 ***********/
+
+	/**
+	 * @param \chillerlan\PrototypeDOM\Node\PrototypeNode $node
 	 *
 	 * @return bool
 	 */
-	public function match(DOMNode $node):bool{
+	public function match(PrototypeNode $node):bool{
 
-		foreach($this->nodelist as $element){
+		foreach($this->array as $element){
 
 			if($element->isSameNode($node)){
 				return true;
@@ -69,52 +83,12 @@ class NodeList implements Iterator, ArrayAccess, Countable{
 	}
 
 	/**
-	 * @param int $index
+	 * @param int $offset
 	 *
-	 * @return \DOMNode|null
+	 * @return \chillerlan\PrototypeDOM\Node\Element|null
 	 */
-	public function item(int $index) {
-		return $this->nodelist[$index] ?? null;
-	}
-
-	/**
-	 * @return \DOMNode|null
-	 */
-	public function first(){
-		return $this->nodelist[0] ?? null;
-	}
-
-	/**
-	 * @return \DOMNode|null
-	 */
-	public function last(){
-		return $this->nodelist[$this->count() - 1] ?? null;
-	}
-
-	/**
-	 * @param string $name
-	 *
-	 * @return array
-	 */
-	public function pluck(string $name):array {
-		return array_column($this->nodelist, $name);
-	}
-
-	/**
-	 * @return \chillerlan\PrototypeDOM\NodeList
-	 */
-	public function reverse():NodeList{
-		$this->nodelist = array_reverse($this->nodelist);
-		$this->rewind();
-
-		return $this;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function toArray():array {
-		return $this->nodelist;
+	public function item(int $offset) {
+		return $this->array[$offset] ?? null;
 	}
 
 	/**
@@ -123,9 +97,18 @@ class NodeList implements Iterator, ArrayAccess, Countable{
 	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
 	public function merge(NodeList $nodelist):NodeList{
-		$this->nodelist = array_merge($this->nodelist, $nodelist->toArray());
+		$this->array = array_merge($this->array, $nodelist->toArray());
 
 		return $this;
+	}
+
+	/**
+	 * @param bool $xml
+	 *
+	 * @return string
+	 */
+	public function inspect($xml = false):string {
+		return (new Document($this, $xml))->inspect(null, $xml);
 	}
 
 
@@ -134,38 +117,38 @@ class NodeList implements Iterator, ArrayAccess, Countable{
 	 ************/
 
 	/**
-	 * @return \DOMNode
+	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode
 	 */
-	public function current():DOMNode{
-		return $this->nodelist[$this->key];
+	public function current(){
+		return $this->array[$this->offset];
 	}
 
 	/**
 	 * @return int
 	 */
 	public function key():int{
-		return $this->key;
+		return $this->offset;
 	}
 
 	/**
 	 * @return bool
 	 */
 	public function valid():bool{
-		return $this->offsetExists($this->key);
+		return $this->offsetExists($this->offset);
 	}
 
 	/**
 	 *  @return void
 	 */
 	public function next(){
-		$this->key++;
+		$this->offset++;
 	}
 
 	/**
 	 * @return void
 	 */
 	public function rewind(){
-		$this->key = 0;
+		$this->offset = 0;
 	}
 
 
@@ -179,31 +162,35 @@ class NodeList implements Iterator, ArrayAccess, Countable{
 	 * @return bool
 	 */
 	public function offsetExists($offset):bool{
-		return isset($this->nodelist[$offset]);
+		return isset($this->array[$offset]);
 	}
 
 	/**
 	 * @param int $offset
 	 *
-	 * @return \DOMNode|null
+	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|null
 	 */
 	public function offsetGet($offset){
 		return $this->item($offset);
 	}
 
 	/**
-	 * @param int   $offset
-	 * @param mixed $value
+	 * @param int                                         $offset
+	 * @param \chillerlan\PrototypeDOM\Node\PrototypeNode $value
 	 *
 	 * @return void
 	 */
 	public function offsetSet($offset, $value){
 
-		if(is_int($offset)){
-			$this->nodelist[$offset] = $value;
-		}
-		else{
-			$this->nodelist[] = $value;
+		if($value instanceof PrototypeNode){
+
+			if(is_int($offset)){
+				$this->array[$offset] = $value;
+			}
+			else{
+				$this->array[] = $value;
+			}
+
 		}
 
 	}
@@ -214,7 +201,7 @@ class NodeList implements Iterator, ArrayAccess, Countable{
 	 * @return void
 	 */
 	public function offsetUnset($offset){
-		unset($this->nodelist[$offset]);
+		unset($this->array[$offset]);
 	}
 
 
@@ -226,7 +213,7 @@ class NodeList implements Iterator, ArrayAccess, Countable{
 	 * @return int
 	 */
 	public function count():int{
-		return count($this->nodelist);
+		return count($this->array);
 	}
 
 }

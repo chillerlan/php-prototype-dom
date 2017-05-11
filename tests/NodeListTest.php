@@ -13,7 +13,7 @@
 namespace chillerlan\PrototypeDOMTest;
 
 use chillerlan\PrototypeDOM\Document;
-use chillerlan\PrototypeDOM\Element;
+use chillerlan\PrototypeDOM\Node\Element;
 use Iterator, ArrayAccess, Countable;
 use chillerlan\PrototypeDOM\NodeList;
 use PHPUnit\Framework\TestCase;
@@ -37,24 +37,38 @@ class NodeListTest extends TestCase{
 	}
 
 	public function testLoad(){
-		$this->nodelist = new NodeList((new Document)->_loadHTMLFragment('<div id="boo" class="bar">content1</div><div><a href="#foo">blah</a></div>'));
+		$this->nodelist = (new Document)->_HTMLFragmentToNodeList('<div id="boo" class="bar">content1</div><div><a href="#foo">blah</a></div>');
+
+#		$this->nodelist = new NodeList($this->nodelist);
 
 		$this->assertCount(2, $this->nodelist);
+		$this->assertSame(2, $this->nodelist->length);
 
-		$this->assertSame('boo', $this->nodelist->first()->id());
+		$this->assertSame('boo', $this->nodelist->first()->id);
 
 		$this->nodelist->reverse();
 
-		$this->assertSame('boo', $this->nodelist->last()->id());
+		$this->assertSame('boo', $this->nodelist->last()->id);
 
 
 		foreach($this->nodelist as $i => $node){
 			$this->assertInstanceOf(Element::class, $node);
 			unset($this->nodelist[$i]);
+			$this->nodelist[$i] = new Element('foo');
+			$this->nodelist[] = 'whatever';
 		}
 
-		$this->assertCount(0, $this->nodelist);
+		$this->assertSame(['foo', 'foo'], $this->nodelist->pluck('tagName'));
 
+		$this->nodelist->each(function($e){
+			$this->assertSame('foo', $e->tagName);
+		});
+
+		$this->assertSame([0, 1], $this->nodelist->map(function($e, $i){
+			return $i;
+		}));
+
+		$this->assertSame('<foo></foo><foo></foo>', trim($this->nodelist->inspect()));
 	}
 
 }

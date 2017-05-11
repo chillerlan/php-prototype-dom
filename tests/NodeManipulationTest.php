@@ -17,54 +17,67 @@ class NodeManipulationTest extends TestAbstract{
 	public function testRemove(){
 
 		foreach($this->document->select(['head', 'body']) as $node){
-			/** @var \chillerlan\PrototypeDOM\ManipulationTrait $node */
+			/** @var \chillerlan\PrototypeDOM\Traits\ElementTrait $node */
 			$node->remove();
 		}
 
 		$this->assertSame('<!DOCTYPE html>'."\n".'<html lang="en"></html>'."\n", $this->document->inspect());
 
 		$element = $this->document->newElement('div', ['id' => 'what'])->update('foo!');
-		$this->assertSame('what', $element->remove()->id());
+		$this->assertSame('what', $element->remove()->id);
 	}
 
 	public function testReplace(){
 		$this->element->replace($this->document->newElement('p', ['id' => 'nocontent'])->update('foo'));
 
-		$this->assertSame('foo', $this->document->getElementById('nocontent')->nodeValue);
+		$this->assertSame('foo', $this->_e('nocontent')->nodeValue);
 	}
 
 	public function testWrap(){
 		$wrapper = $this->document->newElement('section', ['id' => 'nope']);
 		$this->element->wrap($wrapper);
 
-		$this->assertSame('what', $this->document->getElementById('nope')->firstChild->id());
+		$this->assertSame('what', $this->_e('nope')->firstChild->id);
 
 		$wrapper = $this->document->newElement('section', ['id' => 'nope']);
 		$element = $this->document->newElement('div', ['id' => 'what'])->update('foo!');
-		$this->assertSame('<section id="nope"><div id="what">foo!</div></section>', $element->wrap($wrapper)->inspect());
+		$this->assertSame('<section id="nope"><div id="what">foo!</div></section>', $element->wrap($wrapper)->innerHTML);
 	}
 
 	public function testEmpty(){
-		$this->assertSame(0, $this->element->empty()->childNodes->length);
+		$this->assertTrue($this->_e('wallet')->empty());
+		$this->assertFalse($this->_e('cart')->empty());
+
+		$element = $this->_e('list-of-apples');
+
+		$this->assertSame(8, $element->childNodes->length);
+		$this->assertSame(4, $element->childElements()->count());
+		$this->assertFalse($element->empty());
+
+		$element->purge();
+
+		$this->assertSame(0, $element->childElements()->count());
+		$this->assertSame(0, $element->childNodes->length);
+		$this->assertTrue($element->empty());
 	}
 
 	public function testUpdate(){
 		$this->element->update('<div id="boo" class="bar">content1</div>');
 
-		$this->assertSame('content1', $this->document->getElementById('boo')->nodeValue);
-		$this->assertTrue($this->document->getElementById('boo')->hasClassName('bar'));
+		$this->assertSame('content1', $this->_e('boo')->nodeValue);
+		$this->assertTrue($this->_e('boo')->hasClassName('bar'));
 	}
 
 	public function testCleanWhitespace(){
-		$this->element = $this->document->getElementById('content')->next();
-		$this->assertSame('<div>  </div>', $this->element->inspect());
+		$this->element = $this->_e('wallet');
+		$this->assertSame('<div id="wallet">     </div>', $this->element->innerHTML);
 
 		$this->element->cleanWhitespace();
-		$this->assertSame('<div></div>', $this->element->inspect());
+		$this->assertSame('<div id="wallet"></div>', $this->element->innerHTML);
 	}
 
 	public function testInsert(){
-		$this->element = $this->document->getElementById('content');
+		$this->element = $this->_e('content');
 
 		$this->element
 			->insert($this->document->newElement('p', ['id' => 'whatever'])->update('bottom1'))
@@ -81,8 +94,8 @@ class NodeManipulationTest extends TestAbstract{
 
 		$this->assertNull($this->element->up(2));
 
-		$this->assertSame('bottom3', $this->document->getElementById('bottom3')->nodeValue);
-		print_r($this->document->inspect());
+		$this->assertSame('bottom3', $this->_e('bottom3')->nodeValue);
+#		print_r($this->document->inspect());
 #		$this->markTestSkipped('@todo testInsert');
 	}
 

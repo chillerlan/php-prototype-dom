@@ -15,85 +15,108 @@ namespace chillerlan\PrototypeDOMTest;
 class NodeTraversalTest extends TestAbstract{
 
 	public function testRecursivelyCollect(){
-		$this->element = $this->document->getElementById('content');
+		$element = $this->_e('content');
 
-		$this->assertSame(['body', 'html'], $this->element->ancestors()->pluck('nodeName'));
-		$this->assertSame(['div', 'div'], $this->element->siblings()->pluck('nodeName'));
+		$this->assertSame(['body', 'html'], $element->ancestors()->pluck('nodeName'));
+		$this->assertSame(['div', 'div', 'ul','div', 'div',], $element->siblings()->pluck('nodeName'));
 
-		$elements = $this->element->recursivelyCollect('parentNode', 1);
+		$elements = $element->recursivelyCollect('parentNode', 1);
 		$this->assertSame(['body'], $elements->pluck('nodeName'));
 	}
 
 	public function testInspect(){
-		$this->assertEquals('<div id="what" class=" foo  bar " style="background: #000; color: #fff">content</div>', $this->element->inspect());
+		$this->assertEquals('<h3 id="title" title="yummy!">Apples</h3>', $this->_e('title')->inspect());
+		$this->assertEquals('<foo></foo>', $this->document->newElement('foo')->inspect());
+		$this->assertEquals('<foo></foo>', $this->document->newElement('foo')->innerHTML);
 	}
 
 	public function testSelect(){
-		$this->element = $this->document->getElementById('content');
+		$element = $this->_e('apples');
 
-		$expected = ['some stuff', 'more stuff', 'other stuff'];
-		$this->assertSame($expected, $this->element->select('*')->pluck('nodeValue'));
-		$this->assertSame($expected, $this->element->descendants()->pluck('nodeValue'));
+		$this->assertSame(['title', 'golden-delicious', 'mutsu'], $element->select('[title="yummy!"]')->map([$this, 'getID']));
+		$this->assertSame(['saying', 'golden-delicious', 'mutsu'], $element->select(['p#saying', 'li[title="yummy!"]'])->map([$this, 'getID']));
+		$this->assertCount(0, $element->select('[title="disgusting!"]'));
 	}
 
 	public function testMatch(){
-		$this->assertFalse($this->element->match('ul.bar'));
+		$element = $this->_e('fruits');
+		$this->assertTrue($element->match('ul'));
+		$this->assertFalse($element->match('p'));
 
-		$this->assertTrue($this->element->match('div.foo.bar'));
-		$this->assertTrue($this->element->match('#what'));
-		$this->assertTrue($this->element->match('body > div'));
+		$element = $this->_e('mutsu');
+		$this->assertTrue($element->match('li#mutsu.yummy'));
+		$this->assertTrue($element->match('[title="yummy!"]'));
 	}
 
 	public function testDown(){
-		$this->element = $this->document->getElementById('stuff');
+		$element = $this->_e('fruits');
 
-		$this->assertSame('content', $this->element->down('div', 1)->id());
-		$this->assertSame('what', $this->element->down()->id());
-		$this->assertSame('other', $this->element->down(1)->down(2)->id());
+		$this->assertSame('apples', $element->down()->id);
+		$this->assertSame('apples', $element->down(0)->id);
+		$this->assertSame('golden-delicious', $element->down(3)->id);
+		$this->assertNull($element->down(42));
+		$this->assertSame('golden-delicious', $this->_e('apples')->down('li.yummy')->id);
+		$this->assertSame('mutsu', $this->_e('apples')->down('.yummy', 1)->id);
 	}
 
 	public function testUp(){
-		$this->element = $this->document->getElementById('other');
+		$element = $this->_e('fruits');
+		$this->assertSame('body', $element->up()->tagName);
+		$this->assertSame('body', $element->up(0)->tagName);
 
-		$this->assertSame('content', $this->element->up()->id());
-		$this->assertSame('what', $this->element->up('body')->down()->id());
+		$element = $this->_e('mutsu');
+		$this->assertSame('fruits', $element->up(2)->id);
+		$this->assertSame('apples', $element->up('li')->id);
+		$this->assertSame('apples', $element->up('.keeps-the-doctor-away')->id);
+		$this->assertSame('fruits', $element->up('ul', 1)->id);
+		$this->assertNull($element->up('div'));
 	}
 
 	public function testPrevious(){
-		$this->element = $this->document->getElementById('other');
+		$element = $this->_e('saying');
+		$this->assertSame('list-of-apples', $element->previous()->id);
+		$this->assertSame('list-of-apples', $element->previous(0)->id);
+		$this->assertSame('h3', $element->previous(1)->tagName);
+		$this->assertSame('h3', $element->previous('h3')->tagName);
 
-		$this->assertSame('some', $this->element->previous(1)->id());
-		$this->assertSame('more', $this->element->previous()->id());
-		$this->assertSame('more', $this->element->previous(0)->id());
+		$element = $this->_e('ida-red');
+		$this->assertSame('mutsu', $element->previous('.yummy')->id);
+		$this->assertSame('golden-delicious', $element->previous('.yummy', 1)->id);
+		$this->assertNull($element->previous(5));
 	}
 
 	public function testNext(){
-		$this->element = $this->document->getElementById('some');
+		$element = $this->_e('title');
+		$this->assertSame('list-of-apples', $element->next()->id);
+		$this->assertSame('list-of-apples', $element->next(0)->id);
+		$this->assertSame('saying', $element->next(1)->id);
+		$this->assertSame('saying', $element->next('p')->id);
 
-		$this->assertSame('other', $this->element->next(1)->id());
-		$this->assertSame('more', $this->element->next()->id());
-		$this->assertSame('more', $this->element->next(0)->id());
+		$element = $this->_e('golden-delicious');
+		$this->assertSame('mutsu', $element->next('.yummy')->id);
+		$this->assertSame('ida-red', $element->next('.yummy', 1)->id);
+
+		$this->assertNull($this->_e('ida-red')->next());
 	}
 
 	public function testChildElements(){
-		$this->element = $this->document->getElementById('content');
-
-		$this->assertSame(['some stuff', 'more stuff', 'other stuff'], $this->element->childElements()->pluck('nodeValue'));
+		$this->assertSame('homo-erectus', $this->_e('australopithecus')->childElements()->current()->id);
+		$this->assertSame(['homo-neanderthalensis', 'homo-sapiens'], $this->_e('homo-erectus')->childElements()->map([$this, 'getID']));
+		$this->assertCount(0, $this->_e('homo-sapiens')->childElements());
 	}
 
 	public function testDescendantOf(){
-		$this->element = $this->document->getElementById('some');
-
-		$this->assertFalse($this->element->descendantOf($this->document->getElementById('what')));
-
-		$this->assertTrue($this->element->descendantOf($this->document->getElementById('stuff')));
-		$this->assertTrue($this->element->descendantOf($this->document->getElementById('content')));
+		$this->assertTrue($this->_e('homo-sapiens')->descendantOf($this->_e('australopithecus')));
+		$this->assertFalse($this->_e('homo-erectus')->descendantOf($this->_e('homo-sapiens')));
 	}
 
 	public function testFirstDescendant(){
-		$this->element = $this->document->getElementById('content');
+		$this->assertSame('apples', $this->_e('fruits')->firstDescendant()->id);
+		$this->assertSame('homo-erectus', $this->_e('australopithecus')->firstDescendant()->id);
 
-		$this->assertSame('some stuff', $this->element->firstDescendant()->nodeValue);
+		$element = $this->_e('homo-erectus');
+		$this->assertSame(' Latin is super ', $element->firstChild->nodeValue);
+		$this->assertSame('homo-neanderthalensis', $element->firstDescendant()->id);
 	}
 
 }

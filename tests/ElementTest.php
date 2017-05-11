@@ -13,7 +13,7 @@
 namespace chillerlan\PrototypeDOMTest;
 
 use DOMElement;
-use chillerlan\PrototypeDOM\Element;
+use chillerlan\PrototypeDOM\Node\Element;
 
 class ElementTest extends TestAbstract{
 
@@ -23,12 +23,14 @@ class ElementTest extends TestAbstract{
 	}
 
 	public function testID(){
-		$this->assertSame('what', $this->element->id('whatever'));
-		$this->assertSame('whatever', $this->element->id());
+		$this->assertSame('what', $this->element->identify('whatever'));
+		$this->assertSame('whatever', $this->element->identify());
+		$this->assertSame('whatever', $this->element->id);
 	}
 
 	public function testGetClassnames(){
-		$this->assertSame(['foo', 'bar'], $this->element->getClassNames());
+		$this->assertSame(['foo', 'bar'], $this->element->classNames());
+		$this->assertSame('foo  bar', $this->element->class);
 	}
 
 	public function testHasClassname(){
@@ -50,7 +52,7 @@ class ElementTest extends TestAbstract{
 	}
 
 	public function testGetStyle(){
-		$style = $this->element->getStyle();
+		$style = $this->element->getStyles();
 
 		$this->assertSame('#000', $style['background']);
 		$this->assertSame('#fff', $style['color']);
@@ -59,12 +61,12 @@ class ElementTest extends TestAbstract{
 	public function testHasStyle(){
 		$this->element->setStyle(['display' => 'none']);
 
-		$this->assertSame('none', $this->element->hasStyle('display'));
-		$this->assertFalse($this->element->hasStyle('foo'));
+		$this->assertSame('none', $this->element->getStyle('display'));
+		$this->assertNull($this->element->getStyle('foo'));
 	}
 
 	public function testSetStyle(){
-		$style = $this->element->setStyle(['display' => 'none'])->getStyle();
+		$style = $this->element->setStyle(['display' => 'none'])->getStyles();
 
 		$this->assertSame('#000', $style['background']);
 		$this->assertSame('#fff', $style['color']);
@@ -72,9 +74,9 @@ class ElementTest extends TestAbstract{
 
 		$this->element->setStyle(['display' => 'none'], true);
 
-		$this->assertFalse($this->element->hasStyle('background'));
-		$this->assertFalse($this->element->hasStyle('color'));
-		$this->assertSame('none', $this->element->hasStyle('display'));
+		$this->assertNull($this->element->getStyle('background'));
+		$this->assertNull($this->element->getStyle('color'));
+		$this->assertSame('none', $this->element->getStyle('display'));
 	}
 
 	public function testGetAttributes(){

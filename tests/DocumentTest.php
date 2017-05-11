@@ -13,7 +13,7 @@
 namespace chillerlan\PrototypeDOMTest;
 
 use DOMDocument, DOMNodeList;
-use chillerlan\PrototypeDOM\Document;
+use chillerlan\PrototypeDOM\{Document, NodeList};
 
 class DocumentTest extends TestAbstract{
 
@@ -22,22 +22,31 @@ class DocumentTest extends TestAbstract{
 		$this->assertInstanceOf(DOMDocument::class, $this->document);
 	}
 
+	public function testMagicTitle(){
+		$this->assertSame('Prototype DOM Test', $this->document->title);
+
+		$this->document->title = 'foo';
+		$this->assertSame('foo', $this->document->title);
+
+		$this->document->select('head > title')->item(0)->remove();
+		$this->assertNull($this->document->title);
+
+		$this->document->title = 'bar';
+		$this->assertSame('bar', $this->document->title);
+	}
+
 	public function testSelector2xpath(){
 		$this->assertSame('//html/head/meta[position() = 1]', $this->document->selector2xpath('html > head > meta:nth-of-type(1)'));
 	}
 
 	public function testQuery(){
-		$this->element = $this->document->query('//html/head/meta[position() = 1]')->item(0);
+		$element = $this->document->query('//html/head/meta[position() = 1]')->item(0);
 
-		$this->assertSame('UTF-8', $this->element->getAttribute('charset'));
+		$this->assertSame('UTF-8', $element->getAttribute('charset'));
 	}
 
-	public function testGetElementsBySelector(){
+	public function testQuerySelectorAll(){
 		$this->assertSame('en', $this->document->querySelectorAll('html')->item(0)->getAttribute('lang'));
-	}
-
-	public function testInspect(){
-		$this->assertEquals('<meta charset="UTF-8"/>', $this->document->inspect($this->document->select('meta')[0], true));
 	}
 
 	public function testRemoveElementsBySelector(){
@@ -45,13 +54,19 @@ class DocumentTest extends TestAbstract{
 		$this->assertEquals('<!DOCTYPE html>'."\n".'<html lang="en"></html>'."\n", $this->document->removeElementsBySelector(['head', 'body'])->inspect());
 	}
 
-#	public function testToDOMNodeList(){
-#		$nodelist = $this->document->_toNodeList('<div id="boo" class="bar">content1</div><div><a href="#foo">blah</a></div>');
-// @todo
-#		$this->assertSame(2, $nodelist->length);
-#		$this->assertSame('blah', $nodelist->item(1)->nodeValue);
-#		$this->assertInstanceOf(DOMNodeList::class, $this->document->_toNodeList($nodelist));
-#	}
+	public function testToNodeList(){
+		$nodelist = $this->document->_toNodeList('<meta name="viewport" content="width=device-width, initial-scale=1.0" />');
+		$this->assertSame(['name' => 'viewport', 'content' => 'width=device-width, initial-scale=1.0', ], $nodelist->item(0)->getAttributes());
+
+		$nodelist = $this->document->_toNodeList('<div id="boo" class="bar"></div><div><a href="#foo"></a></div>');
+		$this->assertSame(2, $nodelist->length);
+		$this->assertSame('boo', $nodelist->item(0)->id);
+		$this->assertInstanceOf(NodeList::class, $this->document->_toNodeList($nodelist));
+	}
+
+	public function testInspect(){
+		$this->assertEquals('<meta charset="UTF-8"/>', $this->document->inspect($this->document->select('meta')[0], true));
+	}
 
 	public function testRecursivelyCollect(){
 		$this->element = $this->document->getElementById('content');
@@ -61,6 +76,13 @@ class DocumentTest extends TestAbstract{
 
 		$elements = $this->document->recursivelyCollect($this->element, 'parentNode', 1);
 		$this->assertSame(['body'], $elements->pluck('nodeName'));
+	}
+
+	public function testFoo(){
+		/*print_r*/((new Document(file_get_contents(__DIR__.'/../phpunit.xml'), true))->select('filter')->inspect(true));
+		/*print_r*/((new Document(file_get_contents(__DIR__.'/test.html')))->select('.yummy')->inspect());
+
+		$this->assertNull(null);
 	}
 
 }
