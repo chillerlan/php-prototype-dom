@@ -17,6 +17,8 @@ use chillerlan\PrototypeDOM\Node\PrototypeHTMLElement;
 /**
  * @property string $id
  * @property string $class
+ * @property string $href
+ * @property string $src
  * @property string $innerHTML
  */
 trait HTMLElementTrait{
@@ -36,6 +38,22 @@ trait HTMLElementTrait{
 
 	protected function magic_set_class($class) {
 		return $this->setAttribute('class', $class);
+	}
+
+	protected function magic_get_href():string {
+		return trim($this->getAttribute('href'));
+	}
+
+	protected function magic_set_href($class) {
+		return $this->setAttribute('href', $class);
+	}
+
+	protected function magic_get_src():string {
+		return trim($this->getAttribute('src'));
+	}
+
+	protected function magic_set_src($class) {
+		return $this->setAttribute('src', $class);
 	}
 
 	protected function magic_get_innerHTML():string {

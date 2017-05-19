@@ -70,17 +70,24 @@ class Document extends DOMDocument{
 			$currentTitle->update($title);
 		}
 		else{
+			$head         = $this->select('head')->item(0);
 			$currentTitle = $this->newElement('title')->update($title);
-			$this->select('head')->item(0)->insert($currentTitle);
+
+			if(!$head){
+				$head = $this->appendChild($this->newElement('head'));
+			}
+
+			$head->insert($currentTitle);
 		}
 	}
+
 
 
 	/********
 	 * ugly *
 	 ********/
 
-	public function _loadDocument($content, $xml){
+	public function _loadDocument($content, $xml = false){
 
 		switch(true){
 			case $content instanceof NodeList   : return $this->insertNodeList($content);
