@@ -21,7 +21,7 @@ class NodeManipulationTest extends TestAbstract{
 			$node->remove();
 		}
 
-		$this->assertSame('<!DOCTYPE html>'."\n".'<html lang="en"></html>'."\n", $this->document->inspect());
+		$this->assertSame('<!DOCTYPE html>'."\n".'<html lang="en">'."\r\n\r\n\r\n".'</html>'."\n", $this->document->inspect());
 
 		$element = $this->document->newElement('div', ['id' => 'what'])->update('foo!');
 		$this->assertSame('what', $element->remove()->id);
@@ -50,7 +50,7 @@ class NodeManipulationTest extends TestAbstract{
 
 		$element = $this->_e('list-of-apples');
 
-		$this->assertSame(8, $element->childNodes->length);
+		$this->assertSame(9, $element->childNodes->length);
 		$this->assertSame(4, $element->childElements()->count());
 		$this->assertFalse($element->empty());
 
