@@ -11,22 +11,16 @@
 
 namespace chillerlan\PrototypeDOM\Traits;
 
+use chillerlan\Traits\Enumerable;
+
 /**
  * Trait EnumerableTrait
  */
 trait EnumerableTrait{
-
-	/**
-	 * @link http://api.prototypejs.org/language/Enumerable/prototype/each/
-	 *
-	 * @param callable $callback
-	 *
-	 * @return $this
-	 */
-	public function each($callback){
-		$this->map($callback);
-
-		return $this;
+	use Enumerable{
+		__map as map;
+		__each as each;
+		__toArray as toArray;
 	}
 
 	/**
@@ -45,30 +39,6 @@ trait EnumerableTrait{
 	 */
 	public function last(){
 		return $this->item($this->count() - 1);
-	}
-
-	/**
-	 * @link http://api.prototypejs.org/language/Enumerable/prototype/collect/
-	 * @link http://api.prototypejs.org/language/Enumerable/prototype/map/
-	 *
-	 * @param $callback
-	 *
-	 * @return array
-	 * @throws \Exception
-	 */
-	public function map($callback):array {
-
-		if(!is_callable($callback)){
-			throw new \Exception('invalid callback'); // @codeCoverageIgnore
-		}
-
-		$return = [];
-
-		foreach($this->array as $index => $element){
-			$return[$index] = call_user_func_array($callback, [$element, $index]);
-		}
-
-		return $return;
 	}
 
 	/**

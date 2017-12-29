@@ -14,7 +14,7 @@ namespace chillerlan\PrototypeDOM;
 
 use DOMDocument, DOMNode, DOMNodeList, DOMXPath;
 use chillerlan\PrototypeDOM\Node\{Element, PrototypeNode};
-use chillerlan\PrototypeDOM\Traits\Magic;
+use chillerlan\Traits\Magic;
 use Symfony\Component\CssSelector\CssSelectorConverter;
 
 /**

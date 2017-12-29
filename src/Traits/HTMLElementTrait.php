@@ -13,6 +13,7 @@
 namespace chillerlan\PrototypeDOM\Traits;
 
 use chillerlan\PrototypeDOM\Node\PrototypeHTMLElement;
+use chillerlan\Traits\Magic;
 
 /**
  * @property string $id

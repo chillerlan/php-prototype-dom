@@ -13,14 +13,29 @@
 namespace chillerlan\PrototypeDOM;
 
 use ArrayAccess, Countable, DOMNodeList, Iterator;
-use chillerlan\PrototypeDOM\Node\PrototypeNode;
-use chillerlan\PrototypeDOM\Traits\{EnumerableTrait, Magic};
+use chillerlan\PrototypeDOM\{
+	Node\PrototypeNode, Traits\EnumerableTrait
+};
+use chillerlan\Traits\{
+	Magic, Interfaces\ArrayAccessTrait, SPL\CountableTrait, SPL\SeekableIteratorTrait
+};
 
 /**
  * @property int $length
+ *
+ * @method \chillerlan\PrototypeDOM\Node\PrototypeNode current()
+ * @method int key()
+ * @method bool valid()
+ * @method void next()
+ * @method void rewind()
+ * @method void seek($pos)
+ * @method bool offsetExists($offset)
+ * @method \chillerlan\PrototypeDOM\Node\PrototypeNode|null offsetGet($offset)
+ * @method void offsetUnset($offset)
+ * @method
  */
 class NodeList implements Iterator, ArrayAccess, Countable{
-	use EnumerableTrait, Magic;
+	use EnumerableTrait, Magic, SeekableIteratorTrait, ArrayAccessTrait, CountableTrait;
 
 	/**
 	 * @var array
@@ -111,68 +126,9 @@ class NodeList implements Iterator, ArrayAccess, Countable{
 		return (new Document($this, $xml))->inspect(null, $xml);
 	}
 
-
-	/************
-	 * Iterator *
-	 ************/
-
-	/**
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode
-	 */
-	public function current(){
-		return $this->array[$this->offset];
-	}
-
-	/**
-	 * @return int
-	 */
-	public function key():int{
-		return $this->offset;
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function valid():bool{
-		return $this->offsetExists($this->offset);
-	}
-
-	/**
-	 *  @return void
-	 */
-	public function next(){
-		$this->offset++;
-	}
-
-	/**
-	 * @return void
-	 */
-	public function rewind(){
-		$this->offset = 0;
-	}
-
-
 	/***************
 	 * ArrayAccess *
 	 ***************/
-
-	/**
-	 * @param int $offset
-	 *
-	 * @return bool
-	 */
-	public function offsetExists($offset):bool{
-		return isset($this->array[$offset]);
-	}
-
-	/**
-	 * @param int $offset
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|null
-	 */
-	public function offsetGet($offset){
-		return $this->item($offset);
-	}
 
 	/**
 	 * @param int                                         $offset
@@ -193,27 +149,6 @@ class NodeList implements Iterator, ArrayAccess, Countable{
 
 		}
 
-	}
-
-	/**
-	 * @param int $offset
-	 *
-	 * @return void
-	 */
-	public function offsetUnset($offset){
-		unset($this->array[$offset]);
-	}
-
-
-	/*************
-	 * Countable *
-	 *************/
-
-	/**
-	 * @return int
-	 */
-	public function count():int{
-		return count($this->array);
 	}
 
 }
