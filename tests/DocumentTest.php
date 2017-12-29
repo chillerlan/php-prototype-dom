@@ -51,7 +51,7 @@ class DocumentTest extends TestAbstract{
 
 	public function testRemoveElementsBySelector(){
 		// first and last line break \n and the rest PHP_EOL?
-		$this->assertEquals('<!DOCTYPE html>'."\n".'<html lang="en">'."\r\n\r\n\r\n".'</html>'."\n", $this->document->removeElementsBySelector(['head', 'body'])->inspect());
+		$this->assertEquals('<!DOCTYPE html>'."\n".'<html lang="en"></html>'."\n", $this->document->removeElementsBySelector(['head', 'body'])->inspect());
 	}
 
 	public function testToNodeList(){
