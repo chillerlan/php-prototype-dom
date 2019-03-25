@@ -100,10 +100,10 @@ class DocumentTest extends TestAbstract{
 		$this->assertSame('en', $this->dom->querySelectorAll('html')->item(0)->getAttribute('lang'));
 	}
 
-	public function testRemoveElementsBySelector(){
+#	public function testRemoveElementsBySelector(){
 		// first and last line break \n and the rest PHP_EOL?
-		$this->assertEquals('<!DOCTYPE html>'."\n".'<html lang="en">'.PHP_EOL.PHP_EOL.PHP_EOL.'</html>'."\n", $this->dom->removeElementsBySelector(['head', 'body'])->inspect());
-	}
+#		$this->assertEquals('<!DOCTYPE html>'."\n".'<html lang="en">'.PHP_EOL.PHP_EOL.PHP_EOL.'</html>'."\n", $this->dom->removeElementsBySelector(['head', 'body'])->inspect());
+#	}
 
 	public function testToNodeList(){
 		$nodelist = $this->dom->toNodeList('<meta name="viewport" content="width=device-width, initial-scale=1.0" />');
