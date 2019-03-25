@@ -1,5 +1,5 @@
 # chillerlan/php-prototype-dom
-[prototype.js](http://api.prototypejs.org/dom/) like DOM traversal and manipulation for PHP 7+.
+[prototype.js](http://api.prototypejs.org/dom/) like DOM traversal and manipulation for PHP 7.2+.
 
 [![version][packagist-badge]][packagist]
 [![license][license-badge]][license]
