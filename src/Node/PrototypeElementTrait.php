@@ -1,8 +1,8 @@
 <?php
 /**
- * Trait ElementTrait
+ * Trait PrototypeElementTrait
  *
- * @filesource   ElementTrait.php
+ * @filesource   PrototypeElementTrait.php
  * @created      08.05.2017
  * @package      chillerlan\PrototypeDOM\Node
  * @author       Smiley <smiley@chillerlan.net>
@@ -14,7 +14,8 @@ namespace chillerlan\PrototypeDOM\Node;
 
 use chillerlan\PrototypeDOM\NodeList;
 
-trait ElementTrait{
+trait PrototypeElementTrait{
+	use PrototypeTraversalTrait;
 
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/wrap/

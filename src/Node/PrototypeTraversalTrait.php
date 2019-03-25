@@ -1,8 +1,8 @@
 <?php
 /**
- * Trait TraversalTrait
+ * Trait PrototypeTraversalTrait
  *
- * @filesource   TraversalTrait.php
+ * @filesource   PrototypeTraversalTrait.php
  * @created      06.05.2017
  * @package      chillerlan\PrototypeDOM\Traits
  * @author       Smiley <smiley@chillerlan.net>
@@ -18,7 +18,8 @@ use DOMNode;
 /**
  * @property \chillerlan\PrototypeDOM\Document $ownerDocument
  */
-trait TraversalTrait{
+trait PrototypeTraversalTrait{
+	use PrototypeNodeTrait;
 
 	/**
 	 * @param        $selector
@@ -26,9 +27,9 @@ trait TraversalTrait{
 	 * @param string $property
 	 * @param int    $nodeType https://secure.php.net/manual/dom.constants.php
 	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|null
+	 * @return \chillerlan\PrototypeDOM\Node\PrototypeTraversal|\DOMNode|null
 	 */
-	public function recursivelyFind($selector, int $index = null, string $property = null, int $nodeType = \XML_ELEMENT_NODE):?PrototypeNode{
+	public function recursivelyFind($selector, int $index = null, string $property = null, int $nodeType = \XML_ELEMENT_NODE):?PrototypeTraversal{
 
 		if(\is_numeric($selector)){
 			return $this->ownerDocument->recursivelyFind($this, $property, null, $selector, $nodeType);
@@ -65,9 +66,9 @@ trait TraversalTrait{
 	 * @param null $expression
 	 * @param int  $index
 	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|null
+	 * @return \chillerlan\PrototypeDOM\Node\PrototypeTraversal|null
 	 */
-	public function down($expression = null, int $index = null):?PrototypeNode{
+	public function down($expression = null, int $index = null):?PrototypeTraversal{
 
 		if($expression === null && $index === null){
 			return $this->firstDescendant();
@@ -92,9 +93,9 @@ trait TraversalTrait{
 	 * @param string|null $expression
 	 * @param int|null    $index
 	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|null
+	 * @return \chillerlan\PrototypeDOM\Node\PrototypeTraversal|null
 	 */
-	public function up($expression = null, int $index = null):?PrototypeNode{
+	public function up($expression = null, int $index = null):?PrototypeTraversal{
 		return $this->recursivelyFind($expression, $index, 'parentNode');
 	}
 
@@ -104,9 +105,9 @@ trait TraversalTrait{
 	 * @param string|null $expression
 	 * @param int|null    $index
 	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|null
+	 * @return \chillerlan\PrototypeDOM\Node\PrototypeTraversal|null
 	 */
-	public function previous($expression = null, int $index = null):?PrototypeNode{
+	public function previous($expression = null, int $index = null):?PrototypeTraversal{
 		return $this->recursivelyFind($expression, $index, 'previousSibling');
 	}
 
@@ -116,9 +117,9 @@ trait TraversalTrait{
 	 * @param string|null $expression
 	 * @param int|null    $index
 	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|null
+	 * @return \chillerlan\PrototypeDOM\Node\PrototypeTraversal|null
 	 */
-	public function next($expression = null, int $index = null):?PrototypeNode{
+	public function next($expression = null, int $index = null):?PrototypeTraversal{
 		return $this->recursivelyFind($expression, $index, 'nextSibling');
 	}
 
@@ -188,9 +189,9 @@ trait TraversalTrait{
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/firstDescendant/
 	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|null
+	 * @return \chillerlan\PrototypeDOM\Node\PrototypeTraversal|null
 	 */
-	public function firstDescendant():?PrototypeNode{
+	public function firstDescendant():?PrototypeTraversal{
 		return $this->descendants()->first();
 	}
 

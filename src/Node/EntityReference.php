@@ -13,5 +13,5 @@
 namespace chillerlan\PrototypeDOM\Node;
 
 class EntityReference extends \DOMEntityReference implements PrototypeNode{
-	use NodeTrait;
+	use PrototypeNodeTrait;
 }

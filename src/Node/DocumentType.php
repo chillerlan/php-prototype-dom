@@ -13,5 +13,5 @@
 namespace chillerlan\PrototypeDOM\Node;
 
 class DocumentType extends \DOMDocumentType implements PrototypeNode{
-	use NodeTrait;
+	use PrototypeNodeTrait;
 }

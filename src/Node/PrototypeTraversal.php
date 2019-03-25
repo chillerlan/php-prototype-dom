@@ -41,9 +41,9 @@ interface PrototypeTraversal extends PrototypeNode{
 	 * @param null $expression
 	 * @param int  $index
 	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|null
+	 * @return \chillerlan\PrototypeDOM\Node\PrototypeTraversal|null
 	 */
-	public function down($expression = null, int $index = null):?PrototypeNode;
+	public function down($expression = null, int $index = null):?PrototypeTraversal;
 
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/up/
@@ -51,9 +51,9 @@ interface PrototypeTraversal extends PrototypeNode{
 	 * @param string|null $expression
 	 * @param int|null    $index
 	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|null
+	 * @return \chillerlan\PrototypeDOM\Node\PrototypeTraversal|null
 	 */
-	public function up($expression = null, int $index = null):?PrototypeNode;
+	public function up($expression = null, int $index = null):?PrototypeTraversal;
 
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/previous/
@@ -61,9 +61,9 @@ interface PrototypeTraversal extends PrototypeNode{
 	 * @param string|null $expression
 	 * @param int|null    $index
 	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|null
+	 * @return \chillerlan\PrototypeDOM\Node\PrototypeTraversal|null
 	 */
-	public function previous($expression = null, int $index = null):?PrototypeNode;
+	public function previous($expression = null, int $index = null):?PrototypeTraversal;
 
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/next/
@@ -71,9 +71,9 @@ interface PrototypeTraversal extends PrototypeNode{
 	 * @param string|null $expression
 	 * @param int|null    $index
 	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|null
+	 * @return \chillerlan\PrototypeDOM\Node\PrototypeTraversal|null
 	 */
-	public function next($expression = null, int $index = null):?PrototypeNode;
+	public function next($expression = null, int $index = null):?PrototypeTraversal;
 
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/childElements/
@@ -117,9 +117,9 @@ interface PrototypeTraversal extends PrototypeNode{
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/firstDescendant/
 	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|null
+	 * @return \chillerlan\PrototypeDOM\Node\PrototypeTraversal|null
 	 */
-	public function firstDescendant():?PrototypeNode;
+	public function firstDescendant():?PrototypeTraversal;
 
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/previousSiblings/

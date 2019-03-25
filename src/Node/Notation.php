@@ -13,5 +13,5 @@
 namespace chillerlan\PrototypeDOM\Node;
 
 class Notation extends \DOMNotation implements PrototypeNode{
-	use NodeTrait;
+	use PrototypeNodeTrait;
 }

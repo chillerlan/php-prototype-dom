@@ -1,8 +1,8 @@
 <?php
 /**
- * Trait HTMLElementTrait
+ * Trait PrototypeHTMLElementTrait
  *
- * @filesource   HTMLElementTrait.php
+ * @filesource   PrototypeHTMLElementTrait.php
  * @created      11.05.2017
  * @package      chillerlan\PrototypeDOM\Node
  * @author       Smiley <smiley@chillerlan.net>
@@ -21,13 +21,14 @@ use chillerlan\Traits\Magic;
  * @property string $src
  * @property string $innerHTML
  */
-trait HTMLElementTrait{
+trait PrototypeHTMLElementTrait{
+	use PrototypeElementTrait;
 
 	protected function magic_get_id():string{
 		return \trim($this->getAttribute('id'));
 	}
 
-	protected function magic_set_id($id){
+	protected function magic_set_id(string $id){
 		return $this->setAttribute('id', $id);
 	}
 
@@ -35,7 +36,7 @@ trait HTMLElementTrait{
 		return \trim($this->getAttribute('class'));
 	}
 
-	protected function magic_set_class($class){
+	protected function magic_set_class(string $class){
 		return $this->setAttribute('class', $class);
 	}
 
@@ -43,16 +44,16 @@ trait HTMLElementTrait{
 		return \trim($this->getAttribute('href'));
 	}
 
-	protected function magic_set_href($class){
-		return $this->setAttribute('href', $class);
+	protected function magic_set_href(string $href){
+		return $this->setAttribute('href', $href);
 	}
 
 	protected function magic_get_src():string{
 		return \trim($this->getAttribute('src'));
 	}
 
-	protected function magic_set_src($class){
-		return $this->setAttribute('src', $class);
+	protected function magic_set_src(string $src){
+		return $this->setAttribute('src', $src);
 	}
 
 	protected function magic_get_innerHTML():string{

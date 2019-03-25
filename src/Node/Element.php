@@ -16,7 +16,7 @@ use chillerlan\Traits\Magic;
 use DOMElement;
 
 class Element extends DOMElement implements PrototypeHTMLElement{
-	use ElementTrait, HTMLElementTrait, Magic, NodeTrait, TraversalTrait;
+	use Magic, PrototypeHTMLElementTrait;
 
 	/**
 	 * @return  string[]

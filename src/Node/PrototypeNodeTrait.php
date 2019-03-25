@@ -1,8 +1,8 @@
 <?php
 /**
- * Trait NodeTrait
+ * Trait PrototypeNodeTrait
  *
- * @filesource   NodeTrait.php
+ * @filesource   PrototypeNodeTrait.php
  * @created      11.05.2017
  * @package      chillerlan\PrototypeDOM\Node
  * @author       Smiley <smiley@chillerlan.net>
@@ -32,7 +32,7 @@ use chillerlan\PrototypeDOM\NodeList;
  * @property string                                $baseURI
  * @property string                                $textContent
  */
-trait NodeTrait{
+trait PrototypeNodeTrait{
 
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/recursivelyCollect/

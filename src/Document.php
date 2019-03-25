@@ -12,12 +12,27 @@
 
 namespace chillerlan\PrototypeDOM;
 
-use chillerlan\PrototypeDOM\Node\{
-	Attr, CdataSection, CharacterData, Comment, DocumentFragment, DocumentType, Element, Entity,
-	EntityReference, Node, Notation, ProcessingInstruction, PrototypeHTMLElement, PrototypeNode, Text,
-};
+use chillerlan\PrototypeDOM\Node\{Attr,
+	CdataSection,
+	CharacterData,
+	Comment,
+	DocumentFragment,
+	DocumentType,
+	Element,
+	Entity,
+	EntityReference,
+	Node,
+	Notation,
+	ProcessingInstruction,
+	PrototypeHTMLElement,
+	PrototypeNode,
+	Text,};
 use chillerlan\Traits\Magic;
-use DOMDocument, DOMException, DOMNode, DOMNodeList, DOMXPath;
+use DOMDocument;
+use DOMException;
+use DOMNode;
+use DOMNodeList;
+use DOMXPath;
 use Symfony\Component\CssSelector\CssSelectorConverter;
 
 /**
@@ -251,13 +266,13 @@ class Document extends DOMDocument{
 	}
 
 	/**
-	 * @param string|array  $selectors
+	 * @param array         $selectors
 	 * @param \DOMNode|null $contextNode
 	 * @param string        $axis
 	 *
 	 * @return \chillerlan\PrototypeDOM\Document
 	 */
-	public function removeElementsBySelector($selectors, DOMNode $contextNode = null, string $axis = null):Document{
+	public function removeElementsBySelector(array $selectors, DOMNode $contextNode = null, string $axis = null):Document{
 		/** @var \chillerlan\PrototypeDOM\NodeList $nodes */
 		$nodes = $this->select($selectors, $contextNode, $axis ?? 'descendant-or-self::');
 
@@ -343,14 +358,14 @@ class Document extends DOMDocument{
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/recursivelyCollect/
 	 *
-	 * @param \chillerlan\PrototypeDOM\Node\PrototypeNode $element
-	 * @param string                                      $property
-	 * @param int                                         $maxLength
-	 * @param int                                         $nodeType https://secure.php.net/manual/dom.constants.php
+	 * @param \DOMNode $element
+	 * @param string   $property
+	 * @param int      $maxLength
+	 * @param int      $nodeType https://secure.php.net/manual/dom.constants.php
 	 *
 	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
-	public function recursivelyCollect(PrototypeNode $element, string $property, int $maxLength = -1, int $nodeType = \XML_ELEMENT_NODE):NodeList{
+	public function recursivelyCollect(DOMNode $element, string $property, int $maxLength = -1, int $nodeType = \XML_ELEMENT_NODE):NodeList{
 		$nodes = new NodeList;
 
 		if(\in_array($property, ['parentNode', 'previousSibling', 'nextSibling'])){
@@ -373,15 +388,15 @@ class Document extends DOMDocument{
 	}
 
 	/**
-	 * @param \chillerlan\PrototypeDOM\Node\PrototypeNode $element
-	 * @param string                                      $property
-	 * @param string|null                                 $selector
-	 * @param int                                         $index
-	 * @param int                                         $nodeType https://secure.php.net/manual/dom.constants.php
+	 * @param \DOMNode    $element
+	 * @param string      $property
+	 * @param string|null $selector
+	 * @param int         $index
+	 * @param int         $nodeType https://secure.php.net/manual/dom.constants.php
 	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|null
+	 * @return \DOMNode|null
 	 */
-	public function recursivelyFind(PrototypeNode $element, string $property = null, string $selector = null, int $index = 0, int $nodeType = \XML_ELEMENT_NODE):?PrototypeNode{
+	public function recursivelyFind(DOMNode $element, string $property = null, string $selector = null, int $index = 0, int $nodeType = \XML_ELEMENT_NODE):?DOMNode{
 
 		if(\in_array($property, ['parentNode', 'previousSibling', 'nextSibling'])){
 
@@ -403,12 +418,12 @@ class Document extends DOMDocument{
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/match/
 	 *
-	 * @param \chillerlan\PrototypeDOM\Node\PrototypeNode|\DOMNode $element
-	 * @param string                                               $selector
+	 * @param \DOMNode $element
+	 * @param string   $selector
 	 *
 	 * @return bool
 	 */
-	public function match(PrototypeNode $element, string $selector):bool{
+	public function match(DOMNode $element, string $selector):bool{
 
 		/** @var \chillerlan\PrototypeDOM\Node\Element $match */
 		foreach($this->select([$selector]) as $match){
@@ -444,10 +459,10 @@ class Document extends DOMDocument{
 	/**
 	 * @param string $elementId
 	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|null
+	 * @return \DOMNode|null
 	 * @throws \DOMException
 	 */
-	public function getElementById($elementId):?PrototypeNode{
+	public function getElementById($elementId):?DOMNode{
 
 		if(!\is_string($elementId)){
 			throw new DOMException('invalid element id');

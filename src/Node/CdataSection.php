@@ -13,5 +13,5 @@
 namespace chillerlan\PrototypeDOM\Node;
 
 class CdataSection extends \DOMCdataSection implements PrototypeNode{
-	use NodeTrait;
+	use PrototypeNodeTrait;
 }

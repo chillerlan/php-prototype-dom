@@ -13,5 +13,5 @@
 namespace chillerlan\PrototypeDOM\Node;
 
 class Text extends \DOMText implements PrototypeElement{
-	use ElementTrait, NodeTrait, TraversalTrait;
+	use PrototypeElementTrait;
 }

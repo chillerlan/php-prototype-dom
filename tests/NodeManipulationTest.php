@@ -19,7 +19,7 @@ class NodeManipulationTest extends TestAbstract{
 	public function testRemove(){
 
 		foreach($this->dom->select(['head', 'body']) as $node){
-			/** @var \chillerlan\PrototypeDOM\Node\ElementTrait $node */
+			/** @var \chillerlan\PrototypeDOM\Node\Element $node */
 			$node->remove();
 		}
 

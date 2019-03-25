@@ -87,7 +87,7 @@ class NodeList implements SeekableIterator, ArrayAccess, Countable{
 	 * @return bool
 	 */
 	public function match(DOMNode $node):bool{
-
+		/** @var \chillerlan\PrototypeDOM\Node\Element $element */
 		foreach($this->array as $element){
 
 			if($element->isSameNode($node)){
@@ -102,9 +102,9 @@ class NodeList implements SeekableIterator, ArrayAccess, Countable{
 	/**
 	 * @param int $offset
 	 *
-	 * @return \chillerlan\PrototypeDOM\Node\Element|null
+	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|\DOMNode|null
 	 */
-	public function item(int $offset):?Element{
+	public function item(int $offset):?DOMNode{
 		return $this->array[$offset] ?? null;
 	}
 
@@ -133,14 +133,14 @@ class NodeList implements SeekableIterator, ArrayAccess, Countable{
 	 ***************/
 
 	/**
-	 * @param int                                         $offset
-	 * @param \chillerlan\PrototypeDOM\Node\PrototypeNode $value
+	 * @param int      $offset
+	 * @param \DOMNode $value
 	 *
 	 * @return void
 	 */
 	public function offsetSet($offset, $value):void{
 
-		if($value instanceof PrototypeNode){
+		if($value instanceof DOMNode){
 
 			\is_int($offset)
 				? $this->array[$offset] = $value
@@ -153,18 +153,18 @@ class NodeList implements SeekableIterator, ArrayAccess, Countable{
 	/**
 	 * @link http://api.prototypejs.org/language/Array/prototype/first/
 	 *
-	 * @return \chillerlan\PrototypeDOM\Node\Element|null
+	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|\DOMNode|null
 	 */
-	public function first():?Element{
+	public function first():?DOMNode{
 		return $this->__first();
 	}
 
 	/**
 	 * @link http://api.prototypejs.org/language/Array/prototype/last/
 	 *
-	 * @return \chillerlan\PrototypeDOM\Node\Element|null
+	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|\DOMNode|null
 	 */
-	public function last():?Element{
+	public function last():?DOMNode{
 		return $this->__last();
 	}
 

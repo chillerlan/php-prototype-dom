@@ -13,5 +13,5 @@
 namespace chillerlan\PrototypeDOM\Node;
 
 class CharacterData extends \DOMCharacterData implements PrototypeElement{
-	use ElementTrait, NodeTrait, TraversalTrait;
+	use PrototypeElementTrait;
 }
