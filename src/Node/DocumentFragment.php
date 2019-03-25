@@ -12,9 +12,6 @@
 
 namespace chillerlan\PrototypeDOM\Node;
 
-use DOMDocumentFragment;
-use chillerlan\PrototypeDOM\Traits\ElementTrait;
-
-class DocumentFragment extends DOMDocumentFragment implements PrototypeElement{
-	use ElementTrait;
+class DocumentFragment extends \DOMDocumentFragment implements PrototypeElement{
+	use ElementTrait, NodeTrait;
 }

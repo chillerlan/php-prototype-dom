@@ -12,9 +12,6 @@
 
 namespace chillerlan\PrototypeDOM\Node;
 
-use chillerlan\PrototypeDOM\Traits\NodeTrait;
-use DOMAttr;
-
-class Attr extends DOMAttr implements PrototypeNode{
+class Attr extends \DOMAttr implements PrototypeNode{
 	use NodeTrait;
 }
