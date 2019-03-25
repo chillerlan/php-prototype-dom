@@ -4,15 +4,14 @@
  *
  * @filesource   HTMLElementTrait.php
  * @created      11.05.2017
- * @package      chillerlan\PrototypeDOM\Traits
+ * @package      chillerlan\PrototypeDOM\Node
  * @author       Smiley <smiley@chillerlan.net>
  * @copyright    2017 Smiley
  * @license      MIT
  */
 
-namespace chillerlan\PrototypeDOM\Traits;
+namespace chillerlan\PrototypeDOM\Node;
 
-use chillerlan\PrototypeDOM\Node\PrototypeHTMLElement;
 use chillerlan\Traits\Magic;
 
 /**
@@ -23,41 +22,40 @@ use chillerlan\Traits\Magic;
  * @property string $innerHTML
  */
 trait HTMLElementTrait{
-	use Magic, ElementTrait;
 
-	protected function magic_get_id():string {
-		return trim($this->getAttribute('id'));
+	protected function magic_get_id():string{
+		return \trim($this->getAttribute('id'));
 	}
 
-	protected function magic_set_id($id) {
+	protected function magic_set_id($id){
 		return $this->setAttribute('id', $id);
 	}
 
-	protected function magic_get_class():string {
-		return trim($this->getAttribute('class'));
+	protected function magic_get_class():string{
+		return \trim($this->getAttribute('class'));
 	}
 
-	protected function magic_set_class($class) {
+	protected function magic_set_class($class){
 		return $this->setAttribute('class', $class);
 	}
 
-	protected function magic_get_href():string {
-		return trim($this->getAttribute('href'));
+	protected function magic_get_href():string{
+		return \trim($this->getAttribute('href'));
 	}
 
-	protected function magic_set_href($class) {
+	protected function magic_set_href($class){
 		return $this->setAttribute('href', $class);
 	}
 
-	protected function magic_get_src():string {
-		return trim($this->getAttribute('src'));
+	protected function magic_get_src():string{
+		return \trim($this->getAttribute('src'));
 	}
 
-	protected function magic_set_src($class) {
+	protected function magic_set_src($class){
 		return $this->setAttribute('src', $class);
 	}
 
-	protected function magic_get_innerHTML():string {
+	protected function magic_get_innerHTML():string{
 		return $this->inspect();
 	}
 
@@ -68,10 +66,10 @@ trait HTMLElementTrait{
 	 *
 	 * @return string
 	 */
-	public function identify(string $newID = null):string {
+	public function identify(string $newID = null):string{
 		$oldID = $this->id;
 
-		if(!is_null($newID)){
+		if($newID !== null){
 			$this->id = $newID;
 		}
 
@@ -84,24 +82,21 @@ trait HTMLElementTrait{
 	 * @return array
 	 */
 	public function classNames():array{
+
+		if(!$this->hasAttributes()){
+			return [];
+		}
+
+		$classnames        = \explode(' ', $this->class);
 		$currentClassnames = [];
 
-		if($this->hasAttributes()){
-			$classnames = explode(' ', $this->class);
+		foreach($classnames as $classname){
 
-			if(!empty($classnames)){
-
-				foreach($classnames as $classname){
-
-					if(empty($classname)){
-						continue;
-					}
-
-					$currentClassnames[] = $classname;
-				}
-
+			if(empty($classname)){
+				continue;
 			}
 
+			$currentClassnames[] = $classname;
 		}
 
 		return $currentClassnames;
@@ -115,7 +110,7 @@ trait HTMLElementTrait{
 	 * @return bool
 	 */
 	public function hasClassName(string $classname):bool{
-		return in_array($classname, $this->classNames(), true);
+		return \in_array($classname, $this->classNames(), true);
 	}
 
 	/**
@@ -149,9 +144,11 @@ trait HTMLElementTrait{
 	 */
 	public function toggleClassName(string $classname):PrototypeHTMLElement{
 
-		return $this->hasClassName($classname)
-			? $this->removeClassName($classname)
-			: $this->addClassName($classname);
+		if($this->hasClassName($classname)){
+			return $this->removeClassName($classname);
+		}
+
+		return $this->addClassName($classname);
 	}
 
 	/**
@@ -161,10 +158,10 @@ trait HTMLElementTrait{
 	 *
 	 * @return null|string
 	 */
-	public function getStyle(string $property){
+	public function getStyle(string $property):?string{
 		$currentStyle = $this->getStyles();
 
-		if(array_key_exists(strtolower($property), $currentStyle)){
+		if(\array_key_exists(\strtolower($property), $currentStyle)){
 			return $currentStyle[$property];
 		}
 
@@ -179,21 +176,20 @@ trait HTMLElementTrait{
 	 *
 	 * @return \chillerlan\PrototypeDOM\Node\PrototypeHTMLElement
 	 */
-	public function setStyle(array $style, bool $replace = false):PrototypeHTMLElement{
+	public function setStyle(array $style, bool $replace = null):PrototypeHTMLElement{
 		$currentStyle = $this->getStyles();
 
-		if(!$replace){
-			$style = array_merge($currentStyle, $style);
+		if($replace !== true){
+			$style = \array_merge($currentStyle, $style);
 		}
 
 		foreach($style as $property => $value){
 			$style[$property] = $property.': '.$value.';';
 		}
 
-		$this->setAttribute('style', implode(' ', $style));
+		$this->setAttribute('style', \implode(' ', $style));
 
 		return $this;
 	}
-
 
 }

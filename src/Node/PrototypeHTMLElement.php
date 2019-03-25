@@ -16,6 +16,8 @@ namespace chillerlan\PrototypeDOM\Node;
  * @property string $id
  * @property string $class
  * @property string $innerHTML
+ * @property string $href
+ * @property string $src
  */
 interface PrototypeHTMLElement extends PrototypeElement{
 
@@ -78,7 +80,7 @@ interface PrototypeHTMLElement extends PrototypeElement{
 	 *
 	 * @return null|string
 	 */
-	public function getStyle(string $property);
+	public function getStyle(string $property):?string;
 
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/setStyle/

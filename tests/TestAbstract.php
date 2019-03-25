@@ -13,7 +13,6 @@
 namespace chillerlan\PrototypeDOMTest;
 
 use chillerlan\PrototypeDOM\Document;
-use chillerlan\PrototypeDOM\Node\Element;
 use PHPUnit\Framework\TestCase;
 
 abstract class TestAbstract extends TestCase{
@@ -21,32 +20,17 @@ abstract class TestAbstract extends TestCase{
 	/**
 	 * @var \chillerlan\PrototypeDOM\Document
 	 */
-	protected $document;
+	protected $dom;
 
 	/**
 	 * @var \chillerlan\PrototypeDOM\Node\Element
 	 */
-	protected $element;
+	protected $el;
 
-	protected function setUp(){
-		$this->document               = new Document;
-		$this->document->formatOutput = true;
-		$this->document->loadHTMLFile(__DIR__.'/test.html');
-
-		$this->element = $this->document->select('#what')[0];
-	}
-
-	public function getID(Element $e){
-		return $e->id;
-	}
-
-	/**
-	 * @param $id
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\Element
-	 */
-	protected function _e($id){
-		return $this->document->getElementById($id);
+	protected function setUp():void{
+		$this->dom               = new Document;
+		$this->dom->formatOutput = true;
+		$this->dom->loadHTMLFile(__DIR__.'/test.html');
 	}
 
 }

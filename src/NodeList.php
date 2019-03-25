@@ -12,13 +12,10 @@
 
 namespace chillerlan\PrototypeDOM;
 
-use ArrayAccess, Countable, DOMNodeList, Iterator;
-use chillerlan\PrototypeDOM\{
-	Node\PrototypeNode, Traits\EnumerableTrait
-};
-use chillerlan\Traits\{
-	Magic, Interfaces\ArrayAccessTrait, SPL\CountableTrait, SPL\SeekableIteratorTrait
-};
+use chillerlan\PrototypeDOM\Node\{Element, PrototypeNode};
+use chillerlan\Traits\{Enumerable, Interfaces\ArrayAccessTrait, Magic};
+use chillerlan\Traits\SPL\{CountableTrait, SeekableIteratorTrait};
+use ArrayAccess, Countable, DOMNode, DOMNodeList, SeekableIterator;
 
 /**
  * @property int $length
@@ -30,22 +27,18 @@ use chillerlan\Traits\{
  * @method void rewind()
  * @method void seek($pos)
  * @method bool offsetExists($offset)
- * @method \chillerlan\PrototypeDOM\Node\PrototypeNode|null offsetGet($offset)
+ * @method Node\PrototypeNode|null offsetGet($offset)
  * @method void offsetUnset($offset)
- * @method
  */
-class NodeList implements Iterator, ArrayAccess, Countable{
-	use EnumerableTrait, Magic, SeekableIteratorTrait, ArrayAccessTrait, CountableTrait;
-
-	/**
-	 * @var array
-	 */
-	protected $array = [];
-
-	/**
-	 * @var int
-	 */
-	protected $offset = 0;
+class NodeList implements SeekableIterator, ArrayAccess, Countable{
+	use Magic, SeekableIteratorTrait, ArrayAccessTrait, CountableTrait;
+	use Enumerable{
+		__each as each;
+		__findAll as findAll;
+		__map as map;
+		__reject as reject;
+		__toArray as toArray;
+	}
 
 	/**
 	 * NodeList constructor.
@@ -54,14 +47,23 @@ class NodeList implements Iterator, ArrayAccess, Countable{
 	 *
 	 * @throws \Exception
 	 */
-	public function __construct(DOMNodeList $nodes = null){
+	public function __construct(iterable $nodes = null){
 
-		if(!is_null($nodes)){
-			$this->array = iterator_to_array($nodes);
+		if($nodes instanceof DOMNodeList){
+			$this->array = \iterator_to_array($nodes);
+		}
+		elseif($nodes instanceof NodeList){
+			$this->array = $nodes->toArray();
+		}
+		elseif(\is_iterable($nodes)){
+			foreach($nodes as $node){
+				if($node instanceof DOMNode || $node instanceof PrototypeNode){
+					$this->array[] = $node;
+				}
+			}
 		}
 
 	}
-
 
 	/*********
 	 * magic *
@@ -80,11 +82,11 @@ class NodeList implements Iterator, ArrayAccess, Countable{
 	 ***********/
 
 	/**
-	 * @param \chillerlan\PrototypeDOM\Node\PrototypeNode $node
+	 * @param \DOMNode $node
 	 *
 	 * @return bool
 	 */
-	public function match(PrototypeNode $node):bool{
+	public function match(DOMNode $node):bool{
 
 		foreach($this->array as $element){
 
@@ -102,7 +104,7 @@ class NodeList implements Iterator, ArrayAccess, Countable{
 	 *
 	 * @return \chillerlan\PrototypeDOM\Node\Element|null
 	 */
-	public function item(int $offset) {
+	public function item(int $offset):?Element{
 		return $this->array[$offset] ?? null;
 	}
 
@@ -112,7 +114,7 @@ class NodeList implements Iterator, ArrayAccess, Countable{
 	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
 	public function merge(NodeList $nodelist):NodeList{
-		$this->array = array_merge($this->array, $nodelist->toArray());
+		$this->array = \array_merge($this->array, $nodelist->toArray());
 
 		return $this;
 	}
@@ -122,7 +124,7 @@ class NodeList implements Iterator, ArrayAccess, Countable{
 	 *
 	 * @return string
 	 */
-	public function inspect($xml = false):string {
+	public function inspect(bool $xml = false):string{
 		return (new Document($this, $xml))->inspect(null, $xml);
 	}
 
@@ -136,19 +138,66 @@ class NodeList implements Iterator, ArrayAccess, Countable{
 	 *
 	 * @return void
 	 */
-	public function offsetSet($offset, $value){
+	public function offsetSet($offset, $value):void{
 
 		if($value instanceof PrototypeNode){
 
-			if(is_int($offset)){
-				$this->array[$offset] = $value;
-			}
-			else{
-				$this->array[] = $value;
-			}
+			\is_int($offset)
+				? $this->array[$offset] = $value
+				: $this->array[] = $value;
 
 		}
 
+	}
+
+	/**
+	 * @link http://api.prototypejs.org/language/Array/prototype/first/
+	 *
+	 * @return \chillerlan\PrototypeDOM\Node\Element|null
+	 */
+	public function first():?Element{
+		return $this->__first();
+	}
+
+	/**
+	 * @link http://api.prototypejs.org/language/Array/prototype/last/
+	 *
+	 * @return \chillerlan\PrototypeDOM\Node\Element|null
+	 */
+	public function last():?Element{
+		return $this->__last();
+	}
+
+	/**
+	 * @link http://api.prototypejs.org/language/Enumerable/prototype/pluck/
+	 *
+	 * @param string $property
+	 *
+	 * @return array
+	 */
+	public function pluck(string $property):array{
+		return \array_column($this->array, $property);
+	}
+
+	/**
+	 * @link http://api.prototypejs.org/language/Array/prototype/reverse/
+	 *
+	 * @return \chillerlan\PrototypeDOM\NodeList
+	 */
+	public function reverse():NodeList{
+		$this->array  = \array_reverse($this->array);
+		$this->offset = 0;
+
+		return $this;
+	}
+
+	/**
+	 * @link http://api.prototypejs.org/language/Enumerable/prototype/toArray/
+	 *
+	 * @return array
+	 */
+	public function toArray():array{
+		return $this->array;
 	}
 
 }

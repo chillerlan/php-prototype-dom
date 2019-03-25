@@ -13,7 +13,7 @@
 namespace chillerlan\PrototypeDOM\Node;
 
 /**
- * @property bool $schemaTypeInfo
+ * @property bool   $schemaTypeInfo
  * @property string $tagName
  */
 interface PrototypeElement extends PrototypeTraversal{

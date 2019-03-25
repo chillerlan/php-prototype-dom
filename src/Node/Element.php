@@ -4,7 +4,7 @@
  *
  * @filesource   Element.php
  * @created      05.05.2017
- * @package      chillerlan\PrototypeDOM
+ * @package      chillerlan\PrototypeDOM\Node
  * @author       Smiley <smiley@chillerlan.net>
  * @copyright    2017 Smiley
  * @license      MIT
@@ -12,11 +12,11 @@
 
 namespace chillerlan\PrototypeDOM\Node;
 
+use chillerlan\Traits\Magic;
 use DOMElement;
-use chillerlan\PrototypeDOM\Traits\HTMLElementTrait;
 
 class Element extends DOMElement implements PrototypeHTMLElement{
-	use HTMLElementTrait;
+	use ElementTrait, HTMLElementTrait, Magic, NodeTrait, TraversalTrait;
 
 	/**
 	 * @return  string[]
@@ -34,9 +34,9 @@ class Element extends DOMElement implements PrototypeHTMLElement{
 	/**
 	 * @param array $attributes
 	 *
-	 * @return \chillerlan\PrototypeDOM\Node\Element
+	 * @return \chillerlan\PrototypeDOM\Node\PrototypeHTMLElement
 	 */
-	public function setAttributes(array $attributes):Element{
+	public function setAttributes(array $attributes):PrototypeHTMLElement{
 
 		foreach($attributes as $name => $value){
 			$this->setAttribute($name, $value);
@@ -48,9 +48,9 @@ class Element extends DOMElement implements PrototypeHTMLElement{
 	/**
 	 * @param array $attributes
 	 *
-	 * @return \chillerlan\PrototypeDOM\Node\Element
+	 * @return \chillerlan\PrototypeDOM\Node\PrototypeHTMLElement
 	 */
-	public function removeAttributes(array $attributes):Element{
+	public function removeAttributes(array $attributes):PrototypeHTMLElement{
 
 		foreach($attributes as $name){
 			$this->removeAttribute($name);
@@ -62,20 +62,20 @@ class Element extends DOMElement implements PrototypeHTMLElement{
 	/**
 	 * @param array $classnames
 	 *
-	 * @return \chillerlan\PrototypeDOM\Node\Element
+	 * @return \chillerlan\PrototypeDOM\Node\PrototypeHTMLElement
 	 */
-	public function addClassNames(array $classnames):Element{
+	public function addClassNames(array $classnames):PrototypeHTMLElement{
 		$currentClassnames = $this->classNames();
 
 		foreach($classnames as $classname){
 
-			if(!in_array($classname, $currentClassnames, true)){
-				array_push($currentClassnames, $classname);
+			if(!\in_array($classname, $currentClassnames, true)){
+				$currentClassnames[] = $classname;
 			}
 
 		}
 
-		$this->class = implode(' ', array_unique($currentClassnames));
+		$this->class = \implode(' ', \array_unique($currentClassnames));
 
 		return $this;
 	}
@@ -83,25 +83,21 @@ class Element extends DOMElement implements PrototypeHTMLElement{
 	/**
 	 * @param array $classnames
 	 *
-	 * @return \chillerlan\PrototypeDOM\Node\Element
+	 * @return \chillerlan\PrototypeDOM\Node\PrototypeHTMLElement
 	 */
-	public function removeClassNames(array $classnames):Element{
+	public function removeClassNames(array $classnames):PrototypeHTMLElement{
 		$currentClassnames = $this->classNames();
 
 		foreach($classnames as $classname){
-			$keys = array_keys($currentClassnames, $classname);
+			$keys = \array_keys($currentClassnames, $classname);
 
-			if(!empty($keys)){
-
-				foreach($keys as $key){
-					unset($currentClassnames[$key]);
-				}
-
+			foreach($keys as $key){
+				unset($currentClassnames[$key]);
 			}
 
 		}
 
-		$this->class = implode(' ', array_unique($currentClassnames));
+		$this->class = \implode(' ', \array_unique($currentClassnames));
 
 		return $this;
 	}
@@ -110,22 +106,20 @@ class Element extends DOMElement implements PrototypeHTMLElement{
 	 * @return string[]
 	 */
 	public function getStyles():array{
+
+		if(!$this->hasAttributes()){
+			return [];
+		}
+
+		$styles = \explode(';', \trim($this->getAttribute('style')));
+
 		$currentStyle = [];
 
-		if($this->hasAttributes()){
-			$styles = explode(';', trim($this->getAttribute('style')));
+		foreach($styles as $style){
+			$s = \explode(':', $style);
 
-			if(!empty($styles)){
-
-				foreach($styles as $style){
-					$s = explode(':', $style);
-
-					if(count($s) === 2){
-						$currentStyle[strtolower(trim($s[0]))] = trim($s[1]);
-					}
-
-				}
-
+			if(\count($s) === 2){
+				$currentStyle[\strtolower(\trim($s[0]))] = \trim($s[1]);
 			}
 
 		}

@@ -4,34 +4,33 @@
  *
  * @filesource   NodeTrait.php
  * @created      11.05.2017
- * @package      chillerlan\PrototypeDOM\Traits
+ * @package      chillerlan\PrototypeDOM\Node
  * @author       Smiley <smiley@chillerlan.net>
  * @copyright    2017 Smiley
  * @license      MIT
  */
 
-namespace chillerlan\PrototypeDOM\Traits;
+namespace chillerlan\PrototypeDOM\Node;
 
-use chillerlan\PrototypeDOM\Node\PrototypeNode;
 use chillerlan\PrototypeDOM\NodeList;
 
 /**
- * @property string $nodeName
- * @property string $nodeValue
- * @property int $nodeType
+ * @property string                                $nodeName
+ * @property string                                $nodeValue
+ * @property int                                   $nodeType
  * @property \chillerlan\PrototypeDOM\Node\Element $parentNode
- * @property \DOMNodeList $childNodes
+ * @property \DOMNodeList                          $childNodes
  * @property \chillerlan\PrototypeDOM\Node\Element $firstChild
  * @property \chillerlan\PrototypeDOM\Node\Element $lastChild
  * @property \chillerlan\PrototypeDOM\Node\Element $previousSibling
  * @property \chillerlan\PrototypeDOM\Node\Element $nextSibling
- * @property \DOMNamedNodeMap $attributes
- * @property \chillerlan\PrototypeDOM\Document $ownerDocument
- * @property string $namespaceURI
- * @property string $prefix
- * @property string $localName
- * @property string $baseURI
- * @property string $textContent
+ * @property \DOMNamedNodeMap                      $attributes
+ * @property \chillerlan\PrototypeDOM\Document     $ownerDocument
+ * @property string                                $namespaceURI
+ * @property string                                $prefix
+ * @property string                                $localName
+ * @property string                                $baseURI
+ * @property string                                $textContent
  */
 trait NodeTrait{
 
@@ -40,11 +39,11 @@ trait NodeTrait{
 	 *
 	 * @param string $property
 	 * @param int    $maxLength
-	 * @param int    $nodeType
+	 * @param int    $nodeType https://secure.php.net/manual/dom.constants.php
 	 *
 	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
-	public function recursivelyCollect(string $property, int $maxLength = -1, int $nodeType = XML_ELEMENT_NODE):NodeList{
+	public function recursivelyCollect(string $property, int $maxLength = -1, int $nodeType = \XML_ELEMENT_NODE):NodeList{
 		return $this->ownerDocument->recursivelyCollect($this, $property, $maxLength, $nodeType);
 	}
 
@@ -54,20 +53,17 @@ trait NodeTrait{
 	 * @return bool
 	 */
 	public function empty():bool{
-		return empty(trim($this->nodeValue));
+		return empty(\trim($this->nodeValue));
 	}
 
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/inspect/
 	 *
-	 *
-	 * @todo: fixme!
-	 *
 	 * @param bool $xml
 	 *
 	 * @return string
 	 */
-	public function inspect($xml = false):string{
+	public function inspect(bool $xml = false):string{
 		return $this->ownerDocument->inspect($this, $xml);
 	}
 
@@ -98,7 +94,7 @@ trait NodeTrait{
 			return $this;
 		}
 
-		return $this->parentNode->replaceChild($this->_importNode($newnode), $this);
+		return $this->parentNode->replaceChild($this->importNode($newnode), $this);
 	}
 
 	/**
@@ -124,7 +120,7 @@ trait NodeTrait{
 		while($node){
 			$nextNode = $node->nextSibling;
 
-			if($node->nodeType === XML_TEXT_NODE && $node->empty()){
+			if($node->nodeType === \XML_TEXT_NODE && $node->empty()){
 				$node->remove();
 			}
 
@@ -139,7 +135,7 @@ trait NodeTrait{
 	 *
 	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode
 	 */
-	public function _importNode(PrototypeNode $newNode):PrototypeNode{
+	public function importNode(PrototypeNode $newNode):PrototypeNode{
 		return $this->ownerDocument->importNode($newNode, true);
 	}
 

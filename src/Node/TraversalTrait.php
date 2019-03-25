@@ -10,40 +10,41 @@
  * @license      MIT
  */
 
-namespace chillerlan\PrototypeDOM\Traits;
+namespace chillerlan\PrototypeDOM\Node;
 
-use chillerlan\PrototypeDOM\Node\PrototypeNode;
 use chillerlan\PrototypeDOM\NodeList;
+use DOMNode;
 
+/**
+ * @property \chillerlan\PrototypeDOM\Document $ownerDocument
+ */
 trait TraversalTrait{
-	use  NodeTrait;
 
 	/**
 	 * @param        $selector
 	 * @param        $index
 	 * @param string $property
-	 * @param int    $nodeType
+	 * @param int    $nodeType https://secure.php.net/manual/dom.constants.php
 	 *
 	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|null
 	 */
-	public function _recursivelyFind($selector, $index, string $property, int $nodeType = XML_ELEMENT_NODE){
+	public function recursivelyFind($selector, int $index = null, string $property = null, int $nodeType = \XML_ELEMENT_NODE):?PrototypeNode{
 
-		if(is_numeric($selector)){
-			$index    = $selector;
-			$selector = null;
+		if(\is_numeric($selector)){
+			return $this->ownerDocument->recursivelyFind($this, $property, null, $selector, $nodeType);
 		}
 
-		return $this->ownerDocument->_recursivelyFind($this, $property, $selector, $index ?? 0, $nodeType);
+		return $this->ownerDocument->recursivelyFind($this, $property, $selector, $index ?? 0, $nodeType);
 	}
 
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/select/
 	 *
-	 * @param string|array $selectors
+	 * @param array $selectors
 	 *
 	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
-	public function select($selectors = null):NodeList{
+	public function select(array $selectors = null):NodeList{
 		return $this->ownerDocument->select($selectors, $this, 'descendant::');
 	}
 
@@ -66,21 +67,23 @@ trait TraversalTrait{
 	 *
 	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|null
 	 */
-	public function down($expression = null, int $index = null){
+	public function down($expression = null, int $index = null):?PrototypeNode{
 
-		if(count(func_get_args()) === 0){
+		if($expression === null && $index === null){
 			return $this->firstDescendant();
 		}
 
-		if(is_int($expression)){
-			$index      = $expression;
-			$expression = '*';
-		}
-		else{
-			$index = $index ?? 0;
+		$index = $index ?? 0;
+
+		if(\is_int($expression)){
+			return $this->select(['*'])->item($expression);
 		}
 
-		return $this->select($expression ?? null)->item($index);
+		if(\is_array($expression)){
+			return $this->select($expression)->item($index);
+		}
+
+		return $this->select([$expression])->item($index);
 	}
 
 	/**
@@ -91,8 +94,8 @@ trait TraversalTrait{
 	 *
 	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|null
 	 */
-	public function up($expression = null, int $index = null){
-		return $this->_recursivelyFind($expression, $index, 'parentNode');
+	public function up($expression = null, int $index = null):?PrototypeNode{
+		return $this->recursivelyFind($expression, $index, 'parentNode');
 	}
 
 	/**
@@ -103,8 +106,8 @@ trait TraversalTrait{
 	 *
 	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|null
 	 */
-	public function previous($expression = null, int $index = null){
-		return $this->_recursivelyFind($expression, $index, 'previousSibling');
+	public function previous($expression = null, int $index = null):?PrototypeNode{
+		return $this->recursivelyFind($expression, $index, 'previousSibling');
 	}
 
 	/**
@@ -115,28 +118,28 @@ trait TraversalTrait{
 	 *
 	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|null
 	 */
-	public function next($expression = null, int $index = null){
-		return $this->_recursivelyFind($expression, $index, 'nextSibling');
+	public function next($expression = null, int $index = null):?PrototypeNode{
+		return $this->recursivelyFind($expression, $index, 'nextSibling');
 	}
 
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/childElements/
 	 *
-	 * @param int $nodeType
+	 * @param int $nodeType https://secure.php.net/manual/dom.constants.php
 	 *
 	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
-	public function childElements(int $nodeType = XML_ELEMENT_NODE):NodeList{
+	public function childElements(int $nodeType = \XML_ELEMENT_NODE):NodeList{
 		$children = new NodeList;
 
-		if($this->hasChildNodes()){
+		if(!$this->hasChildNodes()){
+			return $children;
+		}
 
-			foreach($this->childNodes as $child){
+		foreach($this->childNodes as $child){
 
-				if($child->nodeType === $nodeType){
-					$children[] = $child;
-				}
-
+			if($child->nodeType === $nodeType){
+				$children[] = $child;
 			}
 
 		}
@@ -147,11 +150,11 @@ trait TraversalTrait{
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/descendantOf/
 	 *
-	 * @param \chillerlan\PrototypeDOM\Node\PrototypeNode $ancestor
+	 * @param \DOMNode $ancestor
 	 *
 	 * @return bool
 	 */
-	public function descendantOf(PrototypeNode $ancestor):bool{
+	public function descendantOf(DOMNode $ancestor):bool{
 		return $this->ancestors()->match($ancestor);
 	}
 
@@ -185,9 +188,9 @@ trait TraversalTrait{
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/firstDescendant/
 	 *
-	 * @return \chillerlan\PrototypeDOM\Node\Element|null
+	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|null
 	 */
-	public function firstDescendant(){
+	public function firstDescendant():?PrototypeNode{
 		return $this->descendants()->first();
 	}
 

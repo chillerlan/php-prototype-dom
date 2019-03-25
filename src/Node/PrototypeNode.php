@@ -15,22 +15,22 @@ namespace chillerlan\PrototypeDOM\Node;
 use chillerlan\PrototypeDOM\NodeList;
 
 /**
- * @property string $nodeName
- * @property string $nodeValue
- * @property int $nodeType
+ * @property string                                $nodeName
+ * @property string                                $nodeValue
+ * @property int                                   $nodeType
  * @property \chillerlan\PrototypeDOM\Node\Element $parentNode
- * @property \DOMNodeList $childNodes
+ * @property \DOMNodeList                          $childNodes
  * @property \chillerlan\PrototypeDOM\Node\Element $firstChild
  * @property \chillerlan\PrototypeDOM\Node\Element $lastChild
  * @property \chillerlan\PrototypeDOM\Node\Element $previousSibling
  * @property \chillerlan\PrototypeDOM\Node\Element $nextSibling
- * @property \DOMNamedNodeMap $attributes
- * @property \chillerlan\PrototypeDOM\Document $ownerDocument
- * @property string $namespaceURI
- * @property string $prefix
- * @property string $localName
- * @property string $baseURI
- * @property string $textContent
+ * @property \DOMNamedNodeMap                      $attributes
+ * @property \chillerlan\PrototypeDOM\Document     $ownerDocument
+ * @property string                                $namespaceURI
+ * @property string                                $prefix
+ * @property string                                $localName
+ * @property string                                $baseURI
+ * @property string                                $textContent
  */
 interface PrototypeNode{
 
@@ -39,11 +39,11 @@ interface PrototypeNode{
 	 *
 	 * @param string $property
 	 * @param int    $maxLength
-	 * @param int    $nodeType
+	 * @param int    $nodeType https://secure.php.net/manual/dom.constants.php
 	 *
 	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
-	public function recursivelyCollect(string $property, int $maxLength = -1, int $nodeType = XML_ELEMENT_NODE):NodeList;
+	public function recursivelyCollect(string $property, int $maxLength = -1, int $nodeType = \XML_ELEMENT_NODE):NodeList;
 
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/empty/
@@ -59,7 +59,7 @@ interface PrototypeNode{
 	 *
 	 * @return string
 	 */
-	public function inspect($xml = false):string;
+	public function inspect(bool $xml = false):string;
 
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/remove/

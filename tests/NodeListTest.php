@@ -12,10 +12,9 @@
 
 namespace chillerlan\PrototypeDOMTest;
 
-use chillerlan\PrototypeDOM\Document;
-use chillerlan\PrototypeDOM\Node\Element;
-use Iterator, ArrayAccess, Countable;
-use chillerlan\PrototypeDOM\NodeList;
+use chillerlan\PrototypeDOM\{Document, NodeList};
+use chillerlan\PrototypeDOM\Node\{Element, PrototypeNode};
+use ArrayAccess, Countable, DOMException, Iterator;
 use PHPUnit\Framework\TestCase;
 
 class NodeListTest extends TestCase{
@@ -24,8 +23,6 @@ class NodeListTest extends TestCase{
 	 * @var \chillerlan\PrototypeDOM\NodeList
 	 */
 	protected $nodelist;
-
-	protected function setUp(){}
 
 	public function testInstance(){
 		$this->nodelist = new NodeList;
@@ -36,37 +33,39 @@ class NodeListTest extends TestCase{
 		$this->assertInstanceOf(Countable::class, $this->nodelist);
 	}
 
-	public function testLoad(){
-		$this->nodelist = (new Document)->_HTMLFragmentToNodeList('<div id="boo" class="bar">content1</div><div><a href="#foo">blah</a></div>');
+	public function testToNodelistException(){
+		$this->expectException(DOMException::class);
+		$this->expectExceptionMessage('invalid content');
 
-#		$this->nodelist = new NodeList($this->nodelist);
+		(new Document)->toNodeList(42);
+	}
+
+	public function testNodeList(){
+		$this->nodelist = (new Document)->toNodeList('<div id="boo" class="bar">content1</div><div><a href="#foo">blah</a></div>');
+
+		// coverage
+		$this->nodelist = new NodeList($this->nodelist);
 
 		$this->assertCount(2, $this->nodelist);
 		$this->assertSame(2, $this->nodelist->length);
-
 		$this->assertSame('boo', $this->nodelist->first()->id);
 
 		$this->nodelist->reverse();
 
 		$this->assertSame('boo', $this->nodelist->last()->id);
 
-
-		foreach($this->nodelist as $i => $node){
-			$this->assertInstanceOf(Element::class, $node);
+		$this->nodelist->each(function($node, $i){
+			$this->assertInstanceOf(PrototypeNode::class, $node);
 			unset($this->nodelist[$i]);
 			$this->nodelist[$i] = new Element('foo');
 			$this->nodelist[] = 'whatever';
-		}
+		});
 
 		$this->assertSame(['foo', 'foo'], $this->nodelist->pluck('tagName'));
 
 		$this->nodelist->each(function($e){
 			$this->assertSame('foo', $e->tagName);
 		});
-
-		$this->assertSame([0, 1], $this->nodelist->map(function($e, $i){
-			return $i;
-		}));
 
 		$this->assertSame('<foo></foo><foo></foo>', trim($this->nodelist->inspect()));
 	}

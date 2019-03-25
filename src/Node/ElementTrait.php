@@ -4,18 +4,17 @@
  *
  * @filesource   ElementTrait.php
  * @created      08.05.2017
- * @package      chillerlan\PrototypeDOM\Traits
+ * @package      chillerlan\PrototypeDOM\Node
  * @author       Smiley <smiley@chillerlan.net>
  * @copyright    2017 Smiley
  * @license      MIT
  */
 
-namespace chillerlan\PrototypeDOM\Traits;
+namespace chillerlan\PrototypeDOM\Node;
 
-use chillerlan\PrototypeDOM\Node\PrototypeElement;
+use chillerlan\PrototypeDOM\NodeList;
 
 trait ElementTrait{
-	use TraversalTrait;
 
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/wrap/
@@ -36,10 +35,7 @@ trait ElementTrait{
 	 * @return \chillerlan\PrototypeDOM\Node\PrototypeElement
 	 */
 	public function update($content):PrototypeElement{
-		$this->purge();
-		$this->insert($content);
-
-		return $this;
+		return $this->purge()->insert($content);
 	}
 
 	/**
@@ -57,30 +53,31 @@ trait ElementTrait{
 	 */
 	public function insert($content):PrototypeElement{
 
-		if(is_array($content)){
+		if(!\is_array($content)){
 
-			foreach(['before', 'after', 'top', 'bottom'] as $pos){
-
-				if(array_key_exists($pos, $content)){
-					$nodes = $this->ownerDocument->_toNodeList($content[$pos]);
-
-					if($pos === 'top' && $this->hasChildNodes() || $pos === 'after' && $this->nextSibling){
-						$nodes->reverse();
-					}
-
-					foreach($nodes as $node){
-						call_user_func_array([$this, 'insert_'.$pos], [$node]);
-					}
-
-				}
-
-			}
-
-		}
-		else{
-			foreach($this->ownerDocument->_toNodeList($content) as $node){
+			foreach($this->ownerDocument->toNodeList($content) as $node){
 				$this->insert_bottom($node);
 			}
+
+			return $this;
+		}
+
+		foreach(['before', 'after', 'top', 'bottom'] as $pos){
+
+			if(!\array_key_exists($pos, $content)){
+				continue;
+			}
+
+			$nodes = $this->ownerDocument->toNodeList($content[$pos]);
+
+			if($pos === 'top' && $this->hasChildNodes() || $pos === 'after' && $this->nextSibling){
+				$nodes->reverse();
+			}
+
+			foreach($nodes as $node){
+				\call_user_func_array([$this, 'insert_'.$pos], [$node]);
+			}
+
 		}
 
 		return $this;
@@ -95,7 +92,7 @@ trait ElementTrait{
 	public function insert_before(PrototypeElement $node, PrototypeElement $refNode = null):PrototypeElement{
 
 		if($this->parentNode){
-			$this->parentNode->insertBefore($this->_importNode($node), $refNode ?? $this);
+			$this->parentNode->insertBefore($this->importNode($node), $refNode ?? $this);
 		}
 
 		return $this;
@@ -107,9 +104,12 @@ trait ElementTrait{
 	 * @return \chillerlan\PrototypeDOM\Node\PrototypeElement
 	 */
 	public function insert_after(PrototypeElement $node):PrototypeElement{
-		return !$this->nextSibling && $this->parentNode
-			? $this->parentNode->insert_bottom($node)
-			: $this->nextSibling->insert_before($node);
+
+		if(!$this->nextSibling && $this->parentNode){
+			return $this->parentNode->insert_bottom($node); // @codeCoverageIgnore
+		}
+
+		return $this->nextSibling->insert_before($node);
 	}
 
 	/**
@@ -118,9 +118,12 @@ trait ElementTrait{
 	 * @return \chillerlan\PrototypeDOM\Node\PrototypeElement
 	 */
 	public function insert_top(PrototypeElement $node):PrototypeElement{
-		return $this->hasChildNodes()
-			? $this->firstChild->insert_before($node, $this->firstChild)
-			: $this->insert_bottom($node);
+
+		if($this->hasChildNodes()){
+			return $this->firstChild->insert_before($node, $this->firstChild);
+		}
+
+		return $this->insert_bottom($node);
 	}
 
 	/**
@@ -129,7 +132,7 @@ trait ElementTrait{
 	 * @return \chillerlan\PrototypeDOM\Node\PrototypeElement
 	 */
 	public function insert_bottom(PrototypeElement $node):PrototypeElement{
-		$this->appendChild($this->_importNode($node));
+		$this->appendChild($this->importNode($node));
 
 		return $this;
 	}
