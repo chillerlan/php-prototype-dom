@@ -43,7 +43,7 @@ interface PrototypeNode{
 	 *
 	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
-	public function recursivelyCollect(string $property, int $maxLength = -1, int $nodeType = \XML_ELEMENT_NODE):NodeList;
+	public function recursivelyCollect(string $property, int $maxLength = null, int $nodeType = null):NodeList;
 
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/empty/
@@ -59,7 +59,7 @@ interface PrototypeNode{
 	 *
 	 * @return string
 	 */
-	public function inspect(bool $xml = false):string;
+	public function inspect(bool $xml = null):string;
 
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/remove/

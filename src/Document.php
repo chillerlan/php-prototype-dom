@@ -333,7 +333,8 @@ class Document extends DOMDocument{
 	 *
 	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
-	public function select(array $selectors = null, DOMNode $contextNode = null, string $axis = null, int $nodeType = \XML_ELEMENT_NODE):NodeList{
+	public function select(array $selectors = null, DOMNode $contextNode = null, string $axis = null, int $nodeType = null):NodeList{
+		$nodeType = $nodeType ?? \XML_ELEMENT_NODE;
 		$elements = new NodeList;
 
 		foreach($selectors ?? ['*'] as $selector){
@@ -365,8 +366,10 @@ class Document extends DOMDocument{
 	 *
 	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
-	public function recursivelyCollect(DOMNode $element, string $property, int $maxLength = -1, int $nodeType = \XML_ELEMENT_NODE):NodeList{
-		$nodes = new NodeList;
+	public function recursivelyCollect(DOMNode $element, string $property, int $maxLength = null, int $nodeType = null):NodeList{
+		$nodeType  = $nodeType ?? \XML_ELEMENT_NODE;
+		$maxLength = $maxLength ?? -1;
+		$nodes     = new NodeList;
 
 		if(\in_array($property, ['parentNode', 'previousSibling', 'nextSibling'])){
 
@@ -396,7 +399,9 @@ class Document extends DOMDocument{
 	 *
 	 * @return \DOMNode|null
 	 */
-	public function recursivelyFind(DOMNode $element, string $property = null, string $selector = null, int $index = 0, int $nodeType = \XML_ELEMENT_NODE):?DOMNode{
+	public function recursivelyFind(DOMNode $element, string $property = null, string $selector = null, int $index = null, int $nodeType = null):?DOMNode{
+		$nodeType = $nodeType ?? \XML_ELEMENT_NODE;
+		$index    = $index ?? 0;
 
 		if(\in_array($property, ['parentNode', 'previousSibling', 'nextSibling'])){
 

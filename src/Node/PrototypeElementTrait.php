@@ -12,8 +12,6 @@
 
 namespace chillerlan\PrototypeDOM\Node;
 
-use chillerlan\PrototypeDOM\NodeList;
-
 trait PrototypeElementTrait{
 	use PrototypeTraversalTrait;
 

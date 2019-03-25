@@ -12,11 +12,10 @@
 
 namespace chillerlan\PrototypeDOM\Node;
 
-use chillerlan\Traits\Magic;
 use DOMElement;
 
 class Element extends DOMElement implements PrototypeHTMLElement{
-	use Magic, PrototypeHTMLElementTrait;
+	use PrototypeHTMLElementTrait;
 
 	/**
 	 * @return  string[]

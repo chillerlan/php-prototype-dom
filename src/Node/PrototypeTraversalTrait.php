@@ -130,7 +130,8 @@ trait PrototypeTraversalTrait{
 	 *
 	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
-	public function childElements(int $nodeType = \XML_ELEMENT_NODE):NodeList{
+	public function childElements(int $nodeType = null):NodeList{
+		$nodeType = $nodeType ?? \XML_ELEMENT_NODE;
 		$children = new NodeList;
 
 		if(!$this->hasChildNodes()){

@@ -22,7 +22,7 @@ use chillerlan\Traits\Magic;
  * @property string $innerHTML
  */
 trait PrototypeHTMLElementTrait{
-	use PrototypeElementTrait;
+	use Magic, PrototypeElementTrait;
 
 	protected function magic_get_id():string{
 		return \trim($this->getAttribute('id'));
@@ -92,12 +92,12 @@ trait PrototypeHTMLElementTrait{
 		$currentClassnames = [];
 
 		foreach($classnames as $classname){
+			$classname = \trim($classname);
 
-			if(empty($classname)){
-				continue;
+			if(!empty($classname)){
+				$currentClassnames[] = $classname;
 			}
 
-			$currentClassnames[] = $classname;
 		}
 
 		return $currentClassnames;

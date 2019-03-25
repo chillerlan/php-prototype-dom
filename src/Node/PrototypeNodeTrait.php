@@ -43,8 +43,8 @@ trait PrototypeNodeTrait{
 	 *
 	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
-	public function recursivelyCollect(string $property, int $maxLength = -1, int $nodeType = \XML_ELEMENT_NODE):NodeList{
-		return $this->ownerDocument->recursivelyCollect($this, $property, $maxLength, $nodeType);
+	public function recursivelyCollect(string $property, int $maxLength = null, int $nodeType = null):NodeList{
+		return $this->ownerDocument->recursivelyCollect($this, $property, $maxLength ?? -1, $nodeType ?? \XML_ELEMENT_NODE);
 	}
 
 	/**
@@ -63,7 +63,7 @@ trait PrototypeNodeTrait{
 	 *
 	 * @return string
 	 */
-	public function inspect(bool $xml = false):string{
+	public function inspect(bool $xml = null):string{
 		return $this->ownerDocument->inspect($this, $xml);
 	}
 

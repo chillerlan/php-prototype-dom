@@ -82,7 +82,7 @@ interface PrototypeTraversal extends PrototypeNode{
 	 *
 	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
-	public function childElements(int $nodeType = \XML_ELEMENT_NODE):NodeList;
+	public function childElements(int $nodeType = null):NodeList;
 
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/descendantOf/

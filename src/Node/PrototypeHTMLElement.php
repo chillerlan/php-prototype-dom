@@ -90,6 +90,6 @@ interface PrototypeHTMLElement extends PrototypeElement{
 	 *
 	 * @return \chillerlan\PrototypeDOM\Node\PrototypeHTMLElement
 	 */
-	public function setStyle(array $style, bool $replace = false):PrototypeHTMLElement;
+	public function setStyle(array $style, bool $replace = null):PrototypeHTMLElement;
 
 }
