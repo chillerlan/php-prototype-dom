@@ -14,6 +14,10 @@ namespace chillerlan\PrototypeDOM\Node;
 
 use chillerlan\PrototypeDOM\NodeList;
 
+use function trim;
+
+use const XML_ELEMENT_NODE, XML_TEXT_NODE;
+
 /**
  * @property string                                $nodeName
  * @property string                                $nodeValue
@@ -44,7 +48,7 @@ trait PrototypeNodeTrait{
 	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
 	public function recursivelyCollect(string $property, int $maxLength = null, int $nodeType = null):NodeList{
-		return $this->ownerDocument->recursivelyCollect($this, $property, $maxLength ?? -1, $nodeType ?? \XML_ELEMENT_NODE);
+		return $this->ownerDocument->recursivelyCollect($this, $property, $maxLength ?? -1, $nodeType ?? XML_ELEMENT_NODE);
 	}
 
 	/**
@@ -53,7 +57,7 @@ trait PrototypeNodeTrait{
 	 * @return bool
 	 */
 	public function empty():bool{
-		return empty(\trim($this->nodeValue));
+		return empty(trim($this->nodeValue));
 	}
 
 	/**
@@ -120,7 +124,7 @@ trait PrototypeNodeTrait{
 		while($node){
 			$nextNode = $node->nextSibling;
 
-			if($node->nodeType === \XML_TEXT_NODE && $node->empty()){
+			if($node->nodeType === XML_TEXT_NODE && $node->empty()){
 				$node->remove();
 			}
 

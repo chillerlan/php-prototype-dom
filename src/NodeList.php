@@ -12,10 +12,13 @@
 
 namespace chillerlan\PrototypeDOM;
 
-use chillerlan\PrototypeDOM\Node\{Element, PrototypeNode};
+use ArrayAccess;
+use chillerlan\PrototypeDOM\Node\{PrototypeNode};
 use chillerlan\Traits\{Enumerable, Interfaces\ArrayAccessTrait, Magic};
 use chillerlan\Traits\SPL\{CountableTrait, SeekableIteratorTrait};
-use ArrayAccess, Countable, DOMNode, DOMNodeList, SeekableIterator;
+use Countable, DOMNode, DOMNodeList, SeekableIterator;
+
+use function array_column, array_merge, array_reverse, is_int, is_iterable, iterator_to_array;
 
 /**
  * @property int $length
@@ -27,7 +30,7 @@ use ArrayAccess, Countable, DOMNode, DOMNodeList, SeekableIterator;
  * @method void rewind()
  * @method void seek($pos)
  * @method bool offsetExists($offset)
- * @method Node\PrototypeNode|null offsetGet($offset)
+ * @method \chillerlan\PrototypeDOM\Node\PrototypeNode|null offsetGet($offset)
  * @method void offsetUnset($offset)
  */
 class NodeList implements SeekableIterator, ArrayAccess, Countable{
@@ -50,12 +53,12 @@ class NodeList implements SeekableIterator, ArrayAccess, Countable{
 	public function __construct(iterable $nodes = null){
 
 		if($nodes instanceof DOMNodeList){
-			$this->array = \iterator_to_array($nodes);
+			$this->array = iterator_to_array($nodes);
 		}
 		elseif($nodes instanceof NodeList){
 			$this->array = $nodes->toArray();
 		}
-		elseif(\is_iterable($nodes)){
+		elseif(is_iterable($nodes)){
 			foreach($nodes as $node){
 				if($node instanceof DOMNode || $node instanceof PrototypeNode){
 					$this->array[] = $node;
@@ -114,7 +117,7 @@ class NodeList implements SeekableIterator, ArrayAccess, Countable{
 	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
 	public function merge(NodeList $nodelist):NodeList{
-		$this->array = \array_merge($this->array, $nodelist->toArray());
+		$this->array = array_merge($this->array, $nodelist->toArray());
 
 		return $this;
 	}
@@ -142,7 +145,7 @@ class NodeList implements SeekableIterator, ArrayAccess, Countable{
 
 		if($value instanceof DOMNode){
 
-			\is_int($offset)
+			is_int($offset)
 				? $this->array[$offset] = $value
 				: $this->array[] = $value;
 
@@ -176,7 +179,7 @@ class NodeList implements SeekableIterator, ArrayAccess, Countable{
 	 * @return array
 	 */
 	public function pluck(string $property):array{
-		return \array_column($this->array, $property);
+		return array_column($this->array, $property);
 	}
 
 	/**
@@ -185,7 +188,7 @@ class NodeList implements SeekableIterator, ArrayAccess, Countable{
 	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
 	public function reverse():NodeList{
-		$this->array  = \array_reverse($this->array);
+		$this->array  = array_reverse($this->array);
 		$this->offset = 0;
 
 		return $this;

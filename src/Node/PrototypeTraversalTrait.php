@@ -15,10 +15,15 @@ namespace chillerlan\PrototypeDOM\Node;
 use chillerlan\PrototypeDOM\NodeList;
 use DOMNode;
 
+use function is_array, is_int, is_numeric;
+
+use const XML_ELEMENT_NODE;
+
 /**
  * @property \chillerlan\PrototypeDOM\Document $ownerDocument
  */
 trait PrototypeTraversalTrait{
+
 	use PrototypeNodeTrait;
 
 	/**
@@ -29,9 +34,9 @@ trait PrototypeTraversalTrait{
 	 *
 	 * @return \chillerlan\PrototypeDOM\Node\PrototypeTraversal|\DOMNode|null
 	 */
-	public function recursivelyFind($selector, int $index = null, string $property = null, int $nodeType = \XML_ELEMENT_NODE):?PrototypeTraversal{
+	public function recursivelyFind($selector, int $index = null, string $property = null, int $nodeType = XML_ELEMENT_NODE):?PrototypeTraversal{
 
-		if(\is_numeric($selector)){
+		if(is_numeric($selector)){
 			return $this->ownerDocument->recursivelyFind($this, $property, null, $selector, $nodeType);
 		}
 
@@ -76,11 +81,11 @@ trait PrototypeTraversalTrait{
 
 		$index = $index ?? 0;
 
-		if(\is_int($expression)){
+		if(is_int($expression)){
 			return $this->select(['*'])->item($expression);
 		}
 
-		if(\is_array($expression)){
+		if(is_array($expression)){
 			return $this->select($expression)->item($index);
 		}
 
@@ -131,7 +136,7 @@ trait PrototypeTraversalTrait{
 	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
 	public function childElements(int $nodeType = null):NodeList{
-		$nodeType = $nodeType ?? \XML_ELEMENT_NODE;
+		$nodeType = $nodeType ?? XML_ELEMENT_NODE;
 		$children = new NodeList;
 
 		if(!$this->hasChildNodes()){

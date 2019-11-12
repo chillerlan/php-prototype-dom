@@ -12,7 +12,10 @@
 
 namespace chillerlan\PrototypeDOM\Node;
 
+use function array_key_exists, call_user_func_array, is_array;
+
 trait PrototypeElementTrait{
+
 	use PrototypeTraversalTrait;
 
 	/**
@@ -52,7 +55,7 @@ trait PrototypeElementTrait{
 	 */
 	public function insert($content):PrototypeElement{
 
-		if(!\is_array($content)){
+		if(!is_array($content)){
 
 			foreach($this->ownerDocument->toNodeList($content) as $node){
 				$this->insert_bottom($node);
@@ -63,7 +66,7 @@ trait PrototypeElementTrait{
 
 		foreach(['before', 'after', 'top', 'bottom'] as $pos){
 
-			if(!\array_key_exists($pos, $content)){
+			if(!array_key_exists($pos, $content)){
 				continue;
 			}
 
@@ -74,7 +77,7 @@ trait PrototypeElementTrait{
 			}
 
 			foreach($nodes as $node){
-				\call_user_func_array([$this, 'insert_'.$pos], [$node]);
+				call_user_func_array([$this, 'insert_'.$pos], [$node]);
 			}
 
 		}

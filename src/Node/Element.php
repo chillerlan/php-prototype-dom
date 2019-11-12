@@ -14,7 +14,10 @@ namespace chillerlan\PrototypeDOM\Node;
 
 use DOMElement;
 
+use function array_keys, array_unique, count, explode, implode, in_array, strtolower, trim;
+
 class Element extends DOMElement implements PrototypeHTMLElement{
+
 	use PrototypeHTMLElementTrait;
 
 	/**
@@ -68,13 +71,13 @@ class Element extends DOMElement implements PrototypeHTMLElement{
 
 		foreach($classnames as $classname){
 
-			if(!\in_array($classname, $currentClassnames, true)){
+			if(!in_array($classname, $currentClassnames, true)){
 				$currentClassnames[] = $classname;
 			}
 
 		}
 
-		$this->class = \implode(' ', \array_unique($currentClassnames));
+		$this->class = implode(' ', array_unique($currentClassnames));
 
 		return $this;
 	}
@@ -88,7 +91,7 @@ class Element extends DOMElement implements PrototypeHTMLElement{
 		$currentClassnames = $this->classNames();
 
 		foreach($classnames as $classname){
-			$keys = \array_keys($currentClassnames, $classname);
+			$keys = array_keys($currentClassnames, $classname);
 
 			foreach($keys as $key){
 				unset($currentClassnames[$key]);
@@ -96,7 +99,7 @@ class Element extends DOMElement implements PrototypeHTMLElement{
 
 		}
 
-		$this->class = \implode(' ', \array_unique($currentClassnames));
+		$this->class = implode(' ', array_unique($currentClassnames));
 
 		return $this;
 	}
@@ -110,15 +113,15 @@ class Element extends DOMElement implements PrototypeHTMLElement{
 			return [];
 		}
 
-		$styles = \explode(';', \trim($this->getAttribute('style')));
+		$styles = explode(';', trim($this->getAttribute('style')));
 
 		$currentStyle = [];
 
 		foreach($styles as $style){
-			$s = \explode(':', $style);
+			$s = explode(':', $style);
 
-			if(\count($s) === 2){
-				$currentStyle[\strtolower(\trim($s[0]))] = \trim($s[1]);
+			if(count($s) === 2){
+				$currentStyle[strtolower(trim($s[0]))] = trim($s[1]);
 			}
 
 		}

@@ -12,28 +12,17 @@
 
 namespace chillerlan\PrototypeDOM;
 
-use chillerlan\PrototypeDOM\Node\{Attr,
-	CdataSection,
-	CharacterData,
-	Comment,
-	DocumentFragment,
-	DocumentType,
-	Element,
-	Entity,
-	EntityReference,
-	Node,
-	Notation,
-	ProcessingInstruction,
-	PrototypeHTMLElement,
-	PrototypeNode,
-	Text,};
+use chillerlan\PrototypeDOM\Node\{
+	Attr, CdataSection, CharacterData, Comment, DocumentFragment, DocumentType, Element, Entity,
+	EntityReference, Node, Notation, ProcessingInstruction, PrototypeHTMLElement, PrototypeNode, Text,
+};
 use chillerlan\Traits\Magic;
-use DOMDocument;
-use DOMException;
-use DOMNode;
-use DOMNodeList;
-use DOMXPath;
+use DOMDocument, DOMException, DOMNode, DOMNodeList, DOMXPath;
 use Symfony\Component\CssSelector\CssSelectorConverter;
+
+use function count, in_array, is_file, is_iterable, is_readable, is_string;
+
+use const LIBXML_COMPACT, LIBXML_HTML_NODEFDTD, LIBXML_HTML_NOIMPLIED, LIBXML_NOERROR, LIBXML_NONET, XML_ELEMENT_NODE;
 
 /**
  * @property string $title
@@ -57,7 +46,7 @@ class Document extends DOMDocument{
 		'DOMText'                  => Text::class,
 	];
 
-	protected const LOAD_OPTIONS = \LIBXML_COMPACT|\LIBXML_NONET|\LIBXML_HTML_NODEFDTD|\LIBXML_HTML_NOIMPLIED|\LIBXML_NOERROR;
+	protected const LOAD_OPTIONS = LIBXML_COMPACT | LIBXML_NONET | LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED | LIBXML_NOERROR;
 
 	/**
 	 * @var \Symfony\Component\CssSelector\CssSelectorConverter
@@ -86,7 +75,6 @@ class Document extends DOMDocument{
 		$this->cssSelectorConverter = new CssSelectorConverter;
 	}
 
-
 	/*********
 	 * magic *
 	 *********/
@@ -105,6 +93,7 @@ class Document extends DOMDocument{
 
 		if($currentTitle instanceof Element){
 			$currentTitle->update($title);
+
 			return;
 		}
 
@@ -143,11 +132,11 @@ class Document extends DOMDocument{
 			return $this->insertNodeList(new NodeList($content));
 		}
 
-		if(!\is_string($content)){
+		if(!is_string($content)){
 			throw new DOMException('invalid document content');
 		}
 
-		if(\is_file($content) && \is_readable($content)){
+		if(is_file($content) && is_readable($content)){
 			return $this->loadDocumentFile($content, $xml);
 		}
 
@@ -214,11 +203,11 @@ class Document extends DOMDocument{
 			return new NodeList([$content]);
 		}
 
-		if($content instanceof DOMNodeList || \is_iterable($content)){
+		if($content instanceof DOMNodeList || is_iterable($content)){
 			return new NodeList($content);
 		}
 
-		if(\is_string($content)){
+		if(is_string($content)){
 			$document = new self;
 			$document->loadHTML('<html><body id="-import-content">'.$content.'</body></html>');
 
@@ -276,7 +265,7 @@ class Document extends DOMDocument{
 		/** @var \chillerlan\PrototypeDOM\NodeList $nodes */
 		$nodes = $this->select($selectors, $contextNode, $axis ?? 'descendant-or-self::');
 
-		if(\count($nodes) > 0){
+		if(count($nodes) > 0){
 
 			foreach($nodes as $node){
 				$node->remove();
@@ -334,12 +323,12 @@ class Document extends DOMDocument{
 	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
 	public function select(array $selectors = null, DOMNode $contextNode = null, string $axis = null, int $nodeType = null):NodeList{
-		$nodeType = $nodeType ?? \XML_ELEMENT_NODE;
+		$nodeType = $nodeType ?? XML_ELEMENT_NODE;
 		$elements = new NodeList;
 
 		foreach($selectors ?? ['*'] as $selector){
 
-			if(!\is_string($selector)){
+			if(!is_string($selector)){
 				continue;
 			}
 
@@ -367,11 +356,11 @@ class Document extends DOMDocument{
 	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
 	public function recursivelyCollect(DOMNode $element, string $property, int $maxLength = null, int $nodeType = null):NodeList{
-		$nodeType  = $nodeType ?? \XML_ELEMENT_NODE;
+		$nodeType  = $nodeType ?? XML_ELEMENT_NODE;
 		$maxLength = $maxLength ?? -1;
 		$nodes     = new NodeList;
 
-		if(\in_array($property, ['parentNode', 'previousSibling', 'nextSibling'])){
+		if(in_array($property, ['parentNode', 'previousSibling', 'nextSibling'])){
 
 			while($element = $element->{$property}){
 
@@ -379,7 +368,7 @@ class Document extends DOMDocument{
 					$nodes[] = $element;
 				}
 
-				if(\count($nodes) === $maxLength){
+				if(count($nodes) === $maxLength){
 					break;
 				}
 
@@ -400,10 +389,10 @@ class Document extends DOMDocument{
 	 * @return \DOMNode|null
 	 */
 	public function recursivelyFind(DOMNode $element, string $property = null, string $selector = null, int $index = null, int $nodeType = null):?DOMNode{
-		$nodeType = $nodeType ?? \XML_ELEMENT_NODE;
+		$nodeType = $nodeType ?? XML_ELEMENT_NODE;
 		$index    = $index ?? 0;
 
-		if(\in_array($property, ['parentNode', 'previousSibling', 'nextSibling'])){
+		if(in_array($property, ['parentNode', 'previousSibling', 'nextSibling'])){
 
 			/** @var \chillerlan\PrototypeDOM\Node\Element $element */
 			while($element = $element->{$property}){
@@ -469,7 +458,7 @@ class Document extends DOMDocument{
 	 */
 	public function getElementById($elementId):?DOMNode{
 
-		if(!\is_string($elementId)){
+		if(!is_string($elementId)){
 			throw new DOMException('invalid element id');
 		}
 

@@ -14,6 +14,8 @@ namespace chillerlan\PrototypeDOM\Node;
 
 use chillerlan\Traits\Magic;
 
+use function array_key_exists, array_merge, explode, implode, in_array, strtolower, trim;
+
 /**
  * @property string $id
  * @property string $class
@@ -25,7 +27,7 @@ trait PrototypeHTMLElementTrait{
 	use Magic, PrototypeElementTrait;
 
 	protected function magic_get_id():string{
-		return \trim($this->getAttribute('id'));
+		return trim($this->getAttribute('id'));
 	}
 
 	protected function magic_set_id(string $id){
@@ -33,7 +35,7 @@ trait PrototypeHTMLElementTrait{
 	}
 
 	protected function magic_get_class():string{
-		return \trim($this->getAttribute('class'));
+		return trim($this->getAttribute('class'));
 	}
 
 	protected function magic_set_class(string $class){
@@ -41,7 +43,7 @@ trait PrototypeHTMLElementTrait{
 	}
 
 	protected function magic_get_href():string{
-		return \trim($this->getAttribute('href'));
+		return trim($this->getAttribute('href'));
 	}
 
 	protected function magic_set_href(string $href){
@@ -49,7 +51,7 @@ trait PrototypeHTMLElementTrait{
 	}
 
 	protected function magic_get_src():string{
-		return \trim($this->getAttribute('src'));
+		return trim($this->getAttribute('src'));
 	}
 
 	protected function magic_set_src(string $src){
@@ -88,11 +90,11 @@ trait PrototypeHTMLElementTrait{
 			return [];
 		}
 
-		$classnames        = \explode(' ', $this->class);
+		$classnames        = explode(' ', $this->class);
 		$currentClassnames = [];
 
 		foreach($classnames as $classname){
-			$classname = \trim($classname);
+			$classname = trim($classname);
 
 			if(!empty($classname)){
 				$currentClassnames[] = $classname;
@@ -111,7 +113,7 @@ trait PrototypeHTMLElementTrait{
 	 * @return bool
 	 */
 	public function hasClassName(string $classname):bool{
-		return \in_array($classname, $this->classNames(), true);
+		return in_array($classname, $this->classNames(), true);
 	}
 
 	/**
@@ -162,7 +164,7 @@ trait PrototypeHTMLElementTrait{
 	public function getStyle(string $property):?string{
 		$currentStyle = $this->getStyles();
 
-		if(\array_key_exists(\strtolower($property), $currentStyle)){
+		if(array_key_exists(strtolower($property), $currentStyle)){
 			return $currentStyle[$property];
 		}
 
@@ -181,14 +183,14 @@ trait PrototypeHTMLElementTrait{
 		$currentStyle = $this->getStyles();
 
 		if($replace !== true){
-			$style = \array_merge($currentStyle, $style);
+			$style = array_merge($currentStyle, $style);
 		}
 
 		foreach($style as $property => $value){
 			$style[$property] = $property.': '.$value.';';
 		}
 
-		$this->setAttribute('style', \implode(' ', $style));
+		$this->setAttribute('style', implode(' ', $style));
 
 		return $this;
 	}
