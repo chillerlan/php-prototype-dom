@@ -80,7 +80,7 @@ class DocumentTest extends TestAbstract{
 
 	public function testMagicTitleInvalidHTMLException(){
 		$this->expectException(\DOMException::class);
-		$this->expectExceptionMessage('<html> header missing');
+		$this->expectExceptionMessage('html header missing');
 
 		$d = new Document;
 		$d->title = 'nope';

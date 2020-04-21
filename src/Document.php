@@ -104,7 +104,7 @@ class Document extends DOMDocument{
 			$html = $this->select(['html'])->first();
 
 			if(!$html instanceof PrototypeHTMLElement){
-				throw new DOMException('<html> header missing');
+				throw new DOMException('html header missing');
 			}
 
 			$head = $this->newElement('head');
@@ -209,7 +209,7 @@ class Document extends DOMDocument{
 
 		if(is_string($content)){
 			$document = new self;
-			$document->loadHTML('<html><body id="-import-content">'.$content.'</body></html>');
+			$document->loadHTML('<html lang="en"><body id="-import-content">'.$content.'</body></html>');
 
 			return $document->toNodeList($document->getElementById('-import-content')->childNodes);
 		}
