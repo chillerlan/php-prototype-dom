@@ -27,10 +27,10 @@ class NodeListTest extends TestCase{
 	public function testInstance(){
 		$this->nodelist = new NodeList;
 
-		$this->assertInstanceOf(NodeList::class, $this->nodelist);
-		$this->assertInstanceOf(Iterator::class, $this->nodelist);
-		$this->assertInstanceOf(ArrayAccess::class, $this->nodelist);
-		$this->assertInstanceOf(Countable::class, $this->nodelist);
+		self::assertInstanceOf(NodeList::class, $this->nodelist);
+		self::assertInstanceOf(Iterator::class, $this->nodelist);
+		self::assertInstanceOf(ArrayAccess::class, $this->nodelist);
+		self::assertInstanceOf(Countable::class, $this->nodelist);
 	}
 
 	public function testToNodelistException(){
@@ -46,28 +46,28 @@ class NodeListTest extends TestCase{
 		// coverage
 		$this->nodelist = new NodeList($this->nodelist);
 
-		$this->assertCount(2, $this->nodelist);
-		$this->assertSame(2, $this->nodelist->count());
-		$this->assertSame('boo', $this->nodelist->first()->getID());
+		self::assertCount(2, $this->nodelist);
+		self::assertSame(2, $this->nodelist->count());
+		self::assertSame('boo', $this->nodelist->first()->getID());
 
 		$this->nodelist->reverse();
 
-		$this->assertSame('boo', $this->nodelist->last()->getID());
+		self::assertSame('boo', $this->nodelist->last()->getID());
 
 		$this->nodelist->each(function($node, $i){
-			$this->assertInstanceOf(PrototypeNode::class, $node);
+			self::assertInstanceOf(PrototypeNode::class, $node);
 			unset($this->nodelist[$i]);
 			$this->nodelist[$i] = new Element('foo');
 			$this->nodelist[] = 'whatever';
 		});
 
-		$this->assertSame(['foo', 'foo'], $this->nodelist->pluck('tagName'));
+		self::assertSame(['foo', 'foo'], $this->nodelist->pluck('tagName'));
 
 		$this->nodelist->each(function($e){
-			$this->assertSame('foo', $e->tagName);
+			self::assertSame('foo', $e->tagName);
 		});
 
-		$this->assertSame('<foo></foo><foo></foo>', trim($this->nodelist->inspect()));
+		self::assertSame('<foo></foo><foo></foo>', trim($this->nodelist->inspect()));
 	}
 
 }
