@@ -106,9 +106,12 @@ class Document extends DOMDocument{
 	}
 
 	/**
+	 * @param string|\DOMNodeList|\chillerlan\PrototypeDOM\NodeList $content
+	 * @param bool|null $xml
+	 *
+	 * @return \chillerlan\PrototypeDOM\Document
 	 * @throws \DOMException
 	 */
-
 	public function loadDocument($content, bool $xml = null):Document{
 
 		if($content instanceof NodeList){
