@@ -8,58 +8,58 @@
  * @author       Smiley <smiley@chillerlan.net>
  * @copyright    2017 Smiley
  * @license      MIT
+ *
+ * @noinspection PhpIncompatibleReturnTypeInspection
  */
 
 namespace chillerlan\PrototypeDOM\Node;
 
-use chillerlan\Traits\Magic;
-
 use function array_key_exists, array_merge, explode, implode, in_array, strtolower, trim;
 
 /**
- * @property string $id
- * @property string $class
- * @property string $href
- * @property string $src
- * @property string $innerHTML
+ *
  */
 trait PrototypeHTMLElementTrait{
-	use Magic, PrototypeElementTrait;
+	use PrototypeElementTrait;
 
-	protected function magic_get_id():string{
+	public function getID():string{
 		return trim($this->getAttribute('id'));
 	}
 
-	protected function magic_set_id(string $id){
-		return $this->setAttribute('id', $id);
+	public function setID(string $id):PrototypeHTMLElement{
+		$this->setAttribute('id', $id);
+
+		return $this;
 	}
 
-	protected function magic_get_class():string{
+	public function getClassName():string{
 		return trim($this->getAttribute('class'));
 	}
 
-	protected function magic_set_class(string $class){
-		return $this->setAttribute('class', $class);
+	public function setClassName(string $class):PrototypeHTMLElement{
+		$this->setAttribute('class', $class);
+
+		return $this;
 	}
 
-	protected function magic_get_href():string{
+	public function getHref():string{
 		return trim($this->getAttribute('href'));
 	}
 
-	protected function magic_set_href(string $href){
-		return $this->setAttribute('href', $href);
+	public function setHref(string $href):PrototypeHTMLElement{
+		$this->setAttribute('href', $href);
+
+		return $this;
 	}
 
-	protected function magic_get_src():string{
+	public function getSrc():string{
 		return trim($this->getAttribute('src'));
 	}
 
-	protected function magic_set_src(string $src){
-		return $this->setAttribute('src', $src);
-	}
+	public function setSrc(string $src):PrototypeHTMLElement{
+		$this->setAttribute('src', $src);
 
-	protected function magic_get_innerHTML():string{
-		return $this->inspect();
+		return $this;
 	}
 
 	/**
@@ -70,10 +70,10 @@ trait PrototypeHTMLElementTrait{
 	 * @return string
 	 */
 	public function identify(string $newID = null):string{
-		$oldID = $this->id;
+		$oldID = $this->getAttribute('id');
 
 		if($newID !== null){
-			$this->id = $newID;
+			$this->setAttribute('id', $newID);
 		}
 
 		return $oldID;
@@ -90,7 +90,7 @@ trait PrototypeHTMLElementTrait{
 			return [];
 		}
 
-		$classnames        = explode(' ', $this->class);
+		$classnames        = explode(' ', $this->getClassName());
 		$currentClassnames = [];
 
 		foreach($classnames as $classname){

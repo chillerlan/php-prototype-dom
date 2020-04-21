@@ -47,12 +47,12 @@ class NodeListTest extends TestCase{
 		$this->nodelist = new NodeList($this->nodelist);
 
 		$this->assertCount(2, $this->nodelist);
-		$this->assertSame(2, $this->nodelist->length);
-		$this->assertSame('boo', $this->nodelist->first()->id);
+		$this->assertSame(2, $this->nodelist->count());
+		$this->assertSame('boo', $this->nodelist->first()->getID());
 
 		$this->nodelist->reverse();
 
-		$this->assertSame('boo', $this->nodelist->last()->id);
+		$this->assertSame('boo', $this->nodelist->last()->getID());
 
 		$this->nodelist->each(function($node, $i){
 			$this->assertInstanceOf(PrototypeNode::class, $node);

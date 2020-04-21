@@ -12,36 +12,24 @@
 
 namespace chillerlan\PrototypeDOM;
 
-use ArrayAccess;
-use chillerlan\PrototypeDOM\Node\{PrototypeNode};
-use chillerlan\Traits\{Enumerable, Interfaces\ArrayAccessTrait, Magic};
-use chillerlan\Traits\SPL\{CountableTrait, SeekableIteratorTrait};
-use Countable, DOMNode, DOMNodeList, SeekableIterator;
+use OutOfBoundsException;
+use chillerlan\PrototypeDOM\Node\PrototypeNode;
+use DOMNode, DOMNodeList;
 
-use function array_column, array_merge, array_reverse, is_int, is_iterable, iterator_to_array;
+use function array_column, array_key_exists, array_merge, array_reverse, count, is_int, is_iterable, iterator_to_array;
 
-/**
- * @property int $length
- *
- * @method \chillerlan\PrototypeDOM\Node\PrototypeNode current()
- * @method int key()
- * @method bool valid()
- * @method void next()
- * @method void rewind()
- * @method void seek($pos)
- * @method bool offsetExists($offset)
- * @method \chillerlan\PrototypeDOM\Node\PrototypeNode|null offsetGet($offset)
- * @method void offsetUnset($offset)
- */
-class NodeList implements SeekableIterator, ArrayAccess, Countable{
-	use Magic, SeekableIteratorTrait, ArrayAccessTrait, CountableTrait;
-	use Enumerable{
-		__each as each;
-		__findAll as findAll;
-		__map as map;
-		__reject as reject;
-		__toArray as toArray;
-	}
+
+class NodeList implements EnumerableInterface{
+
+	/**
+	 * @var array
+	 */
+	protected array $array = [];
+
+	/**
+	 * @var int
+	 */
+	protected int $offset = 0;
 
 	/**
 	 * NodeList constructor.
@@ -68,17 +56,6 @@ class NodeList implements SeekableIterator, ArrayAccess, Countable{
 
 	}
 
-	/*********
-	 * magic *
-	 *********/
-
-	/**
-	 * @return int
-	 */
-	public function magic_get_length():int{
-		return $this->count();
-	}
-
 
 	/***********
 	 * generic *
@@ -103,15 +80,6 @@ class NodeList implements SeekableIterator, ArrayAccess, Countable{
 	}
 
 	/**
-	 * @param int $offset
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|\DOMNode|null
-	 */
-	public function item(int $offset):?DOMNode{
-		return $this->array[$offset] ?? null;
-	}
-
-	/**
 	 * @param \chillerlan\PrototypeDOM\NodeList $nodelist
 	 *
 	 * @return \chillerlan\PrototypeDOM\NodeList
@@ -131,9 +99,104 @@ class NodeList implements SeekableIterator, ArrayAccess, Countable{
 		return (new Document($this, $xml))->inspect(null, $xml);
 	}
 
+	/*************
+	 * Countable *
+	 *************/
+
+	/**
+	 * @link http://php.net/manual/countable.count.php
+	 * @inheritdoc
+	 */
+	public function count():int{
+		return count($this->array);
+	}
+
+	/************
+	 * Iterator *
+	 ************/
+
+	/**
+	 * @link  http://php.net/manual/iterator.current.php
+	 * @inheritdoc
+	 */
+	public function current():?DOMNode{
+		return $this->array[$this->offset] ?? null;
+	}
+
+	/**
+	 * @link  http://php.net/manual/iterator.next.php
+	 * @inheritdoc
+	 */
+	public function next():void{
+		$this->offset++;
+	}
+
+	/**
+	 * @link  http://php.net/manual/iterator.key.php
+	 * @inheritdoc
+	 */
+	public function key():int{
+		return $this->offset;
+	}
+
+	/**
+	 * @link  http://php.net/manual/iterator.valid.php
+	 * @inheritdoc
+	 */
+	public function valid():bool{
+		return array_key_exists($this->offset, $this->array);
+	}
+
+	/**
+	 * @link  http://php.net/manual/iterator.rewind.php
+	 * @inheritdoc
+	 */
+	public function rewind():void{
+		$this->offset = 0;
+	}
+
+	/********************
+	 * SeekableIterator *
+	 ********************/
+
+	/**
+	 * @link  http://php.net/manual/seekableiterator.seek.php
+	 * @inheritdoc
+	 */
+	public function seek($pos):void{
+		$this->rewind();
+
+		for( ; $this->offset < $pos; ){
+
+			if(!\next($this->array)) {
+				throw new OutOfBoundsException('invalid seek position: '.$pos);
+			}
+
+			$this->offset++;
+		}
+
+	}
+
 	/***************
 	 * ArrayAccess *
 	 ***************/
+
+	/**
+	 * @link  http://php.net/manual/arrayaccess.offsetexists.php
+	 * @inheritdoc
+	 */
+	public function offsetExists($offset):bool{
+		return array_key_exists($offset, $this->array);
+	}
+
+	/**
+	 * @link  http://php.net/manual/arrayaccess.offsetget.php
+	 * @inheritdoc
+	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|\DOMNode|null
+	 */
+	public function offsetGet($offset):?DOMNode{
+		return $this->array[$offset] ?? null;
+	}
 
 	/**
 	 * @param int      $offset
@@ -154,12 +217,24 @@ class NodeList implements SeekableIterator, ArrayAccess, Countable{
 	}
 
 	/**
+	 * @link  http://php.net/manual/arrayaccess.offsetunset.php
+	 * @inheritdoc
+	 */
+	public function offsetUnset($offset):void{
+		unset($this->array[$offset]);
+	}
+
+	/*************
+	 * Prototype *
+	 *************/
+
+	/**
 	 * @link http://api.prototypejs.org/language/Array/prototype/first/
 	 *
 	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|\DOMNode|null
 	 */
 	public function first():?DOMNode{
-		return $this->__first();
+		return $this->array[0] ?? null;
 	}
 
 	/**
@@ -168,7 +243,7 @@ class NodeList implements SeekableIterator, ArrayAccess, Countable{
 	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|\DOMNode|null
 	 */
 	public function last():?DOMNode{
-		return $this->__last();
+		return $this->array[\count($this->array) - 1] ?? null;
 	}
 
 	/**
@@ -201,6 +276,107 @@ class NodeList implements SeekableIterator, ArrayAccess, Countable{
 	 */
 	public function toArray():array{
 		return $this->array;
+	}
+
+	/**
+	 * @link http://api.prototypejs.org/language/Enumerable/prototype/each/
+	 *
+	 * @param callable $callback
+	 *
+	 * @return $this
+	 */
+	public function each($callback){
+		$this->map($callback);
+
+		return $this;
+	}
+
+	/**
+	 * @link http://api.prototypejs.org/language/Enumerable/prototype/collect/
+	 * @link http://api.prototypejs.org/language/Enumerable/prototype/map/
+	 *
+	 * @param callable $callback
+	 *
+	 * @return array
+	 * @throws \Exception
+	 */
+	public function map($callback):array {
+
+		if(!\is_callable($callback)){
+			throw new \Exception('invalid callback');
+		}
+
+		$return = [];
+
+		foreach($this->array as $index => $element){
+			$return[$index] = \call_user_func_array($callback, [$element, $index]);
+		}
+
+		return $return;
+	}
+
+	/**
+	 * @return \chillerlan\PrototypeDOM\NodeList
+	 */
+	public function clear():NodeList{
+		$this->array  = [];
+		$this->offset = 0;
+
+		return $this;
+	}
+
+	/**
+	 * @link http://api.prototypejs.org/language/Enumerable/prototype/findAll/
+	 *
+	 * @param callable $callback
+	 *
+	 * @return array
+	 * @throws \Exception
+	 */
+	public function findAll($callback):array{
+
+		if(!\is_callable($callback)){
+			throw new \Exception('invalid callback');
+		}
+
+		$return = [];
+
+		foreach($this->array as $index => $element){
+
+			if(\call_user_func_array($callback, [$element, $index]) === true){
+				$return[] = $element;
+			}
+
+		}
+
+		return $return;
+	}
+
+	/**
+	 * @link http://api.prototypejs.org/language/Enumerable/prototype/reject/
+	 *
+	 * @param callable $callback
+	 *
+	 * @return array
+	 * @throws \Exception
+	 */
+	public function reject($callback):array{
+
+		if(!\is_callable($callback)){
+			throw new \Exception('invalid callback');
+		}
+
+		$return = [];
+
+		foreach($this->array as $index => $element){
+
+			if(\call_user_func_array($callback, [$element, $index]) !== true){
+				$return[] = $element;
+			}
+
+		}
+
+		return $return;
 	}
 
 }

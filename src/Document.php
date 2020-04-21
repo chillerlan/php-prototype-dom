@@ -16,7 +16,6 @@ use chillerlan\PrototypeDOM\Node\{
 	Attr, CdataSection, CharacterData, Comment, DocumentFragment, DocumentType, Element, Entity,
 	EntityReference, Node, Notation, ProcessingInstruction, PrototypeHTMLElement, PrototypeNode, Text,
 };
-use chillerlan\Traits\Magic;
 use DOMDocument, DOMException, DOMNode, DOMNodeList, DOMXPath;
 use Symfony\Component\CssSelector\CssSelectorConverter;
 
@@ -25,10 +24,9 @@ use function count, in_array, is_file, is_iterable, is_readable, is_string;
 use const LIBXML_COMPACT, LIBXML_HTML_NODEFDTD, LIBXML_HTML_NOIMPLIED, LIBXML_NOERROR, LIBXML_NONET, XML_ELEMENT_NODE;
 
 /**
- * @property string $title
+ *
  */
 class Document extends DOMDocument{
-	use Magic;
 
 	protected const NODE_CLASSES = [
 		'DOMAttr'                  => Attr::class,
@@ -51,7 +49,7 @@ class Document extends DOMDocument{
 	/**
 	 * @var \Symfony\Component\CssSelector\CssSelectorConverter
 	 */
-	protected $cssSelectorConverter;
+	protected CssSelectorConverter $cssSelectorConverter;
 
 	/**
 	 * Document constructor.
@@ -79,8 +77,8 @@ class Document extends DOMDocument{
 	 * magic *
 	 *********/
 
-	public function magic_get_title():?string{
-		return $this->select(['head > title'])->item(0)->nodeValue ?? null;
+	public function getTitle():?string{
+		return $this->select(['head > title'])->offsetGet(0)->nodeValue ?? null;
 	}
 
 	/**
@@ -88,8 +86,8 @@ class Document extends DOMDocument{
 	 *
 	 * @throws \DOMException
 	 */
-	public function magic_set_title(string $title):void{
-		$currentTitle = $this->select(['head > title'])->item(0);
+	public function setTitle(string $title):void{
+		$currentTitle = $this->select(['head > title'])->offsetGet(0);
 
 		if($currentTitle instanceof Element){
 			$currentTitle->update($title);
@@ -97,7 +95,7 @@ class Document extends DOMDocument{
 			return;
 		}
 
-		$head         = $this->select(['head'])->item(0);
+		$head         = $this->select(['head'])->offsetGet(0);
 		$currentTitle = $this->newElement('title')->update($title);
 
 		if(!$head){

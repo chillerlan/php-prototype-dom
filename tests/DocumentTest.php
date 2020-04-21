@@ -31,10 +31,10 @@ class DocumentTest extends TestAbstract{
 		// from \DOMNodeList
 		$NodeList = (new Document($DOMNodeList))->select(['#list-of-apples']);
 		$this->assertInstanceOf(NodeList::class, $NodeList);
-		$this->assertSame('golden-delicious', $NodeList->first()->childElements()->first()->id);
+		$this->assertSame('golden-delicious', $NodeList->first()->childElements()->first()->getID());
 
 		// from \chillerlan\PrototypeDOM\NodeList
-		$this->assertSame('golden-delicious', (new Document($NodeList))->getElementById('list-of-apples')->childElements()->first()->id);
+		$this->assertSame('golden-delicious', (new Document($NodeList))->getElementById('list-of-apples')->childElements()->first()->getID());
 
 		// from xml string
 		$this->dom = new Document(file_get_contents(__DIR__.'/../phpunit.xml'), true);
@@ -62,28 +62,28 @@ class DocumentTest extends TestAbstract{
 	}
 
 	public function testMagicTitle(){
-		$this->assertSame('Prototype DOM Test', $this->dom->title);
+		$this->assertSame('Prototype DOM Test', $this->dom->getTitle());
 
-		$this->dom->title = 'foo';
-		$this->assertSame('foo', $this->dom->title);
+		$this->dom->setTitle('foo');
+		$this->assertSame('foo', $this->dom->getTitle());
 
-		$this->dom->select(['head > title'])->item(0)->remove();
-		$this->assertNull($this->dom->title);
+		$this->dom->select(['head > title'])->offsetGet(0)->remove();
+		$this->assertNull($this->dom->getTitle());
 
-		$this->dom->title = 'bar';
-		$this->assertSame('bar', $this->dom->title);
+		$this->dom->setTitle('bar');
+		$this->assertSame('bar', $this->dom->getTitle());
 
 		$this->dom        = new Document('<html><body></body></html>');
-		$this->dom->title = 'nohead';
-		$this->assertSame('nohead', $this->dom->title);
+		$this->dom->setTitle('nohead');
+		$this->assertSame('nohead', $this->dom->getTitle());
 	}
 
 	public function testMagicTitleInvalidHTMLException(){
-		$this->expectException(\DOMException::class);
+		$this->expectException(DOMException::class);
 		$this->expectExceptionMessage('html header missing');
 
 		$d = new Document;
-		$d->title = 'nope';
+		$d->setTitle('nope');
 	}
 
 	public function testSelector2xpath(){
@@ -91,13 +91,13 @@ class DocumentTest extends TestAbstract{
 	}
 
 	public function testQuery(){
-		$element = $this->dom->query('//html/head/meta[position() = 1]')->item(0);
+		$element = $this->dom->query('//html/head/meta[position() = 1]')->offsetGet(0);
 
 		$this->assertSame('UTF-8', $element->getAttribute('charset'));
 	}
 
 	public function testQuerySelectorAll(){
-		$this->assertSame('en', $this->dom->querySelectorAll('html')->item(0)->getAttribute('lang'));
+		$this->assertSame('en', $this->dom->querySelectorAll('html')->offsetGet(0)->getAttribute('lang'));
 	}
 
 #	public function testRemoveElementsBySelector(){
@@ -107,11 +107,11 @@ class DocumentTest extends TestAbstract{
 
 	public function testToNodeList(){
 		$nodelist = $this->dom->toNodeList('<meta name="viewport" content="width=device-width, initial-scale=1.0" />');
-		$this->assertSame(['name' => 'viewport', 'content' => 'width=device-width, initial-scale=1.0', ], $nodelist->item(0)->getAttributes());
+		$this->assertSame(['name' => 'viewport', 'content' => 'width=device-width, initial-scale=1.0', ], $nodelist->offsetGet(0)->getAttributes());
 
 		$nodelist = $this->dom->toNodeList('<div id="boo" class="bar"></div><div><a href="#foo"></a></div>');
-		$this->assertSame(2, $nodelist->length);
-		$this->assertSame('boo', $nodelist->item(0)->id);
+		$this->assertSame(2, $nodelist->count());
+		$this->assertSame('boo', $nodelist->offsetGet(0)->getID());
 		$this->assertInstanceOf(NodeList::class, $this->dom->toNodeList($nodelist));
 	}
 

@@ -17,7 +17,6 @@ use DOMElement;
 use function array_keys, array_unique, count, explode, implode, in_array, strtolower, trim;
 
 class Element extends DOMElement implements PrototypeHTMLElement{
-
 	use PrototypeHTMLElementTrait;
 
 	/**
@@ -77,9 +76,7 @@ class Element extends DOMElement implements PrototypeHTMLElement{
 
 		}
 
-		$this->class = implode(' ', array_unique($currentClassnames));
-
-		return $this;
+		return $this->setClassName(implode(' ', array_unique($currentClassnames)));
 	}
 
 	/**
@@ -99,9 +96,7 @@ class Element extends DOMElement implements PrototypeHTMLElement{
 
 		}
 
-		$this->class = implode(' ', array_unique($currentClassnames));
-
-		return $this;
+		return $this->setClassName(implode(' ', array_unique($currentClassnames)));
 	}
 
 	/**

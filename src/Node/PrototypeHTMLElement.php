@@ -13,13 +13,18 @@
 namespace chillerlan\PrototypeDOM\Node;
 
 /**
- * @property string $id
- * @property string $class
- * @property string $innerHTML
- * @property string $href
- * @property string $src
+ *
  */
 interface PrototypeHTMLElement extends PrototypeElement{
+
+	public function getID():string;
+	public function setID(string $id):PrototypeHTMLElement;
+	public function getClassName():string;
+	public function setClassName(string $class):PrototypeHTMLElement;
+	public function getHref():string;
+	public function setHref(string $href):PrototypeHTMLElement;
+	public function getSrc():string;
+	public function setSrc(string $src):PrototypeHTMLElement;
 
 	/**
 	 * http://api.prototypejs.org/dom/Element/identify/

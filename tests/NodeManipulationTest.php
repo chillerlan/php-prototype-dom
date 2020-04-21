@@ -26,7 +26,7 @@ class NodeManipulationTest extends TestAbstract{
 #		$this->assertSame('<!DOCTYPE html>'."\n".'<html lang="en">'.PHP_EOL.PHP_EOL.PHP_EOL.'</html>'."\n", $this->dom->inspect());
 
 		$this->el = $this->dom->newElement('div', ['id' => 'what'])->update('foo!');
-		$this->assertSame('what', $this->el->remove()->id);
+		$this->assertSame('what', $this->el->remove()->getID());
 	}
 
 	public function testReplace(){
@@ -42,11 +42,11 @@ class NodeManipulationTest extends TestAbstract{
 
 		$this->el->wrap($wrapper);
 
-		$this->assertSame('what', $this->dom->getElementById('nope')->firstChild->id);
+		$this->assertSame('what', $this->dom->getElementById('nope')->firstChild->getID());
 
 		$wrapper  = $this->dom->newElement('section', ['id' => 'nope']);
 		$this->el = $this->dom->newElement('div', ['id' => 'what'])->update('foo!');
-		$this->assertSame('<section id="nope"><div id="what">foo!</div></section>', $this->el->wrap($wrapper)->innerHTML);
+		$this->assertSame('<section id="nope"><div id="what">foo!</div></section>', $this->el->wrap($wrapper)->inspect());
 	}
 
 	public function testEmpty(){
@@ -77,10 +77,10 @@ class NodeManipulationTest extends TestAbstract{
 
 	public function testCleanWhitespace(){
 		$this->el = $this->dom->getElementById('wallet');
-		$this->assertSame('<div id="wallet">     </div>', $this->el->innerHTML);
+		$this->assertSame('<div id="wallet">     </div>', $this->el->inspect());
 
 		$this->el->cleanWhitespace();
-		$this->assertSame('<div id="wallet"></div>', $this->el->innerHTML);
+		$this->assertSame('<div id="wallet"></div>', $this->el->inspect());
 	}
 
 	public function testInsert(){

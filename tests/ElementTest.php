@@ -31,26 +31,26 @@ class ElementTest extends TestAbstract{
 	public function testID(){
 		$this->assertSame('what', $this->el->identify('whatever'));
 		$this->assertSame('whatever', $this->el->identify());
-		$this->assertSame('whatever', $this->el->id);
+		$this->assertSame('whatever', $this->el->getID());
 	}
 
 	public function testGetClassnames(){
 		$this->assertSame(['foo', 'bar'], $this->el->classNames());
-		$this->assertSame('foo  bar', $this->el->class);
+		$this->assertSame('foo  bar', $this->el->getClassName());
 		// coverage
 		$this->assertSame([], (new Element('div'))->classNames());
 	}
 
 	public function testMagic(){
-		$this->el->id    = 'nope';
-		$this->el->class = 'whatever';
-		$this->el->href  = 'foo';
-		$this->el->src   = 'blah';
+		$this->el->setID('nope');
+		$this->el->setClassName('whatever');
+		$this->el->setHref('foo');
+		$this->el->setSrc('blah');
 
-		$this->assertSame('nope', $this->el->id);
-		$this->assertSame('whatever', $this->el->class);
-		$this->assertSame('foo', $this->el->href);
-		$this->assertSame('blah', $this->el->src);
+		$this->assertSame('nope', $this->el->getID());
+		$this->assertSame('whatever', $this->el->getClassName());
+		$this->assertSame('foo', $this->el->getHref());
+		$this->assertSame('blah', $this->el->getSrc());
 	}
 
 	public function testHasClassname(){
