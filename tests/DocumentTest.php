@@ -102,7 +102,7 @@ class DocumentTest extends TestAbstract{
 
 #	public function testRemoveElementsBySelector(){
 		// first and last line break \n and the rest PHP_EOL?
-#		$this->assertEquals('<!DOCTYPE html>'."\n".'<html lang="en">'.PHP_EOL.PHP_EOL.PHP_EOL.'</html>'."\n", $this->dom->removeElementsBySelector(['head', 'body'])->inspect());
+#		$this->assertSame('<!DOCTYPE html>'."\n".'<html lang="en">'.PHP_EOL.PHP_EOL.PHP_EOL.'</html>'."\n", $this->dom->removeElementsBySelector(['head', 'body'])->inspect());
 #	}
 
 	public function testToNodeList(){
@@ -116,7 +116,7 @@ class DocumentTest extends TestAbstract{
 	}
 
 	public function testInspect(){
-		$this->assertEquals('<meta charset="UTF-8"/>', $this->dom->inspect($this->dom->select(['meta'])[0], true));
+		$this->assertSame('<meta charset="UTF-8"/>', $this->dom->inspect($this->dom->select(['meta'])[0], true));
 	}
 
 	public function testRecursivelyCollect(){

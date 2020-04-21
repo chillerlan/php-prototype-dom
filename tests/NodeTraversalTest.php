@@ -27,8 +27,8 @@ class NodeTraversalTest extends TestAbstract{
 	}
 
 	public function testInspect(){
-		$this->assertEquals('<h3 id="title" title="yummy!">Apples</h3>', $this->dom->getElementById('title')->inspect());
-		$this->assertEquals('<foo></foo>', $this->dom->newElement('foo')->inspect());
+		$this->assertSame('<h3 id="title" title="yummy!">Apples</h3>', $this->dom->getElementById('title')->inspect());
+		$this->assertSame('<foo></foo>', $this->dom->newElement('foo')->inspect());
 	}
 
 	public function testSelect(){
