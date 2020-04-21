@@ -8,6 +8,9 @@
  * @author       Smiley <smiley@chillerlan.net>
  * @copyright    2017 Smiley
  * @license      MIT
+ *
+ * @noinspection PhpParamsInspection
+ * @noinspection PhpIncompatibleReturnTypeInspection
  */
 
 namespace chillerlan\PrototypeDOM\Node;
@@ -15,43 +18,24 @@ namespace chillerlan\PrototypeDOM\Node;
 use function array_key_exists, call_user_func_array, is_array;
 
 trait PrototypeElementTrait{
-
 	use PrototypeTraversalTrait;
 
 	/**
-	 * @link http://api.prototypejs.org/dom/Element/wrap/
-	 *
-	 * @param \chillerlan\PrototypeDOM\Node\PrototypeElement $wrapper
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeElement
+	 * @inheritDoc
 	 */
 	public function wrap(PrototypeElement $wrapper):PrototypeElement{
 		return $wrapper->insert($this->replace($wrapper));
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/dom/Element/update/
-	 *
-	 * @param string|\DOMNode|\DOMNodeList $content
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeElement
+	 * @inheritDoc
 	 */
 	public function update($content):PrototypeElement{
 		return $this->purge()->insert($content);
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/dom/Element/insert/
-	 *
-	 * Accepted insertion points are:
-	 * - before (as element's previous sibling)
-	 * - after (as element's next sibling)
-	 * - top (as element's first child)
-	 * - bottom (as element's last child)
-	 *
-	 * @param string|array|\DOMNode|\DOMNodeList $content
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeElement
+	 * @inheritDoc
 	 */
 	public function insert($content):PrototypeElement{
 
@@ -86,10 +70,7 @@ trait PrototypeElementTrait{
 	}
 
 	/**
-	 * @param \chillerlan\PrototypeDOM\Node\PrototypeElement      $node
-	 * @param \chillerlan\PrototypeDOM\Node\PrototypeElement|null $refNode
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeElement
+	 * @inheritDoc
 	 */
 	public function insert_before(PrototypeElement $node, PrototypeElement $refNode = null):PrototypeElement{
 
@@ -101,9 +82,7 @@ trait PrototypeElementTrait{
 	}
 
 	/**
-	 * @param \chillerlan\PrototypeDOM\Node\PrototypeElement $node
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeElement
+	 * @inheritDoc
 	 */
 	public function insert_after(PrototypeElement $node):PrototypeElement{
 
@@ -115,9 +94,7 @@ trait PrototypeElementTrait{
 	}
 
 	/**
-	 * @param \chillerlan\PrototypeDOM\Node\PrototypeElement $node
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeElement
+	 * @inheritDoc
 	 */
 	public function insert_top(PrototypeElement $node):PrototypeElement{
 
@@ -129,9 +106,7 @@ trait PrototypeElementTrait{
 	}
 
 	/**
-	 * @param \chillerlan\PrototypeDOM\Node\PrototypeElement $node
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeElement
+	 * @inheritDoc
 	 */
 	public function insert_bottom(PrototypeElement $node):PrototypeElement{
 		$this->appendChild($this->importNode($node));

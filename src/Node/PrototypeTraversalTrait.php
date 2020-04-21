@@ -8,6 +8,9 @@
  * @author       Smiley <smiley@chillerlan.net>
  * @copyright    2017 Smiley
  * @license      MIT
+ *
+ * @noinspection PhpParamsInspection
+ * @noinspection PhpIncompatibleReturnTypeInspection
  */
 
 namespace chillerlan\PrototypeDOM\Node;
@@ -23,18 +26,14 @@ use const XML_ELEMENT_NODE;
  * @property \chillerlan\PrototypeDOM\Document $ownerDocument
  */
 trait PrototypeTraversalTrait{
-
 	use PrototypeNodeTrait;
 
 	/**
-	 * @param        $selector
-	 * @param        $index
-	 * @param string $property
-	 * @param int    $nodeType https://secure.php.net/manual/dom.constants.php
+	 * @see https://secure.php.net/manual/dom.constants.php
 	 *
 	 * @return \chillerlan\PrototypeDOM\Node\PrototypeTraversal|\DOMNode|null
 	 */
-	public function recursivelyFind($selector, int $index = null, string $property = null, int $nodeType = XML_ELEMENT_NODE):?PrototypeTraversal{
+	public function recursivelyFind(string $selector = null, int $index = null, string $property = null, int $nodeType = XML_ELEMENT_NODE):?PrototypeTraversal{
 
 		if(is_numeric($selector)){
 			return $this->ownerDocument->recursivelyFind($this, $property, null, $selector, $nodeType);
@@ -44,34 +43,14 @@ trait PrototypeTraversalTrait{
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/dom/Element/select/
-	 *
-	 * @param array $selectors
-	 *
-	 * @return \chillerlan\PrototypeDOM\NodeList
+	 * @inheritDoc
 	 */
 	public function select(array $selectors = null):NodeList{
 		return $this->ownerDocument->select($selectors, $this, 'descendant::');
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/dom/Element/match/
-	 *
-	 * @param string $selector
-	 *
-	 * @return bool
-	 */
-	public function match(string $selector):bool{
-		return $this->ownerDocument->match($this, $selector);
-	}
-
-	/**
-	 * @link http://api.prototypejs.org/dom/Element/down/
-	 *
-	 * @param null $expression
-	 * @param int  $index
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeTraversal|null
+	 * @inheritDoc
 	 */
 	public function down($expression = null, int $index = null):?PrototypeTraversal{
 
@@ -93,47 +72,28 @@ trait PrototypeTraversalTrait{
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/dom/Element/up/
-	 *
-	 * @param string|null $expression
-	 * @param int|null    $index
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeTraversal|null
+	 * @inheritDoc
 	 */
 	public function up($expression = null, int $index = null):?PrototypeTraversal{
 		return $this->recursivelyFind($expression, $index, 'parentNode');
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/dom/Element/previous/
-	 *
-	 * @param string|null $expression
-	 * @param int|null    $index
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeTraversal|null
+	 * @inheritDoc
 	 */
 	public function previous($expression = null, int $index = null):?PrototypeTraversal{
 		return $this->recursivelyFind($expression, $index, 'previousSibling');
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/dom/Element/next/
-	 *
-	 * @param string|null $expression
-	 * @param int|null    $index
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeTraversal|null
+	 * @inheritDoc
 	 */
 	public function next($expression = null, int $index = null):?PrototypeTraversal{
 		return $this->recursivelyFind($expression, $index, 'nextSibling');
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/dom/Element/childElements/
-	 *
-	 * @param int $nodeType https://secure.php.net/manual/dom.constants.php
-	 *
-	 * @return \chillerlan\PrototypeDOM\NodeList
+	 * @inheritDoc
 	 */
 	public function childElements(int $nodeType = null):NodeList{
 		$nodeType = $nodeType ?? XML_ELEMENT_NODE;
@@ -155,65 +115,49 @@ trait PrototypeTraversalTrait{
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/dom/Element/descendantOf/
-	 *
-	 * @param \DOMNode $ancestor
-	 *
-	 * @return bool
+	 * @inheritDoc
 	 */
 	public function descendantOf(DOMNode $ancestor):bool{
 		return $this->ancestors()->match($ancestor);
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/dom/Element/ancestors/
-	 *
-	 * @return \chillerlan\PrototypeDOM\NodeList
+	 * @inheritDoc
 	 */
 	public function ancestors():NodeList{
 		return $this->recursivelyCollect('parentNode');
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/dom/Element/siblings/
-	 *
-	 * @return \chillerlan\PrototypeDOM\NodeList
+	 * @inheritDoc
 	 */
 	public function siblings():NodeList{
 		return $this->previousSiblings()->reverse()->merge($this->nextSiblings());
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/dom/Element/descendants/
-	 *
-	 * @return \chillerlan\PrototypeDOM\NodeList
+	 * @inheritDoc
 	 */
 	public function descendants():NodeList{
 		return $this->select();
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/dom/Element/firstDescendant/
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeTraversal|null
+	 * @inheritDoc
 	 */
 	public function firstDescendant():?PrototypeTraversal{
 		return $this->descendants()->first();
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/dom/Element/previousSiblings/
-	 *
-	 * @return \chillerlan\PrototypeDOM\NodeList
+	 * @inheritDoc
 	 */
 	public function previousSiblings():NodeList{
 		return $this->recursivelyCollect('previousSibling');
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/dom/Element/nextSiblings/
-	 *
-	 * @return \chillerlan\PrototypeDOM\NodeList
+	 * @inheritDoc
 	 */
 	public function nextSiblings():NodeList{
 		return $this->recursivelyCollect('nextSibling');

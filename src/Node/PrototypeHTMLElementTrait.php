@@ -63,11 +63,7 @@ trait PrototypeHTMLElementTrait{
 	}
 
 	/**
-	 * http://api.prototypejs.org/dom/Element/identify/
-	 *
-	 * @param string|null $newID
-	 *
-	 * @return string
+	 * @inheritDoc
 	 */
 	public function identify(string $newID = null):string{
 		$oldID = $this->getAttribute('id');
@@ -80,9 +76,7 @@ trait PrototypeHTMLElementTrait{
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/dom/Element/classNames/
-	 *
-	 * @return array
+	 * @inheritDoc
 	 */
 	public function classNames():array{
 
@@ -106,44 +100,28 @@ trait PrototypeHTMLElementTrait{
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/dom/Element/hasClassName/
-	 *
-	 * @param string $classname
-	 *
-	 * @return bool
+	 * @inheritDoc
 	 */
 	public function hasClassName(string $classname):bool{
 		return in_array($classname, $this->classNames(), true);
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/dom/Element/addClassName/
-	 *
-	 * @param string $classname
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeHTMLElement
+	 * @inheritDoc
 	 */
 	public function addClassName(string $classname):PrototypeHTMLElement{
 		return $this->addClassNames([$classname]);
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/dom/Element/removeClassName/
-	 *
-	 * @param string $classname
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeHTMLElement
+	 * @inheritDoc
 	 */
 	public function removeClassName(string $classname):PrototypeHTMLElement{
 		return $this->removeClassNames([$classname]);
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/dom/Element/toggleClassName/
-	 *
-	 * @param string $classname
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeHTMLElement
+	 * @inheritDoc
 	 */
 	public function toggleClassName(string $classname):PrototypeHTMLElement{
 
@@ -155,11 +133,7 @@ trait PrototypeHTMLElementTrait{
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/dom/Element/getStyle/
-	 *
-	 * @param string $property
-	 *
-	 * @return null|string
+	 * @inheritDoc
 	 */
 	public function getStyle(string $property):?string{
 		$currentStyle = $this->getStyles();
@@ -172,12 +146,7 @@ trait PrototypeHTMLElementTrait{
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/dom/Element/setStyle/
-	 *
-	 * @param array $style
-	 * @param bool  $replace
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeHTMLElement
+	 * @inheritDoc
 	 */
 	public function setStyle(array $style, bool $replace = null):PrototypeHTMLElement{
 		$currentStyle = $this->getStyles();

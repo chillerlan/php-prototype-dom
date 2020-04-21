@@ -12,31 +12,21 @@
 
 namespace chillerlan\PrototypeDOM;
 
-use OutOfBoundsException;
 use chillerlan\PrototypeDOM\Node\PrototypeNode;
-use DOMNode, DOMNodeList;
+use ArrayAccess, Countable, DOMNode, DOMNodeList, Exception, OutOfBoundsException, SeekableIterator;
 
-use function array_column, array_key_exists, array_merge, array_reverse, count, is_int, is_iterable, iterator_to_array;
+use function array_column, array_key_exists, array_merge, array_reverse, call_user_func_array, count,
+	is_callable, is_int, is_iterable, iterator_to_array;
 
 
-class NodeList implements EnumerableInterface{
+class NodeList implements PrototypeEnumerable, SeekableIterator, ArrayAccess, Countable{
 
-	/**
-	 * @var array
-	 */
 	protected array $array = [];
 
-	/**
-	 * @var int
-	 */
 	protected int $offset = 0;
 
 	/**
 	 * NodeList constructor.
-	 *
-	 * @param \DOMNodeList $nodes
-	 *
-	 * @throws \Exception
 	 */
 	public function __construct(iterable $nodes = null){
 
@@ -62,9 +52,7 @@ class NodeList implements EnumerableInterface{
 	 ***********/
 
 	/**
-	 * @param \DOMNode $node
 	 *
-	 * @return bool
 	 */
 	public function match(DOMNode $node):bool{
 		/** @var \chillerlan\PrototypeDOM\Node\Element $element */
@@ -80,9 +68,7 @@ class NodeList implements EnumerableInterface{
 	}
 
 	/**
-	 * @param \chillerlan\PrototypeDOM\NodeList $nodelist
 	 *
-	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
 	public function merge(NodeList $nodelist):NodeList{
 		$this->array = array_merge($this->array, $nodelist->toArray());
@@ -91,9 +77,7 @@ class NodeList implements EnumerableInterface{
 	}
 
 	/**
-	 * @param bool $xml
 	 *
-	 * @return string
 	 */
 	public function inspect(bool $xml = false):string{
 		return (new Document($this, $xml))->inspect(null, $xml);
@@ -104,7 +88,7 @@ class NodeList implements EnumerableInterface{
 	 *************/
 
 	/**
-	 * @link http://php.net/manual/countable.count.php
+	 * @link https://www.php.net/manual/countable.count.php
 	 * @inheritdoc
 	 */
 	public function count():int{
@@ -116,15 +100,16 @@ class NodeList implements EnumerableInterface{
 	 ************/
 
 	/**
-	 * @link  http://php.net/manual/iterator.current.php
+	 * @link https://www.php.net/manual/iterator.current.php
 	 * @inheritdoc
+	 * @return \DOMNode|\chillerlan\PrototypeDOM\Node\PrototypeHTMLElement|null
 	 */
 	public function current():?DOMNode{
 		return $this->array[$this->offset] ?? null;
 	}
 
 	/**
-	 * @link  http://php.net/manual/iterator.next.php
+	 * @link https://www.php.net/manual/iterator.next.php
 	 * @inheritdoc
 	 */
 	public function next():void{
@@ -132,7 +117,7 @@ class NodeList implements EnumerableInterface{
 	}
 
 	/**
-	 * @link  http://php.net/manual/iterator.key.php
+	 * @link https://www.php.net/manual/iterator.key.php
 	 * @inheritdoc
 	 */
 	public function key():int{
@@ -140,7 +125,7 @@ class NodeList implements EnumerableInterface{
 	}
 
 	/**
-	 * @link  http://php.net/manual/iterator.valid.php
+	 * @link https://www.php.net/manual/iterator.valid.php
 	 * @inheritdoc
 	 */
 	public function valid():bool{
@@ -148,7 +133,7 @@ class NodeList implements EnumerableInterface{
 	}
 
 	/**
-	 * @link  http://php.net/manual/iterator.rewind.php
+	 * @link https://www.php.net/manual/iterator.rewind.php
 	 * @inheritdoc
 	 */
 	public function rewind():void{
@@ -160,7 +145,7 @@ class NodeList implements EnumerableInterface{
 	 ********************/
 
 	/**
-	 * @link  http://php.net/manual/seekableiterator.seek.php
+	 * @link https://www.php.net/manual/seekableiterator.seek.php
 	 * @inheritdoc
 	 */
 	public function seek($pos):void{
@@ -182,7 +167,7 @@ class NodeList implements EnumerableInterface{
 	 ***************/
 
 	/**
-	 * @link  http://php.net/manual/arrayaccess.offsetexists.php
+	 * @link https://www.php.net/manual/arrayaccess.offsetexists.php
 	 * @inheritdoc
 	 */
 	public function offsetExists($offset):bool{
@@ -190,19 +175,17 @@ class NodeList implements EnumerableInterface{
 	}
 
 	/**
-	 * @link  http://php.net/manual/arrayaccess.offsetget.php
+	 * @link https://www.php.net/manual/arrayaccess.offsetget.php
 	 * @inheritdoc
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|\DOMNode|null
+	 * @return \DOMNode|\chillerlan\PrototypeDOM\Node\PrototypeHTMLElement|null
 	 */
 	public function offsetGet($offset):?DOMNode{
 		return $this->array[$offset] ?? null;
 	}
 
 	/**
-	 * @param int      $offset
-	 * @param \DOMNode $value
-	 *
-	 * @return void
+	 * @link https://www.php.net/manual/arrayaccess.offsetset.php
+	 * @inheritdoc
 	 */
 	public function offsetSet($offset, $value):void{
 
@@ -217,7 +200,7 @@ class NodeList implements EnumerableInterface{
 	}
 
 	/**
-	 * @link  http://php.net/manual/arrayaccess.offsetunset.php
+	 * @link https://www.php.net/manual/arrayaccess.offsetunset.php
 	 * @inheritdoc
 	 */
 	public function offsetUnset($offset):void{
@@ -229,38 +212,30 @@ class NodeList implements EnumerableInterface{
 	 *************/
 
 	/**
-	 * @link http://api.prototypejs.org/language/Array/prototype/first/
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|\DOMNode|null
+	 * @inheritDoc
+	 * @return \DOMNode|\chillerlan\PrototypeDOM\Node\PrototypeHTMLElement|null
 	 */
 	public function first():?DOMNode{
 		return $this->array[0] ?? null;
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/language/Array/prototype/last/
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode|\DOMNode|null
+	 * @inheritDoc
+	 * @return \DOMNode|\chillerlan\PrototypeDOM\Node\PrototypeHTMLElement|null
 	 */
 	public function last():?DOMNode{
-		return $this->array[\count($this->array) - 1] ?? null;
+		return $this->array[count($this->array) - 1] ?? null;
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/language/Enumerable/prototype/pluck/
-	 *
-	 * @param string $property
-	 *
-	 * @return array
+	 * @inheritDoc
 	 */
 	public function pluck(string $property):array{
 		return array_column($this->array, $property);
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/language/Array/prototype/reverse/
-	 *
-	 * @return \chillerlan\PrototypeDOM\NodeList
+	 * @inheritDoc
 	 */
 	public function reverse():NodeList{
 		$this->array  = array_reverse($this->array);
@@ -270,20 +245,14 @@ class NodeList implements EnumerableInterface{
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/language/Enumerable/prototype/toArray/
-	 *
-	 * @return array
+	 * @inheritDoc
 	 */
 	public function toArray():array{
 		return $this->array;
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/language/Enumerable/prototype/each/
-	 *
-	 * @param callable $callback
-	 *
-	 * @return $this
+	 * @inheritDoc
 	 */
 	public function each($callback){
 		$this->map($callback);
@@ -292,31 +261,25 @@ class NodeList implements EnumerableInterface{
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/language/Enumerable/prototype/collect/
-	 * @link http://api.prototypejs.org/language/Enumerable/prototype/map/
-	 *
-	 * @param callable $callback
-	 *
-	 * @return array
-	 * @throws \Exception
+	 * @inheritDoc
 	 */
 	public function map($callback):array {
 
-		if(!\is_callable($callback)){
-			throw new \Exception('invalid callback');
+		if(!is_callable($callback)){
+			throw new Exception('invalid callback');
 		}
 
 		$return = [];
 
 		foreach($this->array as $index => $element){
-			$return[$index] = \call_user_func_array($callback, [$element, $index]);
+			$return[$index] = call_user_func_array($callback, [$element, $index]);
 		}
 
 		return $return;
 	}
 
 	/**
-	 * @return \chillerlan\PrototypeDOM\NodeList
+	 * @inheritDoc
 	 */
 	public function clear():NodeList{
 		$this->array  = [];
@@ -326,24 +289,20 @@ class NodeList implements EnumerableInterface{
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/language/Enumerable/prototype/findAll/
-	 *
-	 * @param callable $callback
-	 *
-	 * @return array
+	 * @inheritDoc
 	 * @throws \Exception
 	 */
 	public function findAll($callback):array{
 
-		if(!\is_callable($callback)){
-			throw new \Exception('invalid callback');
+		if(!is_callable($callback)){
+			throw new Exception('invalid callback');
 		}
 
 		$return = [];
 
 		foreach($this->array as $index => $element){
 
-			if(\call_user_func_array($callback, [$element, $index]) === true){
+			if(call_user_func_array($callback, [$element, $index]) === true){
 				$return[] = $element;
 			}
 
@@ -353,24 +312,20 @@ class NodeList implements EnumerableInterface{
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/language/Enumerable/prototype/reject/
-	 *
-	 * @param callable $callback
-	 *
-	 * @return array
+	 * @inheritDoc
 	 * @throws \Exception
 	 */
 	public function reject($callback):array{
 
-		if(!\is_callable($callback)){
-			throw new \Exception('invalid callback');
+		if(!is_callable($callback)){
+			throw new Exception('invalid callback');
 		}
 
 		$return = [];
 
 		foreach($this->array as $index => $element){
 
-			if(\call_user_func_array($callback, [$element, $index]) !== true){
+			if(call_user_func_array($callback, [$element, $index]) !== true){
 				$return[] = $element;
 			}
 

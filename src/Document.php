@@ -46,18 +46,10 @@ class Document extends DOMDocument{
 
 	protected const LOAD_OPTIONS = LIBXML_COMPACT | LIBXML_NONET | LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED | LIBXML_NOERROR;
 
-	/**
-	 * @var \Symfony\Component\CssSelector\CssSelectorConverter
-	 */
 	protected CssSelectorConverter $cssSelectorConverter;
 
 	/**
 	 * Document constructor.
-	 *
-	 * @param \chillerlan\PrototypeDOM\NodeList|\DOMNodeList|string|null $content
-	 * @param bool|null                                                  $xml
-	 * @param string|null                                                $version
-	 * @param string|null                                                $encoding
 	 */
 	public function __construct($content = null, bool $xml = null, string $version = null, string $encoding = null){
 		parent::__construct($version ?? '1.0', $encoding ?? 'UTF-8');
@@ -77,13 +69,14 @@ class Document extends DOMDocument{
 	 * magic *
 	 *********/
 
+	/**
+	 * @return string|null
+	 */
 	public function getTitle():?string{
 		return $this->select(['head > title'])->offsetGet(0)->nodeValue ?? null;
 	}
 
 	/**
-	 * @param string $title
-	 *
 	 * @throws \DOMException
 	 */
 	public function setTitle(string $title):void{
@@ -113,10 +106,6 @@ class Document extends DOMDocument{
 	}
 
 	/**
-	 * @param \chillerlan\PrototypeDOM\NodeList|\DOMNodeList|string $content
-	 * @param bool                                                  $xml
-	 *
-	 * @return \chillerlan\PrototypeDOM\Document
 	 * @throws \DOMException
 	 */
 
@@ -142,11 +131,6 @@ class Document extends DOMDocument{
 	}
 
 	/**
-	 * @param string    $file
-	 * @param bool|null $xml
-	 * @param int|null  $options
-	 *
-	 * @return \chillerlan\PrototypeDOM\Document
 	 * @throws \DOMException
 	 */
 	public function loadDocumentFile(string $file, bool $xml = null, int $options = null):Document{
@@ -164,11 +148,6 @@ class Document extends DOMDocument{
 	}
 
 	/**
-	 * @param string   $documentSource
-	 * @param bool     $xml
-	 * @param int|null $options
-	 *
-	 * @return \chillerlan\PrototypeDOM\Document
 	 * @throws \DOMException
 	 */
 	public function loadDocumentString(string $documentSource, bool $xml = null, int $options = null):Document{
@@ -186,10 +165,7 @@ class Document extends DOMDocument{
 	}
 
 	/**
-	 * @param mixed $content
-	 *
-	 * @return \chillerlan\PrototypeDOM\NodeList
-	 * @throws \Exception
+	 * @throws \DOMException
 	 */
 	public function toNodeList($content):NodeList{
 
@@ -220,20 +196,14 @@ class Document extends DOMDocument{
 	 ***********/
 
 	/**
-	 * @param string $selector
-	 * @param string $axis
 	 *
-	 * @return string
 	 */
 	public function selector2xpath(string $selector, string $axis = null):string{
 		return $this->cssSelectorConverter->toXPath($selector, $axis ?? '//');
 	}
 
 	/**
-	 * @param string        $xpath
-	 * @param \DOMNode|null $contextNode
 	 *
-	 * @return \chillerlan\PrototypeDOM\NodeList|null
 	 */
 	public function query(string $xpath, DOMNode $contextNode = null):?NodeList{
 		$q = (new DOMXPath($this))->query($xpath, $contextNode);
@@ -242,25 +212,16 @@ class Document extends DOMDocument{
 	}
 
 	/**
-	 * @param string        $selector
-	 * @param \DOMNode|null $contextNode
-	 * @param string        $axis
 	 *
-	 * @return \chillerlan\PrototypeDOM\NodeList|null
 	 */
 	public function querySelectorAll(string $selector, DOMNode $contextNode = null, string $axis = null):?NodeList{
 		return $this->query($this->cssSelectorConverter->toXPath($selector, $axis ?? 'descendant-or-self::'), $contextNode);
 	}
 
 	/**
-	 * @param array         $selectors
-	 * @param \DOMNode|null $contextNode
-	 * @param string        $axis
 	 *
-	 * @return \chillerlan\PrototypeDOM\Document
 	 */
 	public function removeElementsBySelector(array $selectors, DOMNode $contextNode = null, string $axis = null):Document{
-		/** @var \chillerlan\PrototypeDOM\NodeList $nodes */
 		$nodes = $this->select($selectors, $contextNode, $axis ?? 'descendant-or-self::');
 
 		if(count($nodes) > 0){
@@ -275,13 +236,10 @@ class Document extends DOMDocument{
 	}
 
 	/**
-	 * @param \chillerlan\PrototypeDOM\NodeList $nodeList
 	 *
-	 * @return \chillerlan\PrototypeDOM\Document
 	 */
 	public function insertNodeList(NodeList $nodeList):Document{
 
-		/** @var \DOMNode $node */
 		foreach($nodeList as $node){
 			$this->appendChild($this->importNode($node->cloneNode(true), true));
 		}
@@ -295,11 +253,6 @@ class Document extends DOMDocument{
 
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/inspect/
-	 *
-	 * @param \DOMNode|null $context
-	 * @param bool          $xml
-	 *
-	 * @return string
 	 */
 	public function inspect(DOMNode $context = null, bool $xml = null):string{
 
@@ -312,13 +265,7 @@ class Document extends DOMDocument{
 
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/select/
-	 *
-	 * @param string|array  $selectors
-	 * @param \DOMNode|null $contextNode
-	 * @param string        $axis
-	 * @param int           $nodeType https://secure.php.net/manual/dom.constants.php
-	 *
-	 * @return \chillerlan\PrototypeDOM\NodeList
+	 * @see https://secure.php.net/manual/dom.constants.php
 	 */
 	public function select(array $selectors = null, DOMNode $contextNode = null, string $axis = null, int $nodeType = null):NodeList{
 		$nodeType = $nodeType ?? XML_ELEMENT_NODE;
@@ -344,14 +291,8 @@ class Document extends DOMDocument{
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/dom/Element/recursivelyCollect/
-	 *
-	 * @param \DOMNode $element
-	 * @param string   $property
-	 * @param int      $maxLength
-	 * @param int      $nodeType https://secure.php.net/manual/dom.constants.php
-	 *
-	 * @return \chillerlan\PrototypeDOM\NodeList
+	 * @see http://api.prototypejs.org/dom/Element/recursivelyCollect/
+	 * @see https://secure.php.net/manual/dom.constants.php
 	 */
 	public function recursivelyCollect(DOMNode $element, string $property, int $maxLength = null, int $nodeType = null):NodeList{
 		$nodeType  = $nodeType ?? XML_ELEMENT_NODE;
@@ -378,21 +319,14 @@ class Document extends DOMDocument{
 	}
 
 	/**
-	 * @param \DOMNode    $element
-	 * @param string      $property
-	 * @param string|null $selector
-	 * @param int         $index
-	 * @param int         $nodeType https://secure.php.net/manual/dom.constants.php
-	 *
-	 * @return \DOMNode|null
+	 * @see https://secure.php.net/manual/dom.constants.php
 	 */
-	public function recursivelyFind(DOMNode $element, string $property = null, string $selector = null, int $index = null, int $nodeType = null):?DOMNode{
+	public function recursivelyFind(PrototypeNode $element, string $property = null, string $selector = null, int $index = null, int $nodeType = null):?DOMNode{
 		$nodeType = $nodeType ?? XML_ELEMENT_NODE;
 		$index    = $index ?? 0;
 
 		if(in_array($property, ['parentNode', 'previousSibling', 'nextSibling'])){
 
-			/** @var \chillerlan\PrototypeDOM\Node\Element $element */
 			while($element = $element->{$property}){
 
 				if($element->nodeType !== $nodeType || $selector !== null && !$element->match($selector) || --$index >= 0){
@@ -409,15 +343,9 @@ class Document extends DOMDocument{
 
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/match/
-	 *
-	 * @param \DOMNode $element
-	 * @param string   $selector
-	 *
-	 * @return bool
 	 */
 	public function match(DOMNode $element, string $selector):bool{
 
-		/** @var \chillerlan\PrototypeDOM\Node\Element $match */
 		foreach($this->select([$selector]) as $match){
 
 			if($element->isSameNode($match)){
@@ -431,14 +359,9 @@ class Document extends DOMDocument{
 
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/new/
-	 *
-	 * @param string     $tag
-	 * @param array|null $attributes
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeHTMLElement
 	 */
 	public function newElement(string $tag, array $attributes = null):PrototypeHTMLElement{
-		/** @var \chillerlan\PrototypeDOM\Node\Element $element */
+		/** @var \chillerlan\PrototypeDOM\Node\PrototypeHTMLElement $element */
 		$element = $this->createElement($tag);
 
 		if($attributes !== null){
@@ -449,9 +372,9 @@ class Document extends DOMDocument{
 	}
 
 	/**
-	 * @param string $elementId
+	 * @inheritDoc
 	 *
-	 * @return \DOMNode|null
+	 * @return \chillerlan\PrototypeDOM\Node\PrototypeHTMLElement|\DOMNode|null
 	 * @throws \DOMException
 	 */
 	public function getElementById($elementId):?DOMNode{

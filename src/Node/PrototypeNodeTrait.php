@@ -8,6 +8,9 @@
  * @author       Smiley <smiley@chillerlan.net>
  * @copyright    2017 Smiley
  * @license      MIT
+ *
+ * @noinspection PhpParamsInspection
+ * @noinspection PhpIncompatibleReturnTypeInspection
  */
 
 namespace chillerlan\PrototypeDOM\Node;
@@ -39,42 +42,28 @@ use const XML_ELEMENT_NODE, XML_TEXT_NODE;
 trait PrototypeNodeTrait{
 
 	/**
-	 * @link http://api.prototypejs.org/dom/Element/recursivelyCollect/
-	 *
-	 * @param string $property
-	 * @param int    $maxLength
-	 * @param int    $nodeType https://secure.php.net/manual/dom.constants.php
-	 *
-	 * @return \chillerlan\PrototypeDOM\NodeList
+	 * @inheritDoc
 	 */
 	public function recursivelyCollect(string $property, int $maxLength = null, int $nodeType = null):NodeList{
 		return $this->ownerDocument->recursivelyCollect($this, $property, $maxLength ?? -1, $nodeType ?? XML_ELEMENT_NODE);
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/dom/Element/empty/
-	 *
-	 * @return bool
+	 * @inheritDoc
 	 */
 	public function empty():bool{
 		return empty(trim($this->nodeValue));
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/dom/Element/inspect/
-	 *
-	 * @param bool $xml
-	 *
-	 * @return string
+	 * @inheritDoc
 	 */
 	public function inspect(bool $xml = null):string{
 		return $this->ownerDocument->inspect($this, $xml);
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/dom/Element/remove/
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode
+	 * @inheritDoc
 	 */
 	public function remove():PrototypeNode{
 
@@ -86,11 +75,7 @@ trait PrototypeNodeTrait{
 	}
 
 	/**
-	 * @link http://api.prototypejs.org/dom/Element/replace/
-	 *
-	 * @param \chillerlan\PrototypeDOM\Node\PrototypeNode $newnode
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode
+	 * @inheritDoc
 	 */
 	public function replace(PrototypeNode $newnode):PrototypeNode{
 
@@ -102,21 +87,7 @@ trait PrototypeNodeTrait{
 	}
 
 	/**
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode
-	 */
-	public function purge():PrototypeNode{
-
-		while($this->hasChildNodes()){
-			$this->firstChild->remove();
-		}
-
-		return $this;
-	}
-
-	/**
-	 * @link http://api.prototypejs.org/dom/Element/cleanWhitespace/
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode
+	 * @inheritDoc
 	 */
 	public function cleanWhitespace():PrototypeNode{
 		$node = $this->firstChild;
@@ -135,12 +106,29 @@ trait PrototypeNodeTrait{
 	}
 
 	/**
-	 * @param \chillerlan\PrototypeDOM\Node\PrototypeNode $newNode
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode
+	 * @inheritDoc
+	 */
+	public function purge():PrototypeNode{
+
+		while($this->hasChildNodes()){
+			$this->firstChild->remove();
+		}
+
+		return $this;
+	}
+
+	/**
+	 * @inheritDoc
 	 */
 	public function importNode(PrototypeNode $newNode):PrototypeNode{
 		return $this->ownerDocument->importNode($newNode, true);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function match(string $selector):bool{
+		return $this->ownerDocument->match($this, $selector);
 	}
 
 }

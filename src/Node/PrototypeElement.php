@@ -20,10 +20,6 @@ interface PrototypeElement extends PrototypeTraversal{
 
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/wrap/
-	 *
-	 * @param \chillerlan\PrototypeDOM\Node\PrototypeElement $wrapper
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeElement
 	 */
 	public function wrap(PrototypeElement $wrapper):PrototypeElement;
 
@@ -45,38 +41,29 @@ interface PrototypeElement extends PrototypeTraversal{
 	 * - top (as element's first child)
 	 * - bottom (as element's last child)
 	 *
-	 * @param string|array|\DOMNode|\DOMNodeList $content
+	 * @param string|array|\DOMNode|\DOMNodeList|\chillerlan\PrototypeDOM\Node\PrototypeElement $content
 	 *
 	 * @return \chillerlan\PrototypeDOM\Node\PrototypeElement
 	 */
 	public function insert($content):PrototypeElement;
 
 	/**
-	 * @param \chillerlan\PrototypeDOM\Node\PrototypeElement      $node
-	 * @param \chillerlan\PrototypeDOM\Node\PrototypeElement|null $refNode
 	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeElement
 	 */
 	public function insert_before(PrototypeElement $node, PrototypeElement $refNode = null):PrototypeElement;
 
 	/**
-	 * @param \chillerlan\PrototypeDOM\Node\PrototypeElement $node
 	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeElement
 	 */
 	public function insert_after(PrototypeElement $node):PrototypeElement;
 
 	/**
-	 * @param \chillerlan\PrototypeDOM\Node\PrototypeElement $node
 	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeElement
 	 */
 	public function insert_top(PrototypeElement $node):PrototypeElement;
 
 	/**
-	 * @param \chillerlan\PrototypeDOM\Node\PrototypeElement $node
 	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeElement
 	 */
 	public function insert_bottom(PrototypeElement $node):PrototypeElement;
 

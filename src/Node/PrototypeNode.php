@@ -36,12 +36,6 @@ interface PrototypeNode{
 
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/recursivelyCollect/
-	 *
-	 * @param string $property
-	 * @param int    $maxLength
-	 * @param int    $nodeType https://secure.php.net/manual/dom.constants.php
-	 *
-	 * @return \chillerlan\PrototypeDOM\NodeList
 	 */
 	public function recursivelyCollect(string $property, int $maxLength = null, int $nodeType = null):NodeList;
 
@@ -54,34 +48,37 @@ interface PrototypeNode{
 
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/inspect/
-	 *
-	 * @param bool $xml
-	 *
-	 * @return string
 	 */
 	public function inspect(bool $xml = null):string;
 
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/remove/
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode
 	 */
 	public function remove():PrototypeNode;
 
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/replace/
-	 *
-	 * @param \chillerlan\PrototypeDOM\Node\PrototypeNode $newnode
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode
 	 */
 	public function replace(PrototypeNode $newnode):PrototypeNode;
 
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/cleanWhitespace/
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeNode
 	 */
 	public function cleanWhitespace():PrototypeNode;
+
+	/**
+	 * @link http://api.prototypejs.org/dom/Element/match/
+	 */
+	public function match(string $selector):bool;
+
+	/**
+	 *
+	 */
+	public function purge():PrototypeNode;
+
+	/**
+	 *
+	 */
+	public function importNode(PrototypeNode $newNode):PrototypeNode;
 
 }
