@@ -83,6 +83,13 @@ class NodeList implements PrototypeEnumerable, SeekableIterator, ArrayAccess, Co
 		return (new Document($this, $xml))->inspect(null, $xml);
 	}
 
+	/**
+	 * @return \DOMNode|\chillerlan\PrototypeDOM\Node\PrototypeHTMLElement|null
+	 */
+	public function item(int $offset):?DOMNode{
+		return $this->offsetGet($offset);
+	}
+
 	/*************
 	 * Countable *
 	 *************/

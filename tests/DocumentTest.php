@@ -67,7 +67,7 @@ class DocumentTest extends TestAbstract{
 		$this->dom->setTitle('foo');
 		$this->assertSame('foo', $this->dom->getTitle());
 
-		$this->dom->select(['head > title'])->offsetGet(0)->remove();
+		$this->dom->select(['head > title'])->item(0)->remove();
 		$this->assertNull($this->dom->getTitle());
 
 		$this->dom->setTitle('bar');
@@ -91,13 +91,13 @@ class DocumentTest extends TestAbstract{
 	}
 
 	public function testQuery(){
-		$element = $this->dom->query('//html/head/meta[position() = 1]')->offsetGet(0);
+		$element = $this->dom->query('//html/head/meta[position() = 1]')->item(0);
 
 		$this->assertSame('UTF-8', $element->getAttribute('charset'));
 	}
 
 	public function testQuerySelectorAll(){
-		$this->assertSame('en', $this->dom->querySelectorAll('html')->offsetGet(0)->getAttribute('lang'));
+		$this->assertSame('en', $this->dom->querySelectorAll('html')->item(0)->getAttribute('lang'));
 	}
 
 #	public function testRemoveElementsBySelector(){
@@ -107,11 +107,11 @@ class DocumentTest extends TestAbstract{
 
 	public function testToNodeList(){
 		$nodelist = $this->dom->toNodeList('<meta name="viewport" content="width=device-width, initial-scale=1.0" />');
-		$this->assertSame(['name' => 'viewport', 'content' => 'width=device-width, initial-scale=1.0', ], $nodelist->offsetGet(0)->getAttributes());
+		$this->assertSame(['name' => 'viewport', 'content' => 'width=device-width, initial-scale=1.0', ], $nodelist->item(0)->getAttributes());
 
 		$nodelist = $this->dom->toNodeList('<div id="boo" class="bar"></div><div><a href="#foo"></a></div>');
 		$this->assertSame(2, $nodelist->count());
-		$this->assertSame('boo', $nodelist->offsetGet(0)->getID());
+		$this->assertSame('boo', $nodelist->item(0)->getID());
 		$this->assertInstanceOf(NodeList::class, $this->dom->toNodeList($nodelist));
 	}
 

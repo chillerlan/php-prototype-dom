@@ -73,14 +73,14 @@ class Document extends DOMDocument{
 	 * @return string|null
 	 */
 	public function getTitle():?string{
-		return $this->select(['head > title'])->offsetGet(0)->nodeValue ?? null;
+		return $this->select(['head > title'])->item(0)->nodeValue ?? null;
 	}
 
 	/**
 	 * @throws \DOMException
 	 */
 	public function setTitle(string $title):void{
-		$currentTitle = $this->select(['head > title'])->offsetGet(0);
+		$currentTitle = $this->select(['head > title'])->item(0);
 
 		if($currentTitle instanceof Element){
 			$currentTitle->update($title);
@@ -88,7 +88,7 @@ class Document extends DOMDocument{
 			return;
 		}
 
-		$head         = $this->select(['head'])->offsetGet(0);
+		$head         = $this->select(['head'])->item(0);
 		$currentTitle = $this->newElement('title')->update($title);
 
 		if(!$head){

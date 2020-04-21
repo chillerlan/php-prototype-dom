@@ -61,14 +61,14 @@ trait PrototypeTraversalTrait{
 		$index = $index ?? 0;
 
 		if(is_int($expression)){
-			return $this->select(['*'])->offsetGet($expression);
+			return $this->select(['*'])->item($expression);
 		}
 
 		if(is_array($expression)){
-			return $this->select($expression)->offsetGet($index);
+			return $this->select($expression)->item($index);
 		}
 
-		return $this->select([$expression])->offsetGet($index);
+		return $this->select([$expression])->item($index);
 	}
 
 	/**
