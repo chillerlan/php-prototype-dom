@@ -1,5 +1,5 @@
 # chillerlan/php-prototype-dom
-[prototype.js](http://api.prototypejs.org/dom/) like DOM traversal and manipulation for PHP 7.2+.
+[prototype.js](http://api.prototypejs.org/dom/) like DOM traversal and manipulation for PHP 7.4+.
 
 [![version][packagist-badge]][packagist]
 [![license][license-badge]][license]
@@ -8,6 +8,8 @@
 [![Scrunitizer][scrutinizer-badge]][scrutinizer]
 [![Packagist downloads][downloads-badge]][downloads]
 [![PayPal donate][donate-badge]][donate]
+
+[![CI][gh-action-badge]][gh-action]
 
 [packagist-badge]: https://img.shields.io/packagist/v/chillerlan/php-prototype-dom.svg?style=flat-square
 [packagist]: https://packagist.org/packages/chillerlan/php-prototype-dom
@@ -23,4 +25,6 @@
 [downloads]: https://packagist.org/packages/chillerlan/php-prototype-dom/stats
 [donate-badge]: https://img.shields.io/badge/donate-paypal-ff33aa.svg?style=flat-square
 [donate]: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WLYUNAT9ZTJZ4
+[gh-action-badge]: https://github.com/chillerlan/php-prototype-dom/workflows/CI/badge.svg
+[gh-action]: https://github.com/chillerlan/php-prototype-dom/actions?query=workflow%3A%22CI%22
 
