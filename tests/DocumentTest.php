@@ -23,7 +23,7 @@ class DocumentTest extends TestAbstract{
 	}
 
 	public function testLoadDocument(){
-		$this->dom = new DOMDocument;
+		$this->dom = new Document;
 		$this->dom->load(__DIR__.'/test.html');
 		$DOMNodeList = $this->dom->getElementsByTagName('ul');
 		self::assertInstanceOf(DOMNodeList::class, $DOMNodeList);
