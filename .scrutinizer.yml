@@ -4,9 +4,14 @@ build:
       tests:
         override:
           - php-scrutinizer-run
+  environment:
+    php: 8.0.0
 
 filter:
   excluded_paths:
     - config/*
     - examples/*
     - tests/*
+    - vendor/*
+    - .github/*
+    - .phan/*
