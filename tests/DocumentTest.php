@@ -67,7 +67,7 @@ class DocumentTest extends TestAbstract{
 		$this->dom->setTitle('foo');
 		self::assertSame('foo', $this->dom->getTitle());
 
-		$this->dom->select(['head > title'])->item(0)->remove();
+		$this->dom->select(['head > title'])->item(0)->removeNode();
 		self::assertNull($this->dom->getTitle());
 
 		$this->dom->setTitle('bar');

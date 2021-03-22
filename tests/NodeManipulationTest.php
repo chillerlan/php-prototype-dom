@@ -20,13 +20,13 @@ class NodeManipulationTest extends TestAbstract{
 
 		foreach($this->dom->select(['head', 'body']) as $node){
 			/** @var \chillerlan\PrototypeDOM\Node\Element $node */
-			$node->remove();
+			$node->removeNode();
 		}
 
 #		self::assertSame('<!DOCTYPE html>'."\n".'<html lang="en">'.PHP_EOL.PHP_EOL.PHP_EOL.'</html>'."\n", $this->dom->inspect());
 
 		$this->el = $this->dom->newElement('div', ['id' => 'what'])->update('foo!');
-		self::assertSame('what', $this->el->remove()->getID());
+		self::assertSame('what', $this->el->removeNode()->getID());
 	}
 
 	public function testReplace(){

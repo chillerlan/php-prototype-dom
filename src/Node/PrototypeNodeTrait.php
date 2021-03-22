@@ -65,7 +65,7 @@ trait PrototypeNodeTrait{
 	/**
 	 * @inheritDoc
 	 */
-	public function remove():PrototypeNode{
+	public function removeNode():PrototypeNode{
 
 		if(!$this->parentNode){
 			return $this;
@@ -96,7 +96,7 @@ trait PrototypeNodeTrait{
 			$nextNode = $node->nextSibling;
 
 			if($node->nodeType === XML_TEXT_NODE && $node->empty()){
-				$node->remove();
+				$node->removeNode();
 			}
 
 			$node = $nextNode;
@@ -111,7 +111,7 @@ trait PrototypeNodeTrait{
 	public function purge():PrototypeNode{
 
 		while($this->hasChildNodes()){
-			$this->firstChild->remove();
+			$this->firstChild->removeNode();
 		}
 
 		return $this;

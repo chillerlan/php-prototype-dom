@@ -54,7 +54,7 @@ interface PrototypeNode{
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/remove/
 	 */
-	public function remove():PrototypeNode;
+	public function removeNode():PrototypeNode;
 
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/replace/

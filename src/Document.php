@@ -230,7 +230,7 @@ class Document extends DOMDocument{
 		if(count($nodes) > 0){
 
 			foreach($nodes as $node){
-				$node->remove();
+				$node->removeNode();
 			}
 
 		}
