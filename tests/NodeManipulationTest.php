@@ -16,74 +16,74 @@ use chillerlan\PrototypeDOM\Node\Element;
 
 class NodeManipulationTest extends TestAbstract{
 
-	public function testRemove(){
+	public function testRemove():void{
 
 		foreach($this->dom->select(['head', 'body']) as $node){
 			/** @var \chillerlan\PrototypeDOM\Node\Element $node */
 			$node->removeNode();
 		}
 
-#		self::assertSame('<!DOCTYPE html>'."\n".'<html lang="en">'.PHP_EOL.PHP_EOL.PHP_EOL.'</html>'."\n", $this->dom->inspect());
+#		$this::assertSame('<!DOCTYPE html>'."\n".'<html lang="en">'.PHP_EOL.PHP_EOL.PHP_EOL.'</html>'."\n", $this->dom->inspect());
 
 		$this->el = $this->dom->newElement('div', ['id' => 'what'])->update('foo!');
-		self::assertSame('what', $this->el->removeNode()->getID());
+		$this::assertSame('what', $this->el->removeNode()->getID());
 	}
 
-	public function testReplace(){
+	public function testReplace():void{
 		$this->el = $this->dom->select(['#what'])[0];
 		$this->el->replace($this->dom->newElement('p', ['id' => 'nocontent'])->update('foo'));
 
-		self::assertSame('foo', $this->dom->getElementById('nocontent')->nodeValue);
+		$this::assertSame('foo', $this->dom->getElementById('nocontent')->nodeValue);
 	}
 
-	public function testWrap(){
+	public function testWrap():void{
 		$this->el = $this->dom->select(['#what'])[0];
 		$wrapper  = $this->dom->newElement('section', ['id' => 'nope']);
 
 		$this->el->wrap($wrapper);
 
-		self::assertSame('what', $this->dom->getElementById('nope')->firstChild->getID());
+		$this::assertSame('what', $this->dom->getElementById('nope')->firstChild->getID());
 
 		$wrapper  = $this->dom->newElement('section', ['id' => 'nope']);
 		$this->el = $this->dom->newElement('div', ['id' => 'what'])->update('foo!');
-		self::assertSame('<section id="nope"><div id="what">foo!</div></section>', $this->el->wrap($wrapper)->inspect());
+		$this::assertSame('<section id="nope"><div id="what">foo!</div></section>', $this->el->wrap($wrapper)->inspect());
 	}
 
-	public function testEmpty(){
-		self::assertTrue($this->dom->getElementById('wallet')->empty());
-		self::assertFalse($this->dom->getElementById('cart')->empty());
+	public function testEmpty():void{
+		$this::assertTrue($this->dom->getElementById('wallet')->empty());
+		$this::assertFalse($this->dom->getElementById('cart')->empty());
 
 		$this->el = $this->dom->getElementById('list-of-apples');
 
-#		self::assertSame(9, $this->el->childNodes->length);
-		self::assertSame(4, $this->el->childElements()->count());
-		self::assertFalse($this->el->empty());
+#		$this::assertSame(9, $this->el->childNodes->length);
+		$this::assertSame(4, $this->el->childElements()->count());
+		$this::assertFalse($this->el->empty());
 
 		$this->el->purge();
 
-		self::assertSame(0, $this->el->childElements()->count());
-		self::assertSame(0, $this->el->childNodes->length);
-		self::assertTrue($this->el->empty());
+		$this::assertSame(0, $this->el->childElements()->count());
+		$this::assertSame(0, $this->el->childNodes->length);
+		$this::assertTrue($this->el->empty());
 	}
 
-	public function testUpdate(){
+	public function testUpdate():void{
 		$this->el = $this->dom->select(['#what'])[0];
 
 		$this->el->update('<div id="boo" class="bar">content1</div>');
 
-		self::assertSame('content1', $this->dom->getElementById('boo')->nodeValue);
-		self::assertTrue($this->dom->getElementById('boo')->hasClassName('bar'));
+		$this::assertSame('content1', $this->dom->getElementById('boo')->nodeValue);
+		$this::assertTrue($this->dom->getElementById('boo')->hasClassName('bar'));
 	}
 
-	public function testCleanWhitespace(){
+	public function testCleanWhitespace():void{
 		$this->el = $this->dom->getElementById('wallet');
-		self::assertSame('<div id="wallet">     </div>', $this->el->inspect());
+		$this::assertSame('<div id="wallet">     </div>', $this->el->inspect());
 
 		$this->el->cleanWhitespace();
-		self::assertSame('<div id="wallet"></div>', $this->el->inspect());
+		$this::assertSame('<div id="wallet"></div>', $this->el->inspect());
 	}
 
-	public function testInsert(){
+	public function testInsert():void{
 		$this->el = $this->dom->getElementById('content');
 
 		$this->el
@@ -99,9 +99,9 @@ class NodeManipulationTest extends TestAbstract{
 			->up()
 			->insert(['after' => '<div id="after8"></div>']);
 
-		self::assertNull($this->el->up(2));
+		$this::assertNull($this->el->up(2));
 
-		self::assertSame('bottom3', $this->dom->getElementById('bottom3')->nodeValue);
+		$this::assertSame('bottom3', $this->dom->getElementById('bottom3')->nodeValue);
 
 		$this->dom->getElementById('after8')->insert_top(new Element('div'));
 	}

@@ -17,68 +17,68 @@ use chillerlan\PrototypeDOM\{Document, NodeList};
 
 class DocumentTest extends TestAbstract{
 
-	public function testInstance(){
-		self::assertInstanceOf(Document::class, $this->dom);
-		self::assertInstanceOf(DOMDocument::class, $this->dom);
+	public function testInstance():void{
+		$this::assertInstanceOf(Document::class, $this->dom);
+		$this::assertInstanceOf(DOMDocument::class, $this->dom);
 	}
 
-	public function testLoadDocument(){
+	public function testLoadDocument():void{
 		$this->dom = new Document;
 		$this->dom->load(__DIR__.'/test.html');
 		$DOMNodeList = $this->dom->getElementsByTagName('ul');
-		self::assertInstanceOf(DOMNodeList::class, $DOMNodeList);
+		$this::assertInstanceOf(DOMNodeList::class, $DOMNodeList);
 
 		// from \DOMNodeList
 		$NodeList = (new Document($DOMNodeList))->select(['#list-of-apples']);
-		self::assertInstanceOf(NodeList::class, $NodeList);
-		self::assertSame('golden-delicious', $NodeList->first()->childElements()->first()->getID());
+		$this::assertInstanceOf(NodeList::class, $NodeList);
+		$this::assertSame('golden-delicious', $NodeList->first()->childElements()->first()->getID());
 
 		// from \chillerlan\PrototypeDOM\NodeList
-		self::assertSame('golden-delicious', (new Document($NodeList))->getElementById('list-of-apples')->childElements()->first()->getID());
+		$this::assertSame('golden-delicious', (new Document($NodeList))->getElementById('list-of-apples')->childElements()->first()->getID());
 
 		// from xml string
 		$this->dom = new Document(file_get_contents(__DIR__.'/../phpunit.xml'), true);
 		$this->dom->select(['directory'])->each(function($e, $i){
-			self::assertSame('.php', $e->getAttribute('suffix'));
+			$this::assertSame('.php', $e->getAttribute('suffix'));
 		});
 	}
 
-	public function testLoadDocumentException(){
+	public function testLoadDocumentException():void{
 		$this->expectException(DOMException::class);
 		$this->expectExceptionMessage('invalid document content');
 		new Document([]);
 	}
 
-	public function testLoadDocumentFile(){
+	public function testLoadDocumentFile():void{
 		// html
 		$this->dom = new Document(__DIR__.'/test.html');
-		self::assertSame('Golden Delicious', $this->dom->getElementById('golden-delicious')->nodeValue);
+		$this::assertSame('Golden Delicious', $this->dom->getElementById('golden-delicious')->nodeValue);
 
 		// xml
 		$this->dom = new Document(__DIR__.'/../phpunit.xml', true);
 		$this->dom->select(['directory'])->each(function($e, $i){
-			self::assertSame('.php', $e->getAttribute('suffix'));
+			$this::assertSame('.php', $e->getAttribute('suffix'));
 		});
 	}
 
-	public function testMagicTitle(){
-		self::assertSame('Prototype DOM Test', $this->dom->getTitle());
+	public function testSetTitle():void{
+		$this::assertSame('Prototype DOM Test', $this->dom->getTitle());
 
 		$this->dom->setTitle('foo');
-		self::assertSame('foo', $this->dom->getTitle());
+		$this::assertSame('foo', $this->dom->getTitle());
 
 		$this->dom->select(['head > title'])->item(0)->removeNode();
-		self::assertNull($this->dom->getTitle());
+		$this::assertNull($this->dom->getTitle());
 
 		$this->dom->setTitle('bar');
-		self::assertSame('bar', $this->dom->getTitle());
+		$this::assertSame('bar', $this->dom->getTitle());
 
 		$this->dom        = new Document('<html><body></body></html>');
 		$this->dom->setTitle('nohead');
-		self::assertSame('nohead', $this->dom->getTitle());
+		$this::assertSame('nohead', $this->dom->getTitle());
 	}
 
-	public function testMagicTitleInvalidHTMLException(){
+	public function testSetTitleInvalidHTMLException():void{
 		$this->expectException(DOMException::class);
 		$this->expectExceptionMessage('html header missing');
 
@@ -86,56 +86,56 @@ class DocumentTest extends TestAbstract{
 		$d->setTitle('nope');
 	}
 
-	public function testSelector2xpath(){
-		self::assertSame('//html/head/meta[position() = 1]', $this->dom->selector2xpath('html > head > meta:nth-of-type(1)'));
+	public function testSelector2xpath():void{
+		$this::assertSame('//html/head/meta[position() = 1]', $this->dom->selector2xpath('html > head > meta:nth-of-type(1)'));
 	}
 
-	public function testQuery(){
+	public function testQuery():void{
 		$element = $this->dom->query('//html/head/meta[position() = 1]')->item(0);
 
-		self::assertSame('UTF-8', $element->getAttribute('charset'));
+		$this::assertSame('UTF-8', $element->getAttribute('charset'));
 	}
 
-	public function testQuerySelectorAll(){
-		self::assertSame('en', $this->dom->querySelectorAll('html')->item(0)->getAttribute('lang'));
+	public function testQuerySelectorAll():void{
+		$this::assertSame('en', $this->dom->querySelectorAll('html')->item(0)->getAttribute('lang'));
 	}
 
-#	public function testRemoveElementsBySelector(){
+#	public function testRemoveElementsBySelector():void{
 		// first and last line break \n and the rest PHP_EOL?
-#		self::assertSame('<!DOCTYPE html>'."\n".'<html lang="en">'.PHP_EOL.PHP_EOL.PHP_EOL.'</html>'."\n", $this->dom->removeElementsBySelector(['head', 'body'])->inspect());
+#		$this::assertSame('<!DOCTYPE html>'."\n".'<html lang="en">'.PHP_EOL.PHP_EOL.PHP_EOL.'</html>'."\n", $this->dom->removeElementsBySelector(['head', 'body'])->inspect());
 #	}
 
-	public function testToNodeList(){
+	public function testToNodeList():void{
 		$nodelist = $this->dom->toNodeList('<meta name="viewport" content="width=device-width, initial-scale=1.0" />');
-		self::assertSame(['name' => 'viewport', 'content' => 'width=device-width, initial-scale=1.0', ], $nodelist->item(0)->getAttributes());
+		$this::assertSame(['name' => 'viewport', 'content' => 'width=device-width, initial-scale=1.0', ], $nodelist->item(0)->getAttributes());
 
 		$nodelist = $this->dom->toNodeList('<div id="boo" class="bar"></div><div><a href="#foo"></a></div>');
-		self::assertSame(2, $nodelist->count());
-		self::assertSame('boo', $nodelist->item(0)->getID());
-		self::assertInstanceOf(NodeList::class, $this->dom->toNodeList($nodelist));
+		$this::assertSame(2, $nodelist->count());
+		$this::assertSame('boo', $nodelist->item(0)->getID());
+		$this::assertInstanceOf(NodeList::class, $this->dom->toNodeList($nodelist));
 	}
 
-	public function testInspect(){
-		self::assertSame('<meta charset="UTF-8"/>', $this->dom->inspect($this->dom->select(['meta'])[0], true));
+	public function testInspect():void{
+		$this::assertSame('<meta charset="UTF-8"/>', $this->dom->inspect($this->dom->select(['meta'])[0], true));
 	}
 
-	public function testRecursivelyCollect(){
+	public function testRecursivelyCollect():void{
 		$this->el = $this->dom->getElementById('content');
 
 		$elements = $this->dom->recursivelyCollect($this->el, 'parentNode');
-		self::assertSame(['body', 'html'], $elements->pluck('nodeName'));
+		$this::assertSame(['body', 'html'], $elements->pluck('nodeName'));
 
 		$elements = $this->dom->recursivelyCollect($this->el, 'parentNode', 1);
-		self::assertSame(['body'], $elements->pluck('nodeName'));
+		$this::assertSame(['body'], $elements->pluck('nodeName'));
 	}
 
-	public function testSelectContinueOnInvalidSelector(){
+	public function testSelectContinueOnInvalidSelector():void{
 		$nodes = $this->dom->select([true, 42, [], '#what', '.yummy']);
 
-		self::assertCount(4, $nodes);
+		$this::assertCount(4, $nodes);
 	}
 
-	public function testElementByIdException(){
+	public function testElementByIdException():void{
 		$this->expectException(DOMException::class);
 		$this->expectExceptionMessage('invalid element id');
 
@@ -145,6 +145,6 @@ class DocumentTest extends TestAbstract{
 	public function testGetElementsByClassName():void{
 		$nodes = $this->dom->getElementsByClassName('yummy');
 
-		self::assertCount(3, $nodes);
+		$this::assertCount(3, $nodes);
 	}
 }

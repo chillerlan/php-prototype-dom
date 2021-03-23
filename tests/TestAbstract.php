@@ -13,13 +13,13 @@
 namespace chillerlan\PrototypeDOMTest;
 
 use chillerlan\PrototypeDOM\Document;
-use chillerlan\PrototypeDOM\Node\PrototypeHTMLElement;
+use chillerlan\PrototypeDOM\Node\PrototypeElement;
 use PHPUnit\Framework\TestCase;
 
 abstract class TestAbstract extends TestCase{
 
 	protected Document $dom;
-	protected PrototypeHTMLElement $el;
+	protected ?PrototypeElement $el = null;
 
 	protected function setUp():void{
 		$this->dom               = new Document;

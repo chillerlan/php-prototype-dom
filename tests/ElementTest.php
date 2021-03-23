@@ -23,98 +23,98 @@ class ElementTest extends TestAbstract{
 		$this->el = $this->dom->select(['#what'])[0];
 	}
 
-	public function testInstance(){
-		self::assertInstanceOf(Element::class, $this->el);
-		self::assertInstanceOf(DOMElement::class, $this->el);
+	public function testInstance():void{
+		$this::assertInstanceOf(Element::class, $this->el);
+		$this::assertInstanceOf(DOMElement::class, $this->el);
 	}
 
-	public function testID(){
-		self::assertSame('what', $this->el->identify('whatever'));
-		self::assertSame('whatever', $this->el->identify());
-		self::assertSame('whatever', $this->el->getID());
+	public function testID():void{
+		$this::assertSame('what', $this->el->identify('whatever'));
+		$this::assertSame('whatever', $this->el->identify());
+		$this::assertSame('whatever', $this->el->getID());
 	}
 
-	public function testGetClassnames(){
-		self::assertSame(['foo', 'bar'], $this->el->classNames());
-		self::assertSame('foo  bar', $this->el->getClassName());
+	public function testGetClassnames():void{
+		$this::assertSame(['foo', 'bar'], $this->el->classNames());
+		$this::assertSame('foo  bar', $this->el->getClassName());
 		// coverage
-		self::assertSame([], (new Element('div'))->classNames());
+		$this::assertSame([], (new Element('div'))->classNames());
 	}
 
-	public function testMagic(){
+	public function testMagic():void{
 		$this->el->setID('nope');
 		$this->el->setClassName('whatever');
 		$this->el->setHref('foo');
 		$this->el->setSrc('blah');
 
-		self::assertSame('nope', $this->el->getID());
-		self::assertSame('whatever', $this->el->getClassName());
-		self::assertSame('foo', $this->el->getHref());
-		self::assertSame('blah', $this->el->getSrc());
+		$this::assertSame('nope', $this->el->getID());
+		$this::assertSame('whatever', $this->el->getClassName());
+		$this::assertSame('foo', $this->el->getHref());
+		$this::assertSame('blah', $this->el->getSrc());
 	}
 
-	public function testHasClassname(){
-		self::assertTrue($this->el->hasClassName('foo'));
-		self::assertTrue($this->el->hasClassName('bar'));
+	public function testHasClassname():void{
+		$this::assertTrue($this->el->hasClassName('foo'));
+		$this::assertTrue($this->el->hasClassName('bar'));
 	}
 
-	public function testAddClassname(){
-		self::assertTrue($this->el->addClassName('what')->hasClassName('what'));
+	public function testAddClassname():void{
+		$this::assertTrue($this->el->addClassName('what')->hasClassName('what'));
 	}
 
-	public function testRemoveClassname(){
-		self::assertFalse($this->el->removeClassName('foo')->hasClassName('foo'));
+	public function testRemoveClassname():void{
+		$this::assertFalse($this->el->removeClassName('foo')->hasClassName('foo'));
 	}
 
-	public function testToggleClassname(){
-		self::assertFalse($this->el->toggleClassName('foo')->hasClassName('foo'));
-		self::assertTrue($this->el->toggleClassName('foo')->hasClassName('foo'));
+	public function testToggleClassname():void{
+		$this::assertFalse($this->el->toggleClassName('foo')->hasClassName('foo'));
+		$this::assertTrue($this->el->toggleClassName('foo')->hasClassName('foo'));
 	}
 
-	public function testGetStyle(){
+	public function testGetStyle():void{
 		$style = $this->el->getStyles();
 
-		self::assertSame('#000', $style['background']);
-		self::assertSame('#fff', $style['color']);
+		$this::assertSame('#000', $style['background']);
+		$this::assertSame('#fff', $style['color']);
 
 		// coverage
-		self::assertSame([], (new Element('div'))->getStyles());
+		$this::assertSame([], (new Element('div'))->getStyles());
 	}
 
-	public function testHasStyle(){
+	public function testHasStyle():void{
 		$this->el->setStyle(['display' => 'none']);
 
-		self::assertSame('none', $this->el->getStyle('display'));
-		self::assertNull($this->el->getStyle('foo'));
+		$this::assertSame('none', $this->el->getStyle('display'));
+		$this::assertNull($this->el->getStyle('foo'));
 	}
 
-	public function testSetStyle(){
+	public function testSetStyle():void{
 		$style = $this->el->setStyle(['display' => 'none'])->getStyles();
 
-		self::assertSame('#000', $style['background']);
-		self::assertSame('#fff', $style['color']);
-		self::assertSame('none', $style['display']);
+		$this::assertSame('#000', $style['background']);
+		$this::assertSame('#fff', $style['color']);
+		$this::assertSame('none', $style['display']);
 
 		$this->el->setStyle(['display' => 'none'], true);
 
-		self::assertNull($this->el->getStyle('background'));
-		self::assertNull($this->el->getStyle('color'));
-		self::assertSame('none', $this->el->getStyle('display'));
+		$this::assertNull($this->el->getStyle('background'));
+		$this::assertNull($this->el->getStyle('color'));
+		$this::assertSame('none', $this->el->getStyle('display'));
 	}
 
-	public function testGetAttributes(){
-		self::assertSame('what', $this->el->getAttributes()['id']);
+	public function testGetAttributes():void{
+		$this::assertSame('what', $this->el->getAttributes()['id']);
 	}
 
-	public function testSetAttributes(){
-		self::assertSame('bar', $this->el->setAttributes(['foo' => 'bar'])->getAttributes()['foo']);
+	public function testSetAttributes():void{
+		$this::assertSame('bar', $this->el->setAttributes(['foo' => 'bar'])->getAttributes()['foo']);
 	}
 
-	public function testRemoveAttributes(){
+	public function testRemoveAttributes():void{
 		$this->el->removeAttributes(['class', 'style']);
 
-		self::assertFalse($this->el->hasAttribute('class'));
-		self::assertFalse($this->el->hasAttribute('style'));
+		$this::assertFalse($this->el->hasAttribute('class'));
+		$this::assertFalse($this->el->hasAttribute('style'));
 	}
 
 }

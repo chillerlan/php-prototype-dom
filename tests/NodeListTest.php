@@ -19,55 +19,52 @@ use PHPUnit\Framework\TestCase;
 
 class NodeListTest extends TestCase{
 
-	/**
-	 * @var \chillerlan\PrototypeDOM\NodeList
-	 */
-	protected $nodelist;
+	protected NodeList $nodelist;
 
-	public function testInstance(){
+	public function testInstance():void{
 		$this->nodelist = new NodeList;
 
-		self::assertInstanceOf(NodeList::class, $this->nodelist);
-		self::assertInstanceOf(Iterator::class, $this->nodelist);
-		self::assertInstanceOf(ArrayAccess::class, $this->nodelist);
-		self::assertInstanceOf(Countable::class, $this->nodelist);
+		$this::assertInstanceOf(NodeList::class, $this->nodelist);
+		$this::assertInstanceOf(Iterator::class, $this->nodelist);
+		$this::assertInstanceOf(ArrayAccess::class, $this->nodelist);
+		$this::assertInstanceOf(Countable::class, $this->nodelist);
 	}
 
-	public function testToNodelistException(){
+	public function testToNodelistException():void{
 		$this->expectException(DOMException::class);
 		$this->expectExceptionMessage('invalid content');
 
 		(new Document)->toNodeList(42);
 	}
 
-	public function testNodeList(){
+	public function testNodeList():void{
 		$this->nodelist = (new Document)->toNodeList('<div id="boo" class="bar">content1</div><div><a href="#foo">blah</a></div>');
 
 		// coverage
 		$this->nodelist = new NodeList($this->nodelist);
 
-		self::assertCount(2, $this->nodelist);
-		self::assertSame(2, $this->nodelist->count());
-		self::assertSame('boo', $this->nodelist->first()->getID());
+		$this::assertCount(2, $this->nodelist);
+		$this::assertSame(2, $this->nodelist->count());
+		$this::assertSame('boo', $this->nodelist->first()->getID());
 
 		$this->nodelist->reverse();
 
-		self::assertSame('boo', $this->nodelist->last()->getID());
+		$this::assertSame('boo', $this->nodelist->last()->getID());
 
 		$this->nodelist->each(function($node, $i){
-			self::assertInstanceOf(PrototypeNode::class, $node);
+			$this::assertInstanceOf(PrototypeNode::class, $node);
 			unset($this->nodelist[$i]);
 			$this->nodelist[$i] = new Element('foo');
 			$this->nodelist[] = 'whatever';
 		});
 
-		self::assertSame(['foo', 'foo'], $this->nodelist->pluck('tagName'));
+		$this::assertSame(['foo', 'foo'], $this->nodelist->pluck('tagName'));
 
 		$this->nodelist->each(function($e){
-			self::assertSame('foo', $e->tagName);
+			$this::assertSame('foo', $e->tagName);
 		});
 
-		self::assertSame('<foo></foo><foo></foo>', trim($this->nodelist->inspect()));
+		$this::assertSame('<foo></foo><foo></foo>', trim($this->nodelist->inspect()));
 	}
 
 }
