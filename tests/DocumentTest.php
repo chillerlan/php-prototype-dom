@@ -141,4 +141,10 @@ class DocumentTest extends TestAbstract{
 
 		$this->dom->getElementById(42);
 	}
+
+	public function testGetElementsByClassName():void{
+		$nodes = $this->dom->getElementsByClassName('yummy');
+
+		self::assertCount(3, $nodes);
+	}
 }
