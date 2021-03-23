@@ -50,6 +50,11 @@ class Document extends DOMDocument{
 
 	/**
 	 * Document constructor.
+	 *
+	 * @param string|\DOMNodeList|\chillerlan\PrototypeDOM\NodeList $content
+	 * @param bool|null                                             $xml
+	 * @param string|null                                           $version
+	 * @param string|null                                           $encoding
 	 */
 	public function __construct($content = null, bool $xml = null, string $version = null, string $encoding = null){
 		parent::__construct($version ?? '1.0', $encoding ?? 'UTF-8');
@@ -248,6 +253,13 @@ class Document extends DOMDocument{
 		}
 
 		return $this;
+	}
+
+	/**
+	 *
+	 */
+	public function getElementsByClassName(string $className):NodeList{
+		return $this->select(['.'.$className]);
 	}
 
 	/*************
