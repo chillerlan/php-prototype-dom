@@ -14,6 +14,7 @@ namespace chillerlan\PrototypeDOM\Node;
 
 use chillerlan\PrototypeDOM\NodeList;
 use DOMNode;
+use const XML_ELEMENT_NODE;
 
 interface PrototypeTraversal extends PrototypeNode{
 
@@ -140,4 +141,15 @@ interface PrototypeTraversal extends PrototypeNode{
 	 */
 	public function nextSiblings():NodeList;
 
+	/**
+	 * @see https://secure.php.net/manual/dom.constants.php
+	 *
+	 * @return \chillerlan\PrototypeDOM\Node\PrototypeTraversal|\DOMNode|null
+	 */
+	public function recursivelyFind(
+		string $selector = null,
+		int $index = null,
+		string $property = null,
+		int $nodeType = XML_ELEMENT_NODE
+	):?PrototypeTraversal;
 }
