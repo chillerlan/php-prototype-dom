@@ -1,14 +1,8 @@
 # https://help.github.com/en/categories/automating-your-workflow-with-github-actions
-# https://github.com/localheinz/php-library-template/blob/master/.github/workflows/continuous-integration.yml
-# https://github.com/sebastianbergmann/phpunit/blob/master/.github/workflows/ci.yml
 
 on:
-  pull_request:
-  push:
-    branches:
-      - master
-    tags:
-      - "**"
+  - pull_request
+  - push
 
 name: "CI"
 
@@ -33,3 +27,8 @@ jobs:
 
       - name: "Run unit tests with phpunit"
         run: ${{ matrix.php-binary }} vendor/bin/phpunit --configuration=phpunit.xml --no-coverage
+
+      - name: "Send code coverage report to Codecov.io"
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
