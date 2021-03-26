@@ -61,31 +61,6 @@ class DocumentTest extends TestAbstract{
 		});
 	}
 
-	public function testSetTitle():void{
-		$this::assertSame('Prototype DOM Test', $this->dom->getTitle());
-
-		$this->dom->setTitle('foo');
-		$this::assertSame('foo', $this->dom->getTitle());
-
-		$this->dom->select(['head > title'])->item(0)->removeNode();
-		$this::assertNull($this->dom->getTitle());
-
-		$this->dom->setTitle('bar');
-		$this::assertSame('bar', $this->dom->getTitle());
-
-		$this->dom        = new Document('<html><body></body></html>');
-		$this->dom->setTitle('nohead');
-		$this::assertSame('nohead', $this->dom->getTitle());
-	}
-
-	public function testSetTitleInvalidHTMLException():void{
-		$this->expectException(DOMException::class);
-		$this->expectExceptionMessage('html header missing');
-
-		$d = new Document;
-		$d->setTitle('nope');
-	}
-
 	public function testSelector2xpath():void{
 		$this::assertSame('//html/head/meta[position() = 1]', $this->dom->selector2xpath('html > head > meta:nth-of-type(1)'));
 	}
