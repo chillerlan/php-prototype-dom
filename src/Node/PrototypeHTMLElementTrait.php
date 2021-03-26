@@ -60,10 +60,10 @@ trait PrototypeHTMLElementTrait{
 	 * @inheritDoc
 	 */
 	public function identify(string $newID = null):string{
-		$oldID = $this->getAttribute('id');
+		$oldID = trim($this->getAttribute('id'));
 
 		if($newID !== null){
-			$this->setAttribute('id', $newID);
+			$this->setAttribute('id', trim($newID));
 		}
 
 		return $oldID;
