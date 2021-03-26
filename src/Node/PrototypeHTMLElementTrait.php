@@ -22,16 +22,6 @@ use function array_key_exists, array_merge, explode, implode, in_array, strtolow
 trait PrototypeHTMLElementTrait{
 	use PrototypeElementTrait;
 
-	public function getID():string{
-		return trim($this->getAttribute('id'));
-	}
-
-	public function setID(string $id):PrototypeHTMLElement{
-		$this->setAttribute('id', $id);
-
-		return $this;
-	}
-
 	public function getClassName():string{
 		return trim($this->getAttribute('class'));
 	}

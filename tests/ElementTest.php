@@ -31,7 +31,6 @@ class ElementTest extends TestAbstract{
 	public function testID():void{
 		$this::assertSame('what', $this->el->identify('whatever'));
 		$this::assertSame('whatever', $this->el->identify());
-		$this::assertSame('whatever', $this->el->getID());
 	}
 
 	public function testGetClassnames():void{
@@ -42,12 +41,12 @@ class ElementTest extends TestAbstract{
 	}
 
 	public function testMagic():void{
-		$this->el->setID('nope');
+		$this->el->identify('nope');
 		$this->el->setClassName('whatever');
 		$this->el->setHref('foo');
 		$this->el->setSrc('blah');
 
-		$this::assertSame('nope', $this->el->getID());
+		$this::assertSame('nope', $this->el->identify());
 		$this::assertSame('whatever', $this->el->getClassName());
 		$this::assertSame('foo', $this->el->getHref());
 		$this::assertSame('blah', $this->el->getSrc());

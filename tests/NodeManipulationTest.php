@@ -26,7 +26,7 @@ class NodeManipulationTest extends TestAbstract{
 #		$this::assertSame('<!DOCTYPE html>'."\n".'<html lang="en">'.PHP_EOL.PHP_EOL.PHP_EOL.'</html>'."\n", $this->dom->inspect());
 
 		$this->el = $this->dom->newElement('div', ['id' => 'what'])->update('foo!');
-		$this::assertSame('what', $this->el->removeNode()->getID());
+		$this::assertSame('what', $this->el->removeNode()->identify());
 	}
 
 	public function testReplace():void{
@@ -42,7 +42,7 @@ class NodeManipulationTest extends TestAbstract{
 
 		$this->el->wrap($wrapper);
 
-		$this::assertSame('what', $this->dom->getElementById('nope')->firstChild->getID());
+		$this::assertSame('what', $this->dom->getElementById('nope')->firstChild->identify());
 
 		$wrapper  = $this->dom->newElement('section', ['id' => 'nope']);
 		$this->el = $this->dom->newElement('div', ['id' => 'what'])->update('foo!');

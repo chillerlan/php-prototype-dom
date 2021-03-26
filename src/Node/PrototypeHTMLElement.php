@@ -17,8 +17,6 @@ namespace chillerlan\PrototypeDOM\Node;
  */
 interface PrototypeHTMLElement extends PrototypeElement{
 
-	public function getID():string;
-	public function setID(string $id):PrototypeHTMLElement;
 	public function getClassName():string;
 	public function setClassName(string $class):PrototypeHTMLElement;
 	public function getHref():string;

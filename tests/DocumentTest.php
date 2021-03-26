@@ -31,10 +31,10 @@ class DocumentTest extends TestAbstract{
 		// from \DOMNodeList
 		$NodeList = (new Document($DOMNodeList))->select(['#list-of-apples']);
 		$this::assertInstanceOf(NodeList::class, $NodeList);
-		$this::assertSame('golden-delicious', $NodeList->first()->childElements()->first()->getID());
+		$this::assertSame('golden-delicious', $NodeList->first()->childElements()->first()->identify());
 
 		// from \chillerlan\PrototypeDOM\NodeList
-		$this::assertSame('golden-delicious', (new Document($NodeList))->getElementById('list-of-apples')->childElements()->first()->getID());
+		$this::assertSame('golden-delicious', (new Document($NodeList))->getElementById('list-of-apples')->childElements()->first()->identify());
 
 		// from xml string
 		$this->dom = new Document(file_get_contents(__DIR__.'/../phpunit.xml'), true);
@@ -86,7 +86,7 @@ class DocumentTest extends TestAbstract{
 
 		$nodelist = $this->dom->toNodeList('<div id="boo" class="bar"></div><div><a href="#foo"></a></div>');
 		$this::assertSame(2, $nodelist->count());
-		$this::assertSame('boo', $nodelist->item(0)->getID());
+		$this::assertSame('boo', $nodelist->item(0)->identify());
 		$this::assertInstanceOf(NodeList::class, $this->dom->toNodeList($nodelist));
 	}
 
