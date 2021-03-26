@@ -13,13 +13,13 @@
 namespace chillerlan\PrototypeDOM;
 
 use chillerlan\PrototypeDOM\Node\PrototypeNode;
-use ArrayAccess, Countable, DOMNode, DOMNodeList, Exception, OutOfBoundsException, SeekableIterator;
+use ArrayAccess, Countable, DOMNode, DOMNodeList, InvalidArgumentException, OutOfBoundsException, SeekableIterator;
 
 use function array_column, array_key_exists, array_merge, array_reverse, call_user_func_array, count,
 	is_callable, is_int, is_iterable, iterator_to_array;
 
 
-class NodeList implements PrototypeEnumerable, SeekableIterator, ArrayAccess, Countable{
+class NodeList implements SeekableIterator, ArrayAccess, Countable{
 
 	protected array $array = [];
 
@@ -29,6 +29,19 @@ class NodeList implements PrototypeEnumerable, SeekableIterator, ArrayAccess, Co
 	 * NodeList constructor.
 	 */
 	public function __construct(iterable $nodes = null){
+
+		if($nodes !== null){
+			$this->fromIterable($nodes);
+		}
+
+	}
+
+
+	/***********
+	 * generic *
+	 ***********/
+
+	public function fromIterable(iterable $nodes):NodeList{
 
 		if($nodes instanceof DOMNodeList){
 			$this->array = iterator_to_array($nodes);
@@ -44,12 +57,10 @@ class NodeList implements PrototypeEnumerable, SeekableIterator, ArrayAccess, Co
 			}
 		}
 
+		$this->rewind();
+
+		return $this;
 	}
-
-
-	/***********
-	 * generic *
-	 ***********/
 
 	/**
 	 * Checks if an element in the NodeList matches the given DOMNode
@@ -144,13 +155,13 @@ class NodeList implements PrototypeEnumerable, SeekableIterator, ArrayAccess, Co
 	/**
 	 * @inheritDoc
 	 */
-	public function seek($pos):void{
+	public function seek($offset):void{
 		$this->rewind();
 
-		for( ; $this->offset < $pos; ){
+		for( ; $this->offset < $offset; ){
 
 			if(!\next($this->array)) {
-				throw new OutOfBoundsException('invalid seek position: '.$pos);
+				throw new OutOfBoundsException('invalid seek position: '.$offset);
 			}
 
 			$this->offset++;
@@ -275,8 +286,8 @@ class NodeList implements PrototypeEnumerable, SeekableIterator, ArrayAccess, Co
 	 *
 	 * @param callable|\Closure $iterator
 	 */
-	public function each($callback){
-		$this->map($callback);
+	public function each($iterator):NodeList{
+		$this->map($iterator);
 
 		return $this;
 	}
@@ -290,16 +301,16 @@ class NodeList implements PrototypeEnumerable, SeekableIterator, ArrayAccess, Co
 	 * @param callable|\Closure $iterator
 	 * @throws \InvalidArgumentException
 	 */
-	public function map($callback):array {
+	public function map($iterator):array{
 
-		if(!is_callable($callback)){
-			throw new Exception('invalid callback');
+		if(!is_callable($iterator)){
+			throw new InvalidArgumentException('invalid callback');
 		}
 
 		$return = [];
 
 		foreach($this->array as $index => $element){
-			$return[$index] = call_user_func_array($callback, [$element, $index]);
+			$return[$index] = call_user_func_array($iterator, [$element, $index]);
 		}
 
 		return $return;
@@ -328,17 +339,17 @@ class NodeList implements PrototypeEnumerable, SeekableIterator, ArrayAccess, Co
 	 * @return array
 	 * @throws \InvalidArgumentException
 	 */
-	public function findAll($callback):array{
+	public function findAll($iterator):array{
 
-		if(!is_callable($callback)){
-			throw new Exception('invalid callback');
+		if(!is_callable($iterator)){
+			throw new InvalidArgumentException('invalid callback');
 		}
 
 		$return = [];
 
 		foreach($this->array as $index => $element){
 
-			if(call_user_func_array($callback, [$element, $index]) === true){
+			if(call_user_func_array($iterator, [$element, $index]) === true){
 				$return[] = $element;
 			}
 
@@ -358,17 +369,17 @@ class NodeList implements PrototypeEnumerable, SeekableIterator, ArrayAccess, Co
 	 * @return array
 	 * @throws \InvalidArgumentException
 	 */
-	public function reject($callback):array{
+	public function reject($iterator):array{
 
-		if(!is_callable($callback)){
-			throw new Exception('invalid callback');
+		if(!is_callable($iterator)){
+			throw new InvalidArgumentException('invalid callback');
 		}
 
 		$return = [];
 
 		foreach($this->array as $index => $element){
 
-			if(call_user_func_array($callback, [$element, $index]) !== true){
+			if(call_user_func_array($iterator, [$element, $index]) !== true){
 				$return[] = $element;
 			}
 
