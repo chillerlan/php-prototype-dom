@@ -24,12 +24,20 @@ interface PrototypeHTMLElement extends PrototypeElement{
 	public function getSrc():string;
 	public function setSrc(string $src):PrototypeHTMLElement;
 
+	/*************
+	 * Prototype *
+	 *************/
+
 	/**
+	 * Returns element's ID. If element does not have an ID, $newID assigned to element, and the old id returned.
+	 *
 	 * http://api.prototypejs.org/dom/Element/identify/
 	 */
 	public function identify(string $newID = null):string;
 
 	/**
+	 * Returns an array of the element's current class names.
+	 *
 	 * @link http://api.prototypejs.org/dom/Element/classNames/
 	 *
 	 * @return string[]
@@ -37,31 +45,43 @@ interface PrototypeHTMLElement extends PrototypeElement{
 	public function classNames():array;
 
 	/**
+	 * Checks for the presence of CSS class className on element.
+	 *
 	 * @link http://api.prototypejs.org/dom/Element/hasClassName/
 	 */
 	public function hasClassName(string $classname):bool;
 
 	/**
+	 *Adds the given CSS class to element.
+	 *
 	 * @link http://api.prototypejs.org/dom/Element/addClassName/
 	 */
 	public function addClassName(string $classname):PrototypeHTMLElement;
 
 	/**
+	 * Removes CSS class className from element.
+	 *
 	 * @link http://api.prototypejs.org/dom/Element/removeClassName/
 	 */
 	public function removeClassName(string $classname):PrototypeHTMLElement;
 
 	/**
+	 * Toggles the presence of CSS class className on element.
+	 *
 	 * @link http://api.prototypejs.org/dom/Element/toggleClassName/
 	 */
 	public function toggleClassName(string $classname):PrototypeHTMLElement;
 
 	/**
+	 * Returns the given CSS property value of element.
+	 *
 	 * @link http://api.prototypejs.org/dom/Element/getStyle/
 	 */
 	public function getStyle(string $property):?string;
 
 	/**
+	 * Modifies element's CSS style properties.
+	 *
 	 * @link http://api.prototypejs.org/dom/Element/setStyle/
 	 */
 	public function setStyle(array $style, bool $replace = null):PrototypeHTMLElement;

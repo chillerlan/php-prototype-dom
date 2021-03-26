@@ -23,15 +23,15 @@ use function is_array, is_int, is_numeric;
 use const XML_ELEMENT_NODE;
 
 /**
+ * @implements \chillerlan\PrototypeDOM\Node\PrototypeTraversal
+ *
  * @property \chillerlan\PrototypeDOM\Document $ownerDocument
  */
 trait PrototypeTraversalTrait{
 	use PrototypeNodeTrait;
 
 	/**
-	 * @see https://secure.php.net/manual/dom.constants.php
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeTraversal|\DOMNode|null
+	 * @inheritDoc
 	 */
 	public function recursivelyFind(
 		string $selector = null,

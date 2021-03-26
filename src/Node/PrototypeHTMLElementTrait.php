@@ -17,7 +17,7 @@ namespace chillerlan\PrototypeDOM\Node;
 use function array_key_exists, array_keys, array_merge, array_unique, count, explode, implode, in_array, strtolower, trim;
 
 /**
- *
+ * @implements \chillerlan\PrototypeDOM\Node\PrototypeElement
  */
 trait PrototypeHTMLElementTrait{
 	use PrototypeElementTrait;
@@ -51,6 +51,10 @@ trait PrototypeHTMLElementTrait{
 
 		return $this;
 	}
+
+	/*************
+	 * Prototype *
+	 *************/
 
 	/**
 	 * @inheritDoc

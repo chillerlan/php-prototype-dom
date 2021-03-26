@@ -133,6 +133,8 @@ class Document extends DOMDocument{
 	}
 
 	/**
+	 * @param \chillerlan\PrototypeDOM\NodeList|\chillerlan\PrototypeDOM\Node\PrototypeNode|DOMNodeList|DOMNode|string $content
+	 *
 	 * @throws \DOMException
 	 */
 	public function toNodeList($content):NodeList{

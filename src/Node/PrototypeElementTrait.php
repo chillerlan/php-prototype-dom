@@ -17,6 +17,9 @@ namespace chillerlan\PrototypeDOM\Node;
 
 use function array_key_exists, call_user_func_array, is_array;
 
+/**
+ * @implements \chillerlan\PrototypeDOM\Node\PrototypeElement
+ */
 trait PrototypeElementTrait{
 	use PrototypeTraversalTrait;
 

@@ -52,10 +52,10 @@ class NodeList implements PrototypeEnumerable, SeekableIterator, ArrayAccess, Co
 	 ***********/
 
 	/**
-	 *
+	 * Checks if an element in the NodeList matches the given DOMNode
 	 */
 	public function match(DOMNode $node):bool{
-		/** @var \chillerlan\PrototypeDOM\Node\Element $element */
+
 		foreach($this->array as $element){
 
 			if($element->isSameNode($node)){
@@ -68,7 +68,7 @@ class NodeList implements PrototypeEnumerable, SeekableIterator, ArrayAccess, Co
 	}
 
 	/**
-	 *
+	 * Merges one NodeList into another
 	 */
 	public function merge(NodeList $nodelist):NodeList{
 		$this->array = array_merge($this->array, $nodelist->toArray());
@@ -77,13 +77,8 @@ class NodeList implements PrototypeEnumerable, SeekableIterator, ArrayAccess, Co
 	}
 
 	/**
+	 * Returns the item on $offset or null if none is found
 	 *
-	 */
-	public function inspect(bool $xml = false):string{
-		return (new Document($this, $xml))->inspect(null, $xml);
-	}
-
-	/**
 	 * @return \DOMNode|\chillerlan\PrototypeDOM\Node\PrototypeHTMLElement|null
 	 */
 	public function item(int $offset):?DOMNode{
@@ -95,8 +90,7 @@ class NodeList implements PrototypeEnumerable, SeekableIterator, ArrayAccess, Co
 	 *************/
 
 	/**
-	 * @link https://www.php.net/manual/countable.count.php
-	 * @inheritdoc
+	 * @inheritDoc
 	 */
 	public function count():int{
 		return count($this->array);
@@ -107,8 +101,8 @@ class NodeList implements PrototypeEnumerable, SeekableIterator, ArrayAccess, Co
 	 ************/
 
 	/**
-	 * @link https://www.php.net/manual/iterator.current.php
-	 * @inheritdoc
+	 * @inheritDoc
+	 *
 	 * @return \DOMNode|\chillerlan\PrototypeDOM\Node\PrototypeHTMLElement|null
 	 */
 	public function current():?DOMNode{
@@ -116,32 +110,28 @@ class NodeList implements PrototypeEnumerable, SeekableIterator, ArrayAccess, Co
 	}
 
 	/**
-	 * @link https://www.php.net/manual/iterator.next.php
-	 * @inheritdoc
+	 * @inheritDoc
 	 */
 	public function next():void{
 		$this->offset++;
 	}
 
 	/**
-	 * @link https://www.php.net/manual/iterator.key.php
-	 * @inheritdoc
+	 * @inheritDoc
 	 */
 	public function key():int{
 		return $this->offset;
 	}
 
 	/**
-	 * @link https://www.php.net/manual/iterator.valid.php
-	 * @inheritdoc
+	 * @inheritDoc
 	 */
 	public function valid():bool{
 		return array_key_exists($this->offset, $this->array);
 	}
 
 	/**
-	 * @link https://www.php.net/manual/iterator.rewind.php
-	 * @inheritdoc
+	 * @inheritDoc
 	 */
 	public function rewind():void{
 		$this->offset = 0;
@@ -152,8 +142,7 @@ class NodeList implements PrototypeEnumerable, SeekableIterator, ArrayAccess, Co
 	 ********************/
 
 	/**
-	 * @link https://www.php.net/manual/seekableiterator.seek.php
-	 * @inheritdoc
+	 * @inheritDoc
 	 */
 	public function seek($pos):void{
 		$this->rewind();
@@ -174,16 +163,15 @@ class NodeList implements PrototypeEnumerable, SeekableIterator, ArrayAccess, Co
 	 ***************/
 
 	/**
-	 * @link https://www.php.net/manual/arrayaccess.offsetexists.php
-	 * @inheritdoc
+	 * @inheritDoc
 	 */
 	public function offsetExists($offset):bool{
 		return array_key_exists($offset, $this->array);
 	}
 
 	/**
-	 * @link https://www.php.net/manual/arrayaccess.offsetget.php
-	 * @inheritdoc
+	 * @inheritDoc
+	 *
 	 * @return \DOMNode|\chillerlan\PrototypeDOM\Node\PrototypeHTMLElement|null
 	 */
 	public function offsetGet($offset):?DOMNode{
@@ -191,8 +179,9 @@ class NodeList implements PrototypeEnumerable, SeekableIterator, ArrayAccess, Co
 	}
 
 	/**
-	 * @link https://www.php.net/manual/arrayaccess.offsetset.php
-	 * @inheritdoc
+	 * @inheritDoc
+	 *
+	 * @return \DOMNode|\chillerlan\PrototypeDOM\Node\PrototypeHTMLElement|null
 	 */
 	public function offsetSet($offset, $value):void{
 
@@ -207,8 +196,7 @@ class NodeList implements PrototypeEnumerable, SeekableIterator, ArrayAccess, Co
 	}
 
 	/**
-	 * @link https://www.php.net/manual/arrayaccess.offsetunset.php
-	 * @inheritdoc
+	 * @inheritDoc
 	 */
 	public function offsetUnset($offset):void{
 		unset($this->array[$offset]);
@@ -219,7 +207,19 @@ class NodeList implements PrototypeEnumerable, SeekableIterator, ArrayAccess, Co
 	 *************/
 
 	/**
-	 * @inheritDoc
+	 * Returns the debug-oriented string representation of the object.
+	 *
+	 * @link http://api.prototypejs.org/language/Enumerable/prototype/inspect/
+	 */
+	public function inspect(bool $xml = false):string{
+		return (new Document($this, $xml))->inspect(null, $xml);
+	}
+
+	/**
+	 * Returns the array's first item
+	 *
+	 * @link http://api.prototypejs.org/language/Array/prototype/first/
+	 *
 	 * @return \DOMNode|\chillerlan\PrototypeDOM\Node\PrototypeHTMLElement|null
 	 */
 	public function first():?DOMNode{
@@ -227,7 +227,10 @@ class NodeList implements PrototypeEnumerable, SeekableIterator, ArrayAccess, Co
 	}
 
 	/**
-	 * @inheritDoc
+	 * Returns the array's last item
+	 *
+	 * @link http://api.prototypejs.org/language/Array/prototype/last/
+	 *
 	 * @return \DOMNode|\chillerlan\PrototypeDOM\Node\PrototypeHTMLElement|null
 	 */
 	public function last():?DOMNode{
@@ -235,14 +238,19 @@ class NodeList implements PrototypeEnumerable, SeekableIterator, ArrayAccess, Co
 	}
 
 	/**
-	 * @inheritDoc
+	 * Pre-baked implementation for a common use-case of Enumerable#collect and Enumerable#each:
+	 * fetching the same property for all of the elements. Returns an array of the property values.
+	 *
+	 * @link http://api.prototypejs.org/language/Enumerable/prototype/pluck/
 	 */
 	public function pluck(string $property):array{
 		return array_column($this->array, $property);
 	}
 
 	/**
-	 * @inheritDoc
+	 * Reverses the array's contents.
+	 *
+	 * @link http://api.prototypejs.org/language/Array/prototype/reverse/
 	 */
 	public function reverse():NodeList{
 		$this->array  = array_reverse($this->array);
@@ -252,14 +260,20 @@ class NodeList implements PrototypeEnumerable, SeekableIterator, ArrayAccess, Co
 	}
 
 	/**
-	 * @inheritDoc
+	 * Returns an Array containing the elements of the enumeration.
+	 *
+	 * @link http://api.prototypejs.org/language/Enumerable/prototype/toArray/
 	 */
 	public function toArray():array{
 		return $this->array;
 	}
 
 	/**
-	 * @inheritDoc
+	 * Calls iterator for each item in the collection.
+	 *
+	 * @link http://api.prototypejs.org/language/Enumerable/prototype/each/
+	 *
+	 * @param callable|\Closure $iterator
 	 */
 	public function each($callback){
 		$this->map($callback);
@@ -268,7 +282,13 @@ class NodeList implements PrototypeEnumerable, SeekableIterator, ArrayAccess, Co
 	}
 
 	/**
-	 * @inheritDoc
+	 * Returns the result of applying iterator to each element.
+	 *
+	 * @link http://api.prototypejs.org/language/Enumerable/prototype/collect/
+	 * @link http://api.prototypejs.org/language/Enumerable/prototype/map/
+	 *
+	 * @param callable|\Closure $iterator
+	 * @throws \InvalidArgumentException
 	 */
 	public function map($callback):array {
 
@@ -286,7 +306,9 @@ class NodeList implements PrototypeEnumerable, SeekableIterator, ArrayAccess, Co
 	}
 
 	/**
-	 * @inheritDoc
+	 * Clears the array (makes it empty) and returns the array reference.
+	 *
+	 * @link http://api.prototypejs.org/language/Array/prototype/clear/
 	 */
 	public function clear():NodeList{
 		$this->array  = [];
@@ -296,8 +318,15 @@ class NodeList implements PrototypeEnumerable, SeekableIterator, ArrayAccess, Co
 	}
 
 	/**
-	 * @inheritDoc
-	 * @throws \Exception
+	 * Returns all the elements for which the iterator returned a truthy value.
+	 * For the opposite operation, see Enumerable#reject.
+	 *
+	 * @link http://api.prototypejs.org/language/Enumerable/prototype/findAll/
+	 *
+	 * @param callable|\Closure $iterator
+	 *
+	 * @return array
+	 * @throws \InvalidArgumentException
 	 */
 	public function findAll($callback):array{
 
@@ -319,8 +348,15 @@ class NodeList implements PrototypeEnumerable, SeekableIterator, ArrayAccess, Co
 	}
 
 	/**
-	 * @inheritDoc
-	 * @throws \Exception
+	 * Returns all the elements for which the iterator returns a falsy value.
+	 * For the opposite operation, see Enumerable#findAll.
+	 *
+	 * @link http://api.prototypejs.org/language/Enumerable/prototype/reject/
+	 *
+	 * @param callable|\Closure $iterator
+	 *
+	 * @return array
+	 * @throws \InvalidArgumentException
 	 */
 	public function reject($callback):array{
 

@@ -48,22 +48,22 @@ interface PrototypeElement extends PrototypeTraversal{
 	public function insert($content):PrototypeElement;
 
 	/**
-	 *
+	 * Shortcut for PrototypeElement::insert(['before' => $content])
 	 */
 	public function insert_before(PrototypeElement $node, PrototypeElement $refNode = null):PrototypeElement;
 
 	/**
-	 *
+	 * Shortcut for PrototypeElement::insert(['after' => $content])
 	 */
 	public function insert_after(PrototypeElement $node):PrototypeElement;
 
 	/**
-	 *
+	 * Shortcut for PrototypeElement::insert(['top' => $content])
 	 */
 	public function insert_top(PrototypeElement $node):PrototypeElement;
 
 	/**
-	 *
+	 * Shortcut for PrototypeElement::insert(['bottom' => $content])
 	 */
 	public function insert_bottom(PrototypeElement $node):PrototypeElement;
 
