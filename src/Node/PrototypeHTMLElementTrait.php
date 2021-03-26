@@ -14,7 +14,7 @@
 
 namespace chillerlan\PrototypeDOM\Node;
 
-use function array_key_exists, array_merge, explode, implode, in_array, strtolower, trim;
+use function array_key_exists, array_keys, array_merge, array_unique, count, explode, implode, in_array, strtolower, trim;
 
 /**
  *
@@ -152,6 +152,106 @@ trait PrototypeHTMLElementTrait{
 		$this->setAttribute('style', implode(' ', $style));
 
 		return $this;
+	}
+
+	/***********
+	 * Generic *
+	 ***********/
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getAttributes():array{
+		$attributes = [];
+
+		foreach($this->attributes as $attribute){
+			$attributes[$attribute->nodeName] = $attribute->nodeValue;
+		}
+
+		return $attributes;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function setAttributes(array $attributes):PrototypeHTMLElement{
+
+		foreach($attributes as $name => $value){
+			$this->setAttribute($name, $value);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function removeAttributes(array $attributes):PrototypeHTMLElement{
+
+		foreach($attributes as $name){
+			$this->removeAttribute($name);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function addClassNames(array $classnames):PrototypeHTMLElement{
+		$currentClassnames = $this->classNames();
+
+		foreach($classnames as $classname){
+
+			if(!in_array($classname, $currentClassnames, true)){
+				$currentClassnames[] = $classname;
+			}
+
+		}
+
+		return $this->setClassName(implode(' ', array_unique($currentClassnames)));
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function removeClassNames(array $classnames):PrototypeHTMLElement{
+		$currentClassnames = $this->classNames();
+
+		foreach($classnames as $classname){
+			$keys = array_keys($currentClassnames, $classname);
+
+			foreach($keys as $key){
+				unset($currentClassnames[$key]);
+			}
+
+		}
+
+		return $this->setClassName(implode(' ', array_unique($currentClassnames)));
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getStyles():array{
+
+		if(!$this->hasAttributes()){
+			return [];
+		}
+
+		$styles       = explode(';', trim($this->getAttribute('style')));
+		$currentStyle = [];
+
+		foreach($styles as $style){
+			$s = explode(':', $style);
+
+			if(count($s) === 2){
+				$currentStyle[strtolower(trim($s[0]))] = trim($s[1]);
+			}
+
+		}
+
+		return $currentStyle;
 	}
 
 }

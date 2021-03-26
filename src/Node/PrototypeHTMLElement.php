@@ -66,4 +66,46 @@ interface PrototypeHTMLElement extends PrototypeElement{
 	 */
 	public function setStyle(array $style, bool $replace = null):PrototypeHTMLElement;
 
+	/***********
+	 * Generic *
+	 ***********/
+
+	/**
+	 * @return  string[]
+	 */
+	public function getAttributes():array;
+
+	/**
+	 * @param array $attributes
+	 *
+	 * @return \chillerlan\PrototypeDOM\Node\PrototypeHTMLElement
+	 */
+	public function setAttributes(array $attributes):PrototypeHTMLElement;
+
+	/**
+	 * @param array $attributes
+	 *
+	 * @return \chillerlan\PrototypeDOM\Node\PrototypeHTMLElement
+	 */
+	public function removeAttributes(array $attributes):PrototypeHTMLElement;
+
+	/**
+	 * @param array $classnames
+	 *
+	 * @return \chillerlan\PrototypeDOM\Node\PrototypeHTMLElement
+	 */
+	public function addClassNames(array $classnames):PrototypeHTMLElement;
+
+	/**
+	 * @param array $classnames
+	 *
+	 * @return \chillerlan\PrototypeDOM\Node\PrototypeHTMLElement
+	 */
+	public function removeClassNames(array $classnames):PrototypeHTMLElement;
+
+	/**
+	 * @return string[]
+	 */
+	public function getStyles():array;
+
 }
