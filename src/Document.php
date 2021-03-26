@@ -182,14 +182,14 @@ class Document extends DOMDocument{
 	}
 
 	/**
-	 *
+	 * @link https://developer.mozilla.org/docs/Web/API/Document/querySelectorAll
 	 */
 	public function querySelectorAll(string $selector, DOMNode $contextNode = null, string $axis = null):?NodeList{
 		return $this->query($this->cssSelectorConverter->toXPath($selector, $axis ?? 'descendant-or-self::'), $contextNode);
 	}
 
 	/**
-	 *
+	 * Removes the nodes from the document that match the given selector(s)
 	 */
 	public function removeElementsBySelector(array $selectors, DOMNode $contextNode = null, string $axis = null):Document{
 		$nodes = $this->select($selectors, $contextNode, $axis ?? 'descendant-or-self::');
@@ -206,7 +206,7 @@ class Document extends DOMDocument{
 	}
 
 	/**
-	 *
+	 * Inserts a NodeList into the document by appending its nodes
 	 */
 	public function insertNodeList(NodeList $nodeList):Document{
 
@@ -233,7 +233,7 @@ class Document extends DOMDocument{
 	}
 
 	/**
-	 *
+	 * @link https://developer.mozilla.org/docs/Web/API/Document/getElementsByClassName
 	 */
 	public function getElementsByClassName(string $className):NodeList{
 		return $this->select(['.'.$className]);

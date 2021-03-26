@@ -75,10 +75,17 @@ class DocumentTest extends TestAbstract{
 		$this::assertSame('en', $this->dom->querySelectorAll('html')->item(0)->getAttribute('lang'));
 	}
 
-#	public function testRemoveElementsBySelector():void{
-		// first and last line break \n and the rest PHP_EOL?
-#		$this::assertSame('<!DOCTYPE html>'."\n".'<html lang="en">'.PHP_EOL.PHP_EOL.PHP_EOL.'</html>'."\n", $this->dom->removeElementsBySelector(['head', 'body'])->inspect());
-#	}
+	public function testRemoveElementsBySelector():void{
+		$this->dom->removeElementsBySelector(['#content > div', '#homo-erectus > div', '#list-of-apples > li']);
+		$this::assertTrue($this->dom->getElementById('content')->empty());
+		$this::assertCount(0, $this->dom->getElementById('content')->childElements());
+		$this::assertTrue($this->dom->getElementById('list-of-apples')->empty());
+		$this::assertCount(0, $this->dom->getElementById('list-of-apples')->childElements());
+		// comment node left
+		$this::assertTrue($this->dom->getElementById('homo-erectus')->empty());
+		$this::assertCount(0, $this->dom->getElementById('homo-erectus')->childElements());
+		$this::assertSame('Latin is super', trim($this->dom->getElementById('homo-erectus')->childNodes[0]->nodeValue));
+	}
 
 	public function testToNodeList():void{
 		$nodelist = $this->dom->toNodeList('<meta name="viewport" content="width=device-width, initial-scale=1.0" />');
