@@ -12,6 +12,8 @@
 
 namespace chillerlan\PrototypeDOM\Node;
 
-class Comment extends \DOMComment implements PrototypeNode{
+use DOMComment;
+
+class Comment extends DOMComment implements PrototypeNode{
 	use PrototypeNodeTrait;
 }

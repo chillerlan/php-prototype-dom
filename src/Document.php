@@ -216,6 +216,21 @@ class Document extends DOMDocument{
 	}
 
 	/**
+	 * @inheritDoc
+	 *
+	 * @return \chillerlan\PrototypeDOM\Node\PrototypeHTMLElement|\DOMNode|null
+	 * @throws \DOMException
+	 */
+	public function getElementById($elementId):?DOMNode{
+
+		if(!is_string($elementId)){
+			throw new DOMException('invalid element id');
+		}
+
+		return $this->select(['#'.$elementId])[0] ?? null;
+	}
+
+	/**
 	 *
 	 */
 	public function getElementsByClassName(string $className):NodeList{
@@ -344,21 +359,6 @@ class Document extends DOMDocument{
 		}
 
 		return $element;
-	}
-
-	/**
-	 * @inheritDoc
-	 *
-	 * @return \chillerlan\PrototypeDOM\Node\PrototypeHTMLElement|\DOMNode|null
-	 * @throws \DOMException
-	 */
-	public function getElementById($elementId):?DOMNode{
-
-		if(!is_string($elementId)){
-			throw new DOMException('invalid element id');
-		}
-
-		return $this->select(['#'.$elementId])[0] ?? null;
 	}
 
 }

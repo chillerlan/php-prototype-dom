@@ -12,6 +12,8 @@
 
 namespace chillerlan\PrototypeDOM\Node;
 
-class ProcessingInstruction extends \DOMProcessingInstruction implements PrototypeNode{
+use DOMProcessingInstruction;
+
+class ProcessingInstruction extends DOMProcessingInstruction implements PrototypeNode{
 	use PrototypeNodeTrait;
 }

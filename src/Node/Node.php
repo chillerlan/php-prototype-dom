@@ -12,6 +12,8 @@
 
 namespace chillerlan\PrototypeDOM\Node;
 
-class Node extends \DOMNode implements PrototypeNode{
+use DOMNode;
+
+class Node extends DOMNode implements PrototypeNode{
 	use PrototypeNodeTrait;
 }

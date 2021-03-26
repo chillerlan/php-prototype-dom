@@ -59,7 +59,7 @@ interface PrototypeNode{
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/replace/
 	 */
-	public function replace(PrototypeNode $newnode):PrototypeNode;
+	public function replace(PrototypeNode $newNode):PrototypeNode;
 
 	/**
 	 * @link http://api.prototypejs.org/dom/Element/cleanWhitespace/

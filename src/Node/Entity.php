@@ -12,6 +12,8 @@
 
 namespace chillerlan\PrototypeDOM\Node;
 
-class Entity extends \DOMEntity implements PrototypeNode{
+use DOMEntity;
+
+class Entity extends DOMEntity implements PrototypeNode{
 	use PrototypeNodeTrait;
 }

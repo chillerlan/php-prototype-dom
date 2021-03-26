@@ -33,7 +33,12 @@ trait PrototypeTraversalTrait{
 	 *
 	 * @return \chillerlan\PrototypeDOM\Node\PrototypeTraversal|\DOMNode|null
 	 */
-	public function recursivelyFind(string $selector = null, int $index = null, string $property = null, int $nodeType = XML_ELEMENT_NODE):?PrototypeTraversal{
+	public function recursivelyFind(
+		string $selector = null,
+		int $index = null,
+		string $property = null,
+		int $nodeType = XML_ELEMENT_NODE
+	):?PrototypeTraversal{
 
 		if(is_numeric($selector)){
 			return $this->ownerDocument->recursivelyFind($this, $property, null, $selector, $nodeType);

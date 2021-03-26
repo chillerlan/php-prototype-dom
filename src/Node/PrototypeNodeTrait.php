@@ -77,13 +77,13 @@ trait PrototypeNodeTrait{
 	/**
 	 * @inheritDoc
 	 */
-	public function replace(PrototypeNode $newnode):PrototypeNode{
+	public function replace(PrototypeNode $newNode):PrototypeNode{
 
 		if(!$this->parentNode){
 			return $this;
 		}
 
-		return $this->parentNode->replaceChild($this->importNode($newnode), $this);
+		return $this->parentNode->replaceChild($this->importNode($newNode), $this);
 	}
 
 	/**
