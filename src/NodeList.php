@@ -16,11 +16,13 @@ use chillerlan\PrototypeDOM\Node\PrototypeNode;
 use ArrayAccess, Countable, DOMNode, DOMNodeList, InvalidArgumentException, OutOfBoundsException, SeekableIterator;
 
 use function array_column, array_key_exists, array_merge, array_reverse, call_user_func_array, count,
-	is_callable, is_int, is_iterable, iterator_to_array;
-
+	is_callable, is_int, is_iterable, iterator_to_array, next;
 
 class NodeList implements SeekableIterator, ArrayAccess, Countable{
 
+	/**
+	 * @var \chillerlan\PrototypeDOM\Node\PrototypeNode[]|\DOMNode[]
+	 */
 	protected array $array = [];
 
 	protected int $offset = 0;
@@ -160,7 +162,7 @@ class NodeList implements SeekableIterator, ArrayAccess, Countable{
 
 		for( ; $this->offset < $offset; ){
 
-			if(!\next($this->array)) {
+			if(!next($this->array)) {
 				throw new OutOfBoundsException('invalid seek position: '.$offset);
 			}
 
@@ -304,7 +306,7 @@ class NodeList implements SeekableIterator, ArrayAccess, Countable{
 	public function map($iterator):array{
 
 		if(!is_callable($iterator)){
-			throw new InvalidArgumentException('invalid callback');
+			throw new InvalidArgumentException('invalid iterator');
 		}
 
 		$return = [];
@@ -336,13 +338,13 @@ class NodeList implements SeekableIterator, ArrayAccess, Countable{
 	 *
 	 * @param callable|\Closure $iterator
 	 *
-	 * @return array
+	 * @return array<\chillerlan\PrototypeDOM\Node\PrototypeNode|\chillerlan\PrototypeDOM\Node\PrototypeHTMLElement|\DOMNode>
 	 * @throws \InvalidArgumentException
 	 */
 	public function findAll($iterator):array{
 
 		if(!is_callable($iterator)){
-			throw new InvalidArgumentException('invalid callback');
+			throw new InvalidArgumentException('invalid iterator');
 		}
 
 		$return = [];
@@ -366,13 +368,13 @@ class NodeList implements SeekableIterator, ArrayAccess, Countable{
 	 *
 	 * @param callable|\Closure $iterator
 	 *
-	 * @return array
+	 * @return array<\chillerlan\PrototypeDOM\Node\PrototypeNode|\chillerlan\PrototypeDOM\Node\PrototypeHTMLElement|\DOMNode>
 	 * @throws \InvalidArgumentException
 	 */
 	public function reject($iterator):array{
 
 		if(!is_callable($iterator)){
-			throw new InvalidArgumentException('invalid callback');
+			throw new InvalidArgumentException('invalid iterator');
 		}
 
 		$return = [];
