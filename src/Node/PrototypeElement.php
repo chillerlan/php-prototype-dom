@@ -65,7 +65,7 @@ interface PrototypeElement extends PrototypeTraversal{
 	public function insert_bottom(PrototypeElement $node):PrototypeElement;
 
 	/**
-	 * Returns the element tag name (convenience method)
+	 * Returns the element tag name (convenience method) or null if the property doesn't exist
 	 */
-	public function tag():string;
+	public function tag():?string;
 }

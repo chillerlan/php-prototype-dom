@@ -119,7 +119,7 @@ trait PrototypeElementTrait{
 	/**
 	 * @inheritDoc
 	 */
-	public function tag():string{
-		return $this->tagName;
+	public function tag():?string{
+		return $this->tagName ?? null;
 	}
 }
