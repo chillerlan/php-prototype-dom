@@ -33,7 +33,7 @@ class NodeManipulationTest extends TestAbstract{
 		$this->el = $this->dom->select(['#what'])[0];
 		$this->el->replace($this->dom->newElement('p', ['id' => 'nocontent'])->update('foo'));
 
-		$this::assertSame('foo', $this->dom->getElementById('nocontent')->nodeValue);
+		$this::assertSame('foo', $this->dom->getElementById('nocontent')->value());
 	}
 
 	public function testWrap():void{
@@ -71,7 +71,7 @@ class NodeManipulationTest extends TestAbstract{
 
 		$this->el->update('<div id="boo" class="bar">content1</div>');
 
-		$this::assertSame('content1', $this->dom->getElementById('boo')->nodeValue);
+		$this::assertSame('content1', $this->dom->getElementById('boo')->value());
 		$this::assertTrue($this->dom->getElementById('boo')->hasClassName('bar'));
 	}
 
@@ -101,7 +101,7 @@ class NodeManipulationTest extends TestAbstract{
 
 		$this::assertNull($this->el->up(2));
 
-		$this::assertSame('bottom3', $this->dom->getElementById('bottom3')->nodeValue);
+		$this::assertSame('bottom3', $this->dom->getElementById('bottom3')->value());
 
 		$this->dom->getElementById('after8')->insert_top(new Element('div'));
 	}

@@ -81,10 +81,12 @@ class DocumentTest extends TestAbstract{
 		$this::assertCount(0, $this->dom->getElementById('content')->childElements());
 		$this::assertTrue($this->dom->getElementById('list-of-apples')->empty());
 		$this::assertCount(0, $this->dom->getElementById('list-of-apples')->childElements());
-		// comment node left
 		$this::assertTrue($this->dom->getElementById('homo-erectus')->empty());
 		$this::assertCount(0, $this->dom->getElementById('homo-erectus')->childElements());
-		$this::assertSame('Latin is super', trim($this->dom->getElementById('homo-erectus')->childNodes[0]->nodeValue));
+		// comment node left
+		$node = $this->dom->getElementById('homo-erectus')->childElements(XML_COMMENT_NODE)[0];
+		$this::assertSame('#comment', $node->name());
+		$this::assertSame('Latin is super', $node->value());
 	}
 
 	public function testToNodeList():void{

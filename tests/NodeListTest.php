@@ -91,7 +91,7 @@ class NodeListTest extends TestAbstract{
 		$this::assertSame(['foo', 'foo', 'foo', 'foo'], $this->nodelist->pluck('tagName'));
 
 		$this->nodelist->each(function($e){
-			$this::assertSame('foo', $e->tagName);
+			$this::assertSame('foo', $e->tag());
 		});
 
 		$this::assertSame('<foo></foo><foo></foo><foo></foo><foo></foo>', trim($this->nodelist->inspect()));

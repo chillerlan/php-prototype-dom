@@ -66,8 +66,8 @@ class NodeTraversalTest extends TestAbstract{
 
 	public function testUp():void{
 		$this->el = $this->dom->getElementById('fruits');
-		$this::assertSame('body', $this->el->up()->tagName);
-		$this::assertSame('body', $this->el->up(0)->tagName);
+		$this::assertSame('body', $this->el->up()->tag());
+		$this::assertSame('body', $this->el->up(0)->tag());
 
 		$this->el = $this->dom->getElementById('mutsu');
 		$this::assertSame('fruits', $this->el->up(2)->identify());
@@ -81,8 +81,8 @@ class NodeTraversalTest extends TestAbstract{
 		$this->el = $this->dom->getElementById('saying');
 		$this::assertSame('list-of-apples', $this->el->previous()->identify());
 		$this::assertSame('list-of-apples', $this->el->previous(0)->identify());
-		$this::assertSame('h3', $this->el->previous(1)->tagName);
-		$this::assertSame('h3', $this->el->previous('h3')->tagName);
+		$this::assertSame('h3', $this->el->previous(1)->tag());
+		$this::assertSame('h3', $this->el->previous('h3')->tag());
 
 		$this->el = $this->dom->getElementById('ida-red');
 		$this::assertSame('mutsu', $this->el->previous('.yummy')->identify());
@@ -122,7 +122,7 @@ class NodeTraversalTest extends TestAbstract{
 		$this::assertSame('homo-erectus', $this->dom->getElementById('australopithecus')->firstDescendant()->identify());
 
 		$this->el = $this->dom->getElementById('homo-erectus');
-		$this::assertSame(' Latin is super ', $this->el->firstChild->nodeValue);
+		$this::assertSame('Latin is super', $this->el->firstChild->value()); // unfiltered comment element
 		$this::assertSame('homo-neanderthalensis', $this->el->firstDescendant()->identify());
 	}
 

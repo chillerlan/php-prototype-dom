@@ -134,4 +134,18 @@ trait PrototypeNodeTrait{
 		return $this->ownerDocument->match($this, $selector);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
+	public function name():string{
+		return $this->nodeName;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function value(bool $trimmed = true):string{
+		return $trimmed ? trim($this->nodeValue) : $this->nodeValue;
+	}
+
 }

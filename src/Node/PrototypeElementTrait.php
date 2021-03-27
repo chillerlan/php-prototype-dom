@@ -118,4 +118,10 @@ trait PrototypeElementTrait{
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
+	public function tag():string{
+		return $this->tagName;
+	}
 }

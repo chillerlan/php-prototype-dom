@@ -98,4 +98,14 @@ interface PrototypeNode{
 	 */
 	public function importNode(PrototypeNode $newNode):PrototypeNode;
 
+	/**
+	 * Returns the node name (convenience method)
+	 */
+	public function name():string;
+
+	/**
+	 * Returns the node value, optionally trims whitespace (default)
+	 */
+	public function value(bool $trimmed = true):string;
+
 }
