@@ -13,7 +13,7 @@
 namespace chillerlan\PrototypeDOM\Node;
 
 /**
- *
+ * @extends \DOMElement
  */
 interface PrototypeHTMLElement extends PrototypeElement{
 

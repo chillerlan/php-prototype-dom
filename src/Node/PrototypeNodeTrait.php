@@ -22,6 +22,7 @@ use function trim;
 use const XML_ELEMENT_NODE, XML_TEXT_NODE;
 
 /**
+ * @extends    \DOMNode
  * @implements \chillerlan\PrototypeDOM\Node\PrototypeNode
  *
  * @property string                                $nodeName

@@ -16,6 +16,9 @@ use chillerlan\PrototypeDOM\NodeList;
 use DOMNode;
 use const XML_ELEMENT_NODE;
 
+/**
+ * @extends \DOMNode
+ */
 interface PrototypeTraversal extends PrototypeNode{
 
 	/**

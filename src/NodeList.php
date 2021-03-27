@@ -21,7 +21,7 @@ use function array_column, array_key_exists, array_merge, array_reverse, call_us
 class NodeList implements SeekableIterator, ArrayAccess, Countable{
 
 	/**
-	 * @var \chillerlan\PrototypeDOM\Node\PrototypeNode[]|\DOMNode[]
+	 * @var array<\chillerlan\PrototypeDOM\Node\PrototypeNode|\chillerlan\PrototypeDOM\Node\PrototypeHTMLElement|\DOMNode>
 	 */
 	protected array $array = [];
 

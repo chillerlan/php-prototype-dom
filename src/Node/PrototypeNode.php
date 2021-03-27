@@ -15,6 +15,8 @@ namespace chillerlan\PrototypeDOM\Node;
 use chillerlan\PrototypeDOM\NodeList;
 
 /**
+ * @extends \DOMNode
+ *
  * @property string                                $nodeName
  * @property string                                $nodeValue
  * @property int                                   $nodeType

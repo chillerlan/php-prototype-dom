@@ -23,6 +23,7 @@ use function is_array, is_int, is_numeric;
 use const XML_ELEMENT_NODE;
 
 /**
+ * @extends    \DOMNode
  * @implements \chillerlan\PrototypeDOM\Node\PrototypeTraversal
  *
  * @property \chillerlan\PrototypeDOM\Document $ownerDocument

@@ -13,6 +13,8 @@
 namespace chillerlan\PrototypeDOM\Node;
 
 /**
+ * @extends \DOMElement
+ *
  * @property bool   $schemaTypeInfo
  * @property string $tagName
  */
