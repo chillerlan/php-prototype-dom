@@ -60,7 +60,7 @@ use chillerlan\PrototypeDOM\Node\PrototypeHTMLElement;
 $document = new Document(file_get_contents('https://www.php.net/supported-versions.php'));
 
 $supportedVersions = $document->querySelectorAll('tr.stable > td:first-of-type > a')
-	->map(fn(PrototypeHTMLElement $a):string => $a->nodeValue);
+	->map(fn(PrototypeHTMLElement $a):string => $a->value());
 
 var_dump($supportedVersions); // -> ['7.4', '8.0']
 ```
