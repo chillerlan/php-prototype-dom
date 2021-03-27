@@ -2,9 +2,7 @@
 /**
  * Class TestAbstract
  *
- * @filesource   TestAbstract.php
  * @created      05.05.2017
- * @package      chillerlan\PrototypeDOMTest
  * @author       Smiley <smiley@chillerlan.net>
  * @copyright    2017 Smiley
  * @license      MIT

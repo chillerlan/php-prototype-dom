@@ -2,9 +2,7 @@
 /**
  * Class NodeList
  *
- * @filesource   NodeList.php
  * @created      09.05.2017
- * @package      chillerlan\PrototypeDOM
  * @author       Smiley <smiley@chillerlan.net>
  * @copyright    2017 Smiley
  * @license      MIT

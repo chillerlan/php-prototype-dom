@@ -2,9 +2,7 @@
 /**
  * Trait PrototypeTraversalTrait
  *
- * @filesource   PrototypeTraversalTrait.php
  * @created      06.05.2017
- * @package      chillerlan\PrototypeDOM\Traits
  * @author       Smiley <smiley@chillerlan.net>
  * @copyright    2017 Smiley
  * @license      MIT

@@ -2,9 +2,7 @@
 /**
  * Class NodeManipulationTest
  *
- * @filesource   NodeManipulationTest.php
  * @created      08.05.2017
- * @package      chillerlan\PrototypeDOMTest
  * @author       Smiley <smiley@chillerlan.net>
  * @copyright    2017 Smiley
  * @license      MIT
