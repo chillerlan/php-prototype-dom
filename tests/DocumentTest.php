@@ -34,7 +34,8 @@ class DocumentTest extends TestAbstract{
 		$this::assertSame('golden-delicious', $NodeList->first()->childElements()->first()->identify());
 
 		// from \chillerlan\PrototypeDOM\NodeList
-		$this::assertSame('golden-delicious', (new Document($NodeList))->getElementById('list-of-apples')->childElements()->first()->identify());
+		$this::assertSame('golden-delicious', (new Document($NodeList))
+			->getElementById('list-of-apples')->childElements()->first()->identify());
 
 		// from xml string
 		$this->dom = new Document(file_get_contents(__DIR__.'/../phpunit.xml'), true);
@@ -52,7 +53,7 @@ class DocumentTest extends TestAbstract{
 	public function testLoadDocumentFile():void{
 		// html
 		$this->dom = new Document(__DIR__.'/test.html');
-		$this::assertSame('Golden Delicious', $this->dom->getElementById('golden-delicious')->nodeValue);
+		$this::assertSame('Golden Delicious', $this->dom->getElementById('golden-delicious')->value());
 
 		// xml
 		$this->dom = new Document(__DIR__.'/../phpunit.xml', true);
@@ -91,7 +92,10 @@ class DocumentTest extends TestAbstract{
 
 	public function testToNodeList():void{
 		$nodelist = $this->dom->toNodeList('<meta name="viewport" content="width=device-width, initial-scale=1.0" />');
-		$this::assertSame(['name' => 'viewport', 'content' => 'width=device-width, initial-scale=1.0', ], $nodelist->item(0)->getAttributes());
+		$this::assertSame([
+			'name'    => 'viewport',
+			'content' => 'width=device-width, initial-scale=1.0'
+		], $nodelist->item(0)->getAttributes());
 
 		$nodelist = $this->dom->toNodeList('<div id="boo" class="bar"></div><div><a href="#foo"></a></div>');
 		$this::assertSame(2, $nodelist->count());

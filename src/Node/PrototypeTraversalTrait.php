@@ -25,8 +25,6 @@ use const XML_ELEMENT_NODE;
 /**
  * @extends    \DOMNode
  * @implements \chillerlan\PrototypeDOM\Node\PrototypeTraversal
- *
- * @property \chillerlan\PrototypeDOM\Document $ownerDocument
  */
 trait PrototypeTraversalTrait{
 	use PrototypeNodeTrait;

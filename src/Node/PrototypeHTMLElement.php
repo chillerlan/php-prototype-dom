@@ -17,11 +17,34 @@ namespace chillerlan\PrototypeDOM\Node;
  */
 interface PrototypeHTMLElement extends PrototypeElement{
 
+	/**
+	 * Returns the (raw) classname
+	 */
 	public function getClassName():string;
+
+	/**
+	 * Sets the (raw) classname
+	 */
 	public function setClassName(string $class):PrototypeHTMLElement;
+
+	/**
+	 * Returns the "href" attribute (if any, convenience)
+	 */
 	public function getHref():string;
+
+	/**
+	 * Sets the "href" attribute (convenience)
+	 */
 	public function setHref(string $href):PrototypeHTMLElement;
+
+	/**
+	 * Returns the "src" attribute (if any, convenience)
+	 */
 	public function getSrc():string;
+
+	/**
+	 * Sets the "src" attribute (convenience)
+	 */
 	public function setSrc(string $src):PrototypeHTMLElement;
 
 	/*************

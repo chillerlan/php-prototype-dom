@@ -19,6 +19,9 @@ use PHPUnit\Framework\TestCase;
 abstract class TestAbstract extends TestCase{
 
 	protected Document $dom;
+	/**
+	 * @var \chillerlan\PrototypeDOM\Node\PrototypeElement|\DOMElement|null
+	 */
 	protected ?PrototypeElement $el = null;
 
 	protected function setUp():void{

@@ -22,30 +22,48 @@ use function array_key_exists, array_keys, array_merge, array_unique, count, exp
 trait PrototypeHTMLElementTrait{
 	use PrototypeElementTrait;
 
+	/**
+	 * @inheritDoc
+	 */
 	public function getClassName():string{
 		return trim($this->getAttribute('class'));
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function setClassName(string $class):PrototypeHTMLElement{
 		$this->setAttribute('class', $class);
 
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function getHref():string{
 		return trim($this->getAttribute('href'));
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function setHref(string $href):PrototypeHTMLElement{
 		$this->setAttribute('href', $href);
 
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function getSrc():string{
 		return trim($this->getAttribute('src'));
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function setSrc(string $src):PrototypeHTMLElement{
 		$this->setAttribute('src', $src);
 

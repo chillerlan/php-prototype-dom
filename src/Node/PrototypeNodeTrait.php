@@ -24,23 +24,6 @@ use const XML_ELEMENT_NODE, XML_TEXT_NODE;
 /**
  * @extends    \DOMNode
  * @implements \chillerlan\PrototypeDOM\Node\PrototypeNode
- *
- * @property string                                $nodeName
- * @property string                                $nodeValue
- * @property int                                   $nodeType
- * @property \chillerlan\PrototypeDOM\Node\Element $parentNode
- * @property \DOMNodeList                          $childNodes
- * @property \chillerlan\PrototypeDOM\Node\Element $firstChild
- * @property \chillerlan\PrototypeDOM\Node\Element $lastChild
- * @property \chillerlan\PrototypeDOM\Node\Element $previousSibling
- * @property \chillerlan\PrototypeDOM\Node\Element $nextSibling
- * @property \DOMNamedNodeMap                      $attributes
- * @property \chillerlan\PrototypeDOM\Document     $ownerDocument
- * @property string                                $namespaceURI
- * @property string                                $prefix
- * @property string                                $localName
- * @property string                                $baseURI
- * @property string                                $textContent
  */
 trait PrototypeNodeTrait{
 
