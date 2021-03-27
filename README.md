@@ -9,6 +9,7 @@
 [![Scrunitizer][scrutinizer-badge]][scrutinizer]
 [![Packagist downloads][downloads-badge]][downloads]<br/>
 [![CI][gh-action-badge]][gh-action]
+[![phpDocs][gh-docs-badge]][gh-docs]
 
 [php-badge]: https://img.shields.io/packagist/php-v/chillerlan/php-prototype-dom?logo=php&color=8892BF
 [php]: https://www.php.net/supported-versions.php
@@ -26,8 +27,12 @@
 [downloads]: https://packagist.org/packages/chillerlan/php-prototype-dom/stats
 [gh-action-badge]: https://github.com/chillerlan/php-prototype-dom/workflows/CI/badge.svg
 [gh-action]: https://github.com/chillerlan/php-prototype-dom/actions?query=workflow%3A%22CI%22
+[gh-docs-badge]: https://github.com/chillerlan/php-prototype-dom/workflows/Docs/badge.svg
+[gh-docs]: https://github.com/chillerlan/php-prototype-dom/actions?query=workflow%3ADocs
 
 # Documentation
+
+An API documentation created with [phpDocumentor](https://www.phpdoc.org/) can be found at https://chillerlan.github.io/php-prototype-dom/ (WIP).
 
 - for the extended `DOMNode` (prototypejs) methods see: [`Element.Methods`](http://api.prototypejs.org/dom/Element/Methods/)
 - for the extended `DOMNodeList` methods see [`Enumerable`](http://api.prototypejs.org/language/Enumerable/)
