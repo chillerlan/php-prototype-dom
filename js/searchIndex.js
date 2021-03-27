@@ -213,7 +213,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\chillerlan\\PrototypeDOM\\Node\\PrototypeElement\u003A\u003Atag\u0028\u0029",
             "name": "tag",
-            "summary": "Returns\u0020the\u0020element\u0020tag\u0020name\u0020\u0028convenience\u0020method\u0029",
+            "summary": "Returns\u0020the\u0020element\u0020tag\u0020name\u0020\u0028convenience\u0020method\u0029\u0020or\u0020null\u0020if\u0020the\u0020property\u0020doesn\u0027t\u0020exist",
             "url": "classes/chillerlan-PrototypeDOM-Node-PrototypeElement.html#method_tag"
         },                {
             "fqsen": "\\chillerlan\\PrototypeDOM\\Node\\PrototypeElementTrait",
